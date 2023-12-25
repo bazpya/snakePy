@@ -1,6 +1,6 @@
 from source.cell import Cell
 
 
-class Game:
+class Worm:
     __cells__: list[Cell]
     pass
