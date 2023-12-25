@@ -12,6 +12,8 @@ class Game:
             row = []
             for col_index in range(col_count):
                 cell = Cell()
+                cell.row = row_index
+                cell.col = col_index
                 row.append(cell)
             self._cells.append(row)
         self._link_neighbours()
@@ -34,7 +36,7 @@ class Game:
                     this_cell.set_neighbour(Direction.left, left_neighbour)
                     left_neighbour.set_neighbour(Direction.right, this_cell)
 
-    def iterate_cells(self, include_boundaries: bool, func, initial_value):
+    def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1
         row_index_upper_bound = (
             self._row_count if include_boundaries else (self._row_count - 1)
@@ -49,6 +51,6 @@ class Game:
         for row_index in range(row_index_lower_bound, row_index_upper_bound):
             for col_index in range(col_index_lower_bound, col_index_upper_bound):
                 this_cell = self._cells[row_index][col_index]
-                accumulator = func(accumulator, this_cell, row_index, col_index)
+                accumulator = visit_func(this_cell, row_index, col_index, accumulator)
 
         return accumulator
