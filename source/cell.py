@@ -2,23 +2,7 @@ from source.global_refs import CellType, Direction
 
 
 class CellConcept:
-    def set_type(self, type: CellType):
-        self.__type__ = type
-
-    def be_blank(self) -> None:
-        self.set_type(CellType.blank)
-
-    def be_wall(self) -> None:
-        self.set_type(CellType.wall)
-
-    def be_worm(self) -> None:
-        self.set_type(CellType.worm)
-
-    def be_food(self) -> None:
-        self.set_type(CellType.food)
-
-    def get_neighbour(self, direction: Direction) -> "Cell":
-        pass
+    pass
 
 
 class Cell(CellConcept):
@@ -32,20 +16,41 @@ class Cell(CellConcept):
             Direction.left: None,
         }
 
+    # ====================  Type Setters  ====================
+
+    def set_type(self, type: CellType):
+        self.__type__ = type
+
+    def be_blank(self) -> None:
+        self.__type__ = CellType.blank
+
+    def be_wall(self) -> None:
+        self.__type__ = CellType.wall
+
+    def be_worm(self) -> None:
+        self.__type__ = CellType.worm
+
+    def be_food(self) -> None:
+        self.__type__ = CellType.food
+
+    # ====================  Type Getters  ====================
+
     def get_type(self) -> CellType:
         return self.__type__
 
     def is_blank(self) -> bool:
-        return self.get_type() == CellType.blank
+        return self.__type__ == CellType.blank
 
     def is_wall(self) -> bool:
-        return self.get_type() == CellType.wall
+        return self.__type__ == CellType.wall
 
     def is_worm(self) -> bool:
-        return self.get_type() == CellType.worm
+        return self.__type__ == CellType.worm
 
     def is_food(self) -> bool:
-        return self.get_type() == CellType.food
+        return self.__type__ == CellType.food
+
+    # ====================  Neighbours  ====================
 
     def set_neighbour(self, direction: Direction, neighbour: "Cell") -> None:
         self.__neighbours__[direction] = neighbour
