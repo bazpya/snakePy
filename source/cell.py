@@ -35,6 +35,18 @@ class Cell(CellConcept):
     def get_type(self) -> CellType:
         return self.__type__
 
+    def is_blank(self) -> bool:
+        return self.get_type() == CellType.blank
+
+    def is_wall(self) -> bool:
+        return self.get_type() == CellType.wall
+
+    def is_worm(self) -> bool:
+        return self.get_type() == CellType.worm
+
+    def is_food(self) -> bool:
+        return self.get_type() == CellType.food
+
     def set_neighbour(self, direction: Direction, neighbour: "Cell") -> None:
         self.__neighbours__[direction] = neighbour
 

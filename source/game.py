@@ -1,4 +1,4 @@
-from source.global_refs import Direction
+from source.global_refs import Direction, CellType
 from source.cell import Cell
 
 
@@ -9,6 +9,7 @@ class Game:
         self._cells = []
         self._populate()
         self._link_neighbours()
+        self._lay_walls()
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -34,6 +35,17 @@ class Game:
                 left_neighbour = self._cells[ri][ci - 1]
                 cell.set_neighbour(Direction.left, left_neighbour)
                 left_neighbour.set_neighbour(Direction.right, cell)
+
+        self.iterate_cells(True, visit)
+
+    def _lay_walls(self):
+        def visit(cell, ri, ci, acc):
+            should_be_wall = ri in [0, self._row_count - 1] or ci in [
+                0,
+                self._col_count - 1,
+            ]
+            if should_be_wall:
+                cell.be_wall()
 
         self.iterate_cells(True, visit)
 

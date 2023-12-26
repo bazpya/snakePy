@@ -1,5 +1,5 @@
 import unittest
-from source.global_refs import Direction
+from source.global_refs import Direction, CellType
 from source.game import Game
 from source.cell import Cell
 
@@ -94,3 +94,31 @@ class Cell_(unittest.TestCase):
         for r in range(row_count):
             cell = sut._cells[r][-1]
             self.assertIsNone(cell.get_neighbour(Direction.right))
+
+    # ==========================================
+
+    def test_first_row_is_wall(self):
+        first_row = sut._cells[0]
+        for cell in first_row:
+            self.assertTrue(cell.is_wall)
+
+    def test_last_row_is_wall(self):
+        last_row = sut._cells[-1]
+        for cell in last_row:
+            self.assertTrue(cell.is_wall)
+
+    def test_first_col_is_wall(self):
+        for r in range(row_count):
+            cell = sut._cells[r][0]
+            self.assertTrue(cell.is_wall)
+
+    def test_last_col_is_wall(self):
+        for r in range(row_count):
+            cell = sut._cells[r][-1]
+            self.assertTrue(cell.is_wall)
+
+    def test_interior_cells_are_blank(self):
+        def visit(cell, ri, ci, acc):
+            self.assertTrue(cell.is_blank())
+
+        sut.iterate_cells(False, visit)
