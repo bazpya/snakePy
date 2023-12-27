@@ -6,10 +6,12 @@ class CellConcept:
 
 
 class Cell(CellConcept):
-    def __init__(self, type: CellType = CellType.blank):
-        self.__type__ = type
-        self.__type__: CellType
-        self.__neighbours__ = {
+    def __init__(self, row: int, col: int, type: CellType = CellType.blank):
+        self._row = row
+        self._col = col
+        self._type = type
+        self._type: CellType
+        self._neighbours = {
             Direction.up: None,
             Direction.right: None,
             Direction.down: None,
@@ -19,41 +21,41 @@ class Cell(CellConcept):
     # ====================  Type Setters  ====================
 
     def set_type(self, type: CellType):
-        self.__type__ = type
+        self._type = type
 
     def be_blank(self) -> None:
-        self.__type__ = CellType.blank
+        self._type = CellType.blank
 
     def be_wall(self) -> None:
-        self.__type__ = CellType.wall
+        self._type = CellType.wall
 
     def be_worm(self) -> None:
-        self.__type__ = CellType.worm
+        self._type = CellType.worm
 
     def be_food(self) -> None:
-        self.__type__ = CellType.food
+        self._type = CellType.food
 
     # ====================  Type Getters  ====================
 
     def get_type(self) -> CellType:
-        return self.__type__
+        return self._type
 
     def is_blank(self) -> bool:
-        return self.__type__ == CellType.blank
+        return self._type == CellType.blank
 
     def is_wall(self) -> bool:
-        return self.__type__ == CellType.wall
+        return self._type == CellType.wall
 
     def is_worm(self) -> bool:
-        return self.__type__ == CellType.worm
+        return self._type == CellType.worm
 
     def is_food(self) -> bool:
-        return self.__type__ == CellType.food
+        return self._type == CellType.food
 
     # ====================  Neighbours  ====================
 
     def set_neighbour(self, direction: Direction, neighbour: "Cell") -> None:
-        self.__neighbours__[direction] = neighbour
+        self._neighbours[direction] = neighbour
 
     def get_neighbour(self, direction: Direction) -> "Cell":
-        return self.__neighbours__[direction]
+        return self._neighbours[direction]

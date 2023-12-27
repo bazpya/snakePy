@@ -4,9 +4,9 @@ import random
 
 
 class Game:
-    def __init__(self, row_count: int, col_count: int):
+    def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
-        self._col_count = col_count
+        self._col_count = row_count if col_count is None else col_count
         self._cells: list[Cell] = []
         self._populate()
         self._link_neighbours()
@@ -16,9 +16,7 @@ class Game:
         for row_index in range(self._row_count):
             row = []
             for col_index in range(self._col_count):
-                cell = Cell()
-                # cell.row = row_index
-                # cell.col = col_index
+                cell = Cell(row_index, col_index)
                 row.append(cell)
             self._cells.append(row)
 
@@ -59,6 +57,11 @@ class Game:
         food_cell = random.choice(blank_cells)
         food_cell.be_food()
         return food_cell
+
+    def _get_centre(self) -> Cell:
+        row = self._row_count // 2
+        col = self._col_count // 2
+        return self._cells[row][col]
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1

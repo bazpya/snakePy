@@ -8,6 +8,10 @@ col_count = 18
 initial_sut = Game(row_count, col_count)
 
 
+def get_new_sut():
+    return Game(row_count, col_count)
+
+
 class Cell_(unittest.TestCase):
     def test_init_creates_correct_number_of_rows(self):
         self.assertEqual(row_count, len(initial_sut._cells))
@@ -15,6 +19,10 @@ class Cell_(unittest.TestCase):
     def test_init_creates_correct_number_of_columns(self):
         for r in range(row_count):
             self.assertEqual(col_count, len(initial_sut._cells[r]))
+
+    def test_init_with_only_one_dimension_creates_square(self):
+        sut = Game(row_count)
+        self.assertEqual(row_count, sut._col_count)
 
     def test_iterate_cells_hits_all_cells(self):
         all_cells_count = row_count * col_count
@@ -136,7 +144,7 @@ class Cell_(unittest.TestCase):
         self.assertEqual((row_count - 2) * (col_count - 2), count)
 
     def test_drop_food_affects_one_cell(self):
-        sut = Game(row_count, col_count)
+        sut = get_new_sut()
         food_cell = sut._drop_food()
 
         def counter_func(cell, ri, ci, acc):
@@ -144,3 +152,19 @@ class Cell_(unittest.TestCase):
 
         count = sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(1, count)
+
+    # ==========================================
+
+    def test_get_centre_for_large_odd_numbers(self):
+        expected = 8
+        sut = Game(expected * 2 + 1)
+        cell = sut._get_centre()
+        actual = cell._row
+        self.assertEqual(expected, actual)
+
+    def test_get_centre_for_large_even_numbers(self):
+        expected = 8
+        sut = Game(expected * 2)
+        cell = sut._get_centre()
+        actual = cell._row
+        self.assertEqual(expected, actual)
