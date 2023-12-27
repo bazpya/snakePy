@@ -39,6 +39,10 @@ class Cell_(unittest.TestCase):
         sut.be_blank()
         self.assertEqual(CellType.blank, sut.get_type())
 
+    def test_is_worm_works(self):
+        sut = Cell(None, None, CellType.worm)
+        self.assertTrue(sut.is_worm())
+
     def test_init_sets_neighbours_to_none(self):
         sut = Cell(None, None)
         self.assertIsNone(sut.get_neighbour(Direction.right))

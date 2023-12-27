@@ -63,6 +63,13 @@ class Game:
         col = self._col_count // 2
         return self._cells[row][col]
 
+    def add_worm(self) -> Cell:
+        centre = self._get_centre()
+        if not centre.is_blank():
+            raise ValueError("The centre cell is not blank!")
+        centre.be_worm()
+        return centre
+
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1
         row_index_upper_bound = (

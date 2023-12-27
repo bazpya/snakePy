@@ -27,7 +27,7 @@ class Cell_(unittest.TestCase):
     def test_iterate_cells_hits_all_cells(self):
         all_cells_count = row_count * col_count
 
-        def counter_func(cell, ri, ci, acc):
+        def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
         count = initial_sut.iterate_cells(True, counter_func, 0)
@@ -36,7 +36,7 @@ class Cell_(unittest.TestCase):
     def test_iterate_cells_hits_interior_cells(self):
         interior_cells_count = (row_count - 2) * (col_count - 2)
 
-        def counter_func(cell, ri, ci, acc):
+        def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
         count = initial_sut.iterate_cells(False, counter_func, 0)
@@ -147,7 +147,7 @@ class Cell_(unittest.TestCase):
         sut = get_new_sut()
         food_cell = sut._drop_food()
 
-        def counter_func(cell, ri, ci, acc):
+        def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_food() else acc
 
         count = sut.iterate_cells(False, counter_func, 0)
@@ -182,3 +182,15 @@ class Cell_(unittest.TestCase):
         cell = sut._get_centre()
         actual = cell._row
         self.assertEqual(expected, actual)
+
+    # ==========================================
+
+    def test_add_worm_sets_one_cell(self):
+        fresh_sut = get_new_sut()
+
+        def counter_func(cell: Cell, ri, ci, acc):
+            return acc + 1 if cell.is_worm() else acc
+
+        fresh_sut.add_worm()
+        count = fresh_sut.iterate_cells(True, counter_func, 0)
+        self.assertEqual(1, count)
