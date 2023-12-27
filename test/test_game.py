@@ -168,3 +168,17 @@ class Cell_(unittest.TestCase):
         cell = sut._get_centre()
         actual = cell._row
         self.assertEqual(expected, actual)
+
+    def test_get_centre_for_small_odd_numbers(self):
+        expected = 1
+        sut = Game(expected * 2 + 1)
+        cell = sut._get_centre()
+        actual = cell._row
+        self.assertEqual(expected, actual)
+
+    def test_get_centre_for_small_even_numbers(self):
+        expected = 1
+        sut = Game(expected * 2)
+        cell = sut._get_centre()
+        actual = cell._row
+        self.assertEqual(expected, actual)
