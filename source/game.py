@@ -1,12 +1,13 @@
 from source.global_refs import Direction, CellType
 from source.cell import Cell
+import random
 
 
 class Game:
     def __init__(self, row_count: int, col_count: int):
         self._row_count = row_count
         self._col_count = col_count
-        self._cells = []
+        self._cells: list[Cell] = []
         self._populate()
         self._link_neighbours()
         self._lay_walls()
@@ -16,8 +17,8 @@ class Game:
             row = []
             for col_index in range(self._col_count):
                 cell = Cell()
-                cell.row = row_index
-                cell.col = col_index
+                # cell.row = row_index
+                # cell.col = col_index
                 row.append(cell)
             self._cells.append(row)
 
@@ -48,6 +49,16 @@ class Game:
                 cell.be_wall()
 
         self.iterate_cells(True, visit)
+
+    def _get_blank_cells(self) -> list[Cell]:
+        flat_list_of_cells = [x for row in self._cells for x in row]
+        return [x for x in flat_list_of_cells if x.is_blank()]
+
+    def _drop_food(self) -> Cell:
+        blank_cells = self._get_blank_cells()
+        food_cell = random.choice(blank_cells)
+        food_cell.be_food()
+        return food_cell
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1
