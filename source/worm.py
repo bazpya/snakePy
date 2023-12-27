@@ -1,4 +1,5 @@
 from source.cell import Cell
+from source.global_refs import Direction
 
 
 class Worm:
@@ -15,3 +16,7 @@ class Worm:
 
     def get_length(self):
         return len(self._cells)
+
+    def step(self, dir: Direction):
+        next_head = self._head.get_neighbour(dir)
+        self._head = next_head
