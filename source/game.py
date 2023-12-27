@@ -2,8 +2,12 @@ from source.global_refs import Direction, CellType
 from source.cell import Cell
 import random
 
+from source.worm import Worm
+
 
 class Game:
+    _worm: Worm
+
     def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
         self._col_count = row_count if col_count is None else col_count
@@ -67,7 +71,7 @@ class Game:
         centre = self._get_centre()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
-        centre.be_worm()
+        self._worm = Worm(centre)
         return centre
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):

@@ -12,7 +12,7 @@ def get_new_sut():
     return Game(row_count, col_count)
 
 
-class Cell_(unittest.TestCase):
+class Game_(unittest.TestCase):
     def test_init_creates_correct_number_of_rows(self):
         self.assertEqual(row_count, len(initial_sut._cells))
 
