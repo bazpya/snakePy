@@ -12,23 +12,28 @@ class Worm_(unittest.TestCase):
         self.assertEqual(1, sut.get_length())
 
     def test_step_moves_head(self):
-        up_neighbour = Cell(None, None)
-        right_neighbour = Cell(None, None)
-        down_neighbour = Cell(None, None)
-        left_neighbour = Cell(None, None)
-
-        neighbours = {
-            Direction.up: up_neighbour,
-            Direction.right: right_neighbour,
-            Direction.down: down_neighbour,
-            Direction.left: left_neighbour,
-        }
-
-        def side_effect_func(dir: Direction):
-            return neighbours[dir]
-
+        next_cell = Cell(None, None)
         head = Cell(None, None)
-        head.get_neighbour = side_effect_func
+        head.get_neighbour = lambda whatever: next_cell
         worm = Worm(head)
         worm.step(Direction.up)
-        self.assertEqual(up_neighbour, worm._head)
+        self.assertEqual(next_cell, worm.get_head())
+
+    def test_step_makes_new_cell_worm(self):
+        next_cell = Cell(None, None)
+        head = Cell(None, None)
+        head.get_neighbour = lambda whatever: next_cell
+        worm = Worm(head)
+        worm.step(Direction.up)
+        self.assertTrue(next_cell.is_worm)
+
+    def test_step_when_into_blank_cell_keeps_length_same(self):
+        next_cell = Cell(None, None)
+        head = Cell(None, None)
+        head.get_neighbour = lambda whatever: next_cell
+        worm = Worm(head)
+        worm.step(Direction.up)
+        self.assertEqual(1, worm.get_length())
+
+    def test_step_when_into_food_cell_increments_length(self):
+        self.skipTest("Todo")
