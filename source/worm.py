@@ -5,11 +5,13 @@ from collections import deque
 
 class Worm:
     _cells: deque[Cell]
+    _direction: Direction
 
     def __init__(self, only_cell: Cell) -> None:
         self._cells = deque()
         self._cells.append(only_cell)
         only_cell.be_worm()
+        self._direction = Direction.up
 
     def get_head(self):
         return self._cells[-1]
@@ -20,9 +22,14 @@ class Worm:
     def get_length(self):
         return len(self._cells)
 
-    def step(self, dir: Direction):
+    def step(self):
         head = self.get_head()
-        next_cell = head.get_neighbour(dir)
-        next_cell.be_worm()
-        self._cells.append(next_cell)
-        self._cells.popleft()
+        destination = head.get_neighbour(self._direction)
+        self._cells.append(destination)
+        is_growing = destination.is_food()
+        if is_growing:
+            pass
+        else:
+            previous_tail = self._cells.popleft()
+            previous_tail.be_blank()
+        destination.be_worm()
