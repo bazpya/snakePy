@@ -26,15 +26,16 @@ class Worm:
     def step(self):
         head = self.get_head()
         destination = head.get_neighbour(self._direction)
-        should_grow = destination.is_food()
+        should_stay_same_length = destination.is_food() == False
         should_die = destination.is_wall() or destination.is_worm()
         if should_die:
-            self._death_callback()
+            self._die()
             return
-        if should_grow:
-            pass
-        else:
+        if should_stay_same_length:
             previous_tail = self._cells.popleft()
             previous_tail.be_blank()
         destination.be_worm()
         self._cells.append(destination)
+
+    def _die(self):
+        self._death_callback()

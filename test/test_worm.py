@@ -62,3 +62,13 @@ class Worm_(unittest.TestCase):
         worm = Worm(initial_head, death_callback)
         worm.step()
         death_callback.assert_called()
+
+    def test_step_when_into_wall_without_death_callback_does_nothing(self):
+        destination = Cell(None, None, CellType.wall)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        worm = Worm(initial_head)
+        try:
+            worm.step()
+        except Exception:
+            self.fail("Worm death callback threw an error")
