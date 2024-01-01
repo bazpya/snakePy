@@ -1,6 +1,6 @@
 import unittest
-from unittest.mock import MagicMock, Mock
-from source.global_refs import Direction, CellType
+from unittest.mock import MagicMock
+from source.global_refs import CellType
 from source.cell import Cell
 from source.worm import Worm
 
@@ -27,7 +27,7 @@ class Worm_(unittest.TestCase):
         worm.step()
         self.assertTrue(destination.is_worm)
 
-    def test_step_when_into_blank_cell_makes_tail_cell_blank(self):
+    def test_step_when_into_blank_makes_tail_cell_blank(self):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
@@ -36,7 +36,7 @@ class Worm_(unittest.TestCase):
         worm.step()
         self.assertTrue(initial_tail.is_blank())
 
-    def test_step_when_into_blank_cell_keeps_length_same(self):
+    def test_step_when_into_blank_keeps_length_same(self):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
@@ -45,7 +45,7 @@ class Worm_(unittest.TestCase):
         worm.step()
         self.assertEqual(initial_length, worm.get_length())
 
-    def test_step_when_into_food_cell_increments_length(self):
+    def test_step_when_into_food_increments_length(self):
         destination = Cell(None, None, CellType.food)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
@@ -53,3 +53,12 @@ class Worm_(unittest.TestCase):
         initial_length = worm.get_length()
         worm.step()
         self.assertEqual(initial_length + 1, worm.get_length())
+
+    def test_step_when_into_wall_invokes_death_callback(self):
+        destination = Cell(None, None, CellType.wall)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        death_callback = MagicMock()
+        worm = Worm(initial_head, death_callback)
+        worm.step()
+        death_callback.assert_called()
