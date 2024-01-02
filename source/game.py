@@ -1,17 +1,17 @@
-from source.global_refs import Direction, CellType
+from source.global_refs import Direction
 from source.cell import Cell
 import random
-
 from source.worm import Worm
 
 
 class Game:
     _worm: Worm
+    _cells: list[list[Cell]]
 
     def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
         self._col_count = row_count if col_count is None else col_count
-        self._cells: list[Cell] = []
+        self._cells = []
         self._populate()
         self._link_neighbours()
         self._lay_walls()
