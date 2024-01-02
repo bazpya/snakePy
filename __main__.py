@@ -1,7 +1,9 @@
 from source.graphics import Circle, GraphWin, Point
 
-win = GraphWin("My Circle", 100, 100)
-c = Circle(Point(50, 50), 10)
-c.draw(win)
-win.getMouse()  # Pause to view result
-win.close()  # Close window when done
+window = GraphWin("snakePy", 500, 500)
+circle1 = Circle(Point(50, 50), 10)
+circle2 = Circle(Point(80, 80), 20)
+circle1.draw(window)
+circle2.draw(window)
+window.getMouse()
+window.close()

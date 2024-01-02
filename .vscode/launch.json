@@ -2,10 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "Unit Tests",
             "type": "python",
             "request": "launch",
             "module": "unittest",
+            "justMyCode": true
+        },
+        {
+            "name": "Launch",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
             "justMyCode": true
         }
     ]
