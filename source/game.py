@@ -1,3 +1,4 @@
+from source.event import Event
 from source.global_refs import Direction
 from source.cell import Cell
 import random
@@ -7,6 +8,11 @@ from source.worm import Worm
 class Game:
     _worm: Worm
     _cells: list[list[Cell]]
+    _row_count: int
+    _col_count: int
+    _step_event: Event
+    _ate_event: Event
+    _death_event: Event
 
     def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
@@ -15,6 +21,9 @@ class Game:
         self._populate()
         self._link_neighbours()
         self._lay_walls()
+        self._step_event = Event()
+        self._death_event = Event()
+        self._ate_event = Event()
 
     def _populate(self):
         for row_index in range(self._row_count):

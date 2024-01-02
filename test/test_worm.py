@@ -1,5 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
+from source.event import Event
 from source.global_refs import CellType
 from source.cell import Cell
 from source.worm import Worm
@@ -54,16 +55,18 @@ class Worm_(unittest.TestCase):
         worm.step()
         self.assertEqual(initial_length + 1, worm.get_length())
 
-    def test_step_when_into_wall_invokes_death_callback(self):
+    def test_step_when_into_wall_emets_death_event(self):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
+        death_event = Event()
+        worm = Worm(initial_head, death_event)
         death_callback = MagicMock()
-        worm = Worm(initial_head, death_callback)
+        death_event.subscribe(death_callback)
         worm.step()
         death_callback.assert_called()
 
-    def test_step_when_into_wall_without_death_callback_does_nothing(self):
+    def test_step_when_into_wall_without_death_event_does_nothing(self):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
@@ -71,4 +74,4 @@ class Worm_(unittest.TestCase):
         try:
             worm.step()
         except Exception:
-            self.fail("Worm death callback threw an error")
+            self.fail("Worm death event threw an error")
