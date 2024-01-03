@@ -38,18 +38,19 @@ class Worm:
     def step(self):
         head = self.get_head()
         destination = head.get_neighbour(self._direction)
-        should_stay_same_length = destination.is_food() == False
+        is_fed = destination.is_food()
         should_die = destination.is_wall() or destination.is_worm()
         if should_die:
             if self._death_event is not None:
                 self._death_event.emit()
-                return
-        if should_stay_same_length:
+        else:
+            destination.be_worm()
+            self._cells.append(destination)
+        if is_fed:
+            if self._ate_event is not None:
+                self._ate_event.emit()
+        else:
             previous_tail = self._cells.popleft()
             previous_tail.be_blank()
-        destination.be_worm()
-        self._cells.append(destination)
         if self._step_event is not None:
             self._step_event.emit()
-        if self._ate_event is not None:
-            self._ate_event.emit()

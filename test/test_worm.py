@@ -28,16 +28,47 @@ class Worm_(unittest.TestCase):
         sut = Worm(cell)
         self.assertEqual(1, sut.get_length())
 
-    # ===============================  step-any  ===============================
+    # ===============================  events  ===============================
 
-    def test_step_when_into_any_cell_emits_step_event(self):
-        for cellType in CellType:
-            destination = Cell(None, None, cellType)
-            initial_head = Cell(None, None)
-            initial_head.get_neighbour = lambda whatever: destination
-            sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
-            sut.step()
-            self.step_callback.assert_called()
+    def test_step_when_into_blank_emits_the_right_events(self):
+        destination = Cell(None, None, CellType.blank)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut.step()
+        self.step_callback.assert_called()
+        self.ate_callback.assert_not_called()
+        self.death_callback.assert_not_called()
+
+    def test_step_when_into_wall_emits_the_right_events(self):
+        destination = Cell(None, None, CellType.wall)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut.step()
+        self.step_callback.assert_called()
+        self.ate_callback.assert_not_called()
+        self.death_callback.assert_called()
+
+    def test_step_when_into_worm_emits_the_right_events(self):
+        destination = Cell(None, None, CellType.worm)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut.step()
+        self.step_callback.assert_called()
+        self.ate_callback.assert_not_called()
+        self.death_callback.assert_called()
+
+    def test_step_when_into_food_emits_the_right_events(self):
+        destination = Cell(None, None, CellType.food)
+        initial_head = Cell(None, None)
+        initial_head.get_neighbour = lambda whatever: destination
+        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut.step()
+        self.step_callback.assert_called()
+        self.ate_callback.assert_called()
+        self.death_callback.assert_not_called()
 
     # ===============================  step-blank  ===============================
 
@@ -86,32 +117,7 @@ class Worm_(unittest.TestCase):
         sut.step()
         self.assertEqual(initial_length + 1, sut.get_length())
 
-    def test_step_when_into_food_emits_ate_event(self):
-        destination = Cell(None, None, CellType.food)
-        initial_head = Cell(None, None)
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
-        sut.step()
-        self.step_callback.assert_called()
-        self.ate_callback.assert_called()
-
-    def test_step_when_into_food_does_not_emit_death_event(self):
-        destination = Cell(None, None, CellType.food)
-        initial_head = Cell(None, None)
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
-        sut.step()
-        self.death_callback.assert_not_called()
-
     # ===============================  step-wall  ===============================
-
-    def test_step_when_into_wall_emit_death_event(self):
-        destination = Cell(None, None, CellType.wall)
-        initial_head = Cell(None, None)
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
-        sut.step()
-        self.death_callback.assert_called()
 
     def test_step_when_into_wall_without_death_event_does_nothing(self):
         destination = Cell(None, None, CellType.wall)
