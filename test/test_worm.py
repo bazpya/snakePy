@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from source.event import Event
+from source.event_hub import EventHub
 from source.global_refs import CellType
 from source.cell import Cell
 from source.worm import Worm
@@ -9,17 +10,20 @@ from source.worm import Worm
 class Worm_(unittest.TestCase):
     def __init__(self, *args, **kwargs):
         super(Worm_, self).__init__(*args, **kwargs)
-        self.step_event = Event()
-        self.step_callback = MagicMock()
-        self.step_event.subscribe(self.step_callback)
 
-        self.ate_event = Event()
+        self._events = EventHub()
+
+        self._events.stepped = Event()
+        self.stepped_callback = MagicMock()
+        self._events.stepped.subscribe(self.stepped_callback)
+
+        self._events.ate = Event()
         self.ate_callback = MagicMock()
-        self.ate_event.subscribe(self.ate_callback)
+        self._events.ate.subscribe(self.ate_callback)
 
-        self.death_event = Event()
-        self.death_callback = MagicMock()
-        self.death_event.subscribe(self.death_callback)
+        self._events.died = Event()
+        self.died_callback = MagicMock()
+        self._events.died.subscribe(self.died_callback)
 
     # ===============================  init  ===============================
 
@@ -34,41 +38,41 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None, CellType.blank)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
-        self.step_callback.assert_called()
+        self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
-        self.death_callback.assert_not_called()
+        self.died_callback.assert_not_called()
 
     def test_step_when_into_wall_emits_the_right_events(self):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
-        self.step_callback.assert_called()
+        self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
-        self.death_callback.assert_called()
+        self.died_callback.assert_called()
 
     def test_step_when_into_worm_emits_the_right_events(self):
         destination = Cell(None, None, CellType.worm)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
-        self.step_callback.assert_called()
+        self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
-        self.death_callback.assert_called()
+        self.died_callback.assert_called()
 
     def test_step_when_into_food_emits_the_right_events(self):
         destination = Cell(None, None, CellType.food)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
-        self.step_callback.assert_called()
+        self.stepped_callback.assert_called()
         self.ate_callback.assert_called()
-        self.death_callback.assert_not_called()
+        self.died_callback.assert_not_called()
 
     # ===============================  step-blank  ===============================
 
@@ -76,7 +80,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
         self.assertEqual(destination, sut.get_head())
 
@@ -84,7 +88,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         sut.step()
         self.assertTrue(destination.is_worm)
 
@@ -92,7 +96,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         initial_tail = sut.get_tail()
         sut.step()
         self.assertTrue(initial_tail.is_blank())
@@ -101,7 +105,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length, sut.get_length())
@@ -112,7 +116,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None, CellType.food)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length + 1, sut.get_length())
@@ -123,7 +127,7 @@ class Worm_(unittest.TestCase):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self.step_event, self.ate_event, self.death_event)
+        sut = Worm(initial_head, self._events)
         try:
             sut.step()
         except Exception:

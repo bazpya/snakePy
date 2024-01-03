@@ -1,5 +1,6 @@
 from source.cell import Cell
 from source.event import Event
+from source.event_hub import EventHub
 from source.global_refs import Direction
 from collections import deque
 
@@ -7,24 +8,14 @@ from collections import deque
 class Worm:
     _cells: deque[Cell]
     _direction: Direction
-    _step_event: Event
-    _ate_event: Event
-    _death_event: Event
+    _events: EventHub
 
-    def __init__(
-        self,
-        only_cell: Cell,
-        step_event: Event = None,
-        ate_event: Event = None,
-        death_event: Event = None,
-    ) -> None:
+    def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
         self._cells = deque()
         self._cells.append(only_cell)
         only_cell.be_worm()
         self._direction = Direction.up
-        self._step_event = step_event
-        self._ate_event = ate_event
-        self._death_event = death_event
+        self._events = events
 
     def get_head(self):
         return self._cells[-1]
@@ -41,16 +32,16 @@ class Worm:
         is_fed = destination.is_food()
         should_die = destination.is_wall() or destination.is_worm()
         if should_die:
-            if self._death_event is not None:
-                self._death_event.emit()
+            if self._events.died is not None:
+                self._events.died.emit()
         else:
             destination.be_worm()
             self._cells.append(destination)
         if is_fed:
-            if self._ate_event is not None:
-                self._ate_event.emit()
+            if self._events.ate is not None:
+                self._events.ate.emit()
         else:
             previous_tail = self._cells.popleft()
             previous_tail.be_blank()
-        if self._step_event is not None:
-            self._step_event.emit()
+        if self._events.stepped is not None:
+            self._events.stepped.emit()
