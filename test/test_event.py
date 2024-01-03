@@ -15,11 +15,11 @@ class Event_(unittest.TestCase):
         sut = Event()
         callback = MagicMock()
         sut.subscribe(callback)
+
         arg_int = 1
         arg_str = "something"
         arg_obj = {}
         arg_array = []
-
         arg_func = lambda: None
 
         sut.emit(arg_int, arg_str, arg_obj, arg_array, arg_func)

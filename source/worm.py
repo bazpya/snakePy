@@ -1,5 +1,4 @@
 from source.cell import Cell
-from source.event import Event
 from source.event_hub import EventHub
 from source.global_refs import Direction
 from collections import deque
