@@ -16,14 +16,14 @@ class Event_(unittest.TestCase):
         callback = MagicMock()
         sut.subscribe(callback)
 
-        arg_int = 1
-        arg_str = "something"
-        arg_obj = {}
-        arg_array = []
-        arg_func = lambda: None
+        arg1 = 1
+        arg2 = "something"
+        arg3 = {}
+        arg4 = []
+        arg5 = lambda: None
 
-        sut.emit(arg_int, arg_str, arg_obj, arg_array, arg_func)
-        callback.assert_called_with(arg_int, arg_str, arg_obj, arg_array, arg_func)
+        sut.emit(arg1, arg2, arg3, arg4, arg5)
+        callback.assert_called_with(arg1, arg2, arg3, arg4, arg5)
 
     def test_unsubscribe_removes_callback(self):
         sut = Event()

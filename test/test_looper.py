@@ -32,17 +32,15 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
         callback.assert_not_called()
 
     async def test_passes_args_to_func(self):
-        callback = MagicMock()
-        arg_int = 1
-        arg_str = "something"
-        arg_obj = {}
-        arg_array = []
-        arg_func = lambda: None
+        cb = MagicMock()
+        arg1 = 1
+        arg2 = "something"
+        arg3 = {}
+        arg4 = []
+        arg5 = lambda: None
 
-        sut = Looper(
-            0.01, callback, args=(arg_int, arg_str, arg_obj, arg_array, arg_func)
-        )
+        sut = Looper(0.01, cb, args=(arg1, arg2, arg3, arg4, arg5))
         sut.start()
         time.sleep(0.03)
         sut.cancel()
-        callback.assert_called_with(arg_int, arg_str, arg_obj, arg_array, arg_func)
+        cb.assert_called_with(arg1, arg2, arg3, arg4, arg5)
