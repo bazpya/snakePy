@@ -7,16 +7,23 @@ class Looper:
     _interval: float
     _func: object
     _should_continue: bool
+    _end_callback: object
     _args: tuple
 
     def __init__(
-        self, func: object, interval: float, iterations: int = None, args: tuple = ()
+        self,
+        func: object,
+        interval: float,
+        iterations: int = None,
+        end_callback: object = lambda: None,
+        args: tuple = (),
     ):
         self.counter = 0
         self._interval = interval
         self._func = func
         self._iterations = iterations
         self._args = args
+        self._end_callback = end_callback
 
     async def start(self):
         self._should_continue = True
@@ -27,6 +34,7 @@ class Looper:
             while self._should_continue and self._iterations > 0:
                 await self._cycle()
                 self._iterations -= 1
+        self._end_callback()
         return True
 
     def stop(self):

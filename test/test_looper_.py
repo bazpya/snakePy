@@ -41,3 +41,10 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
         sut = Looper(cb, self._msec, iterations=1, args=(arg1, arg2, arg3, arg4, arg5))
         await sut.start()
         cb.assert_called_with(arg1, arg2, arg3, arg4, arg5, sut)
+
+    async def test_invokes_end_callback(self):
+        func = MagicMock()
+        end_callback = MagicMock()
+        sut = Looper(func, self._msec, self._some_number_1, end_callback)
+        result = await sut.start()
+        end_callback.assert_called_once()
