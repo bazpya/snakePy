@@ -18,13 +18,13 @@ class Worm:
         self._direction = Direction.up
         self._events = events
 
-    def get_head(self):
+    def get_head(self):  # todo: see if you can remove this
         return self._cells[-1]
 
-    def get_tail(self):
+    def get_tail(self):  # todo: see if you can remove this
         return self._cells[0]
 
-    def get_length(self):
+    def get_length(self):  # todo: see if you can remove this
         return len(self._cells)
 
     def step(self):
