@@ -10,6 +10,7 @@ class Worm:
     _direction: Direction
     _events: EventHub
     _looper: Looper
+    _steps_taken: int
 
     def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
         self._cells = deque()
@@ -17,6 +18,7 @@ class Worm:
         only_cell.be_worm()
         self._direction = Direction.up
         self._events = events
+        self._steps_taken = 0
 
     def get_head(self):  # todo: see if you can remove this
         return self._cells[-1]
@@ -47,6 +49,8 @@ class Worm:
         if self._events.stepped is not None:
             self._events.stepped.emit()
 
-    async def run(self):
-        self._looper = Looper(lambda *args: self.step(), interval=0.5, iterations=5)
+    async def run(self, interval: float = 0.5, steps_to_take: int = None):
+        self._looper = Looper(
+            lambda *args: self.step(), interval=interval, iterations=steps_to_take
+        )
         await self._looper.start()

@@ -2,12 +2,13 @@ import unittest
 from unittest.mock import MagicMock
 from source.event import Event
 from source.event_hub import EventHub
-from source.global_refs import CellType
-from source.cell import Cell
-from source.worm import Worm
 
 
-class Worm_(unittest.TestCase):
+class Worm_(unittest.IsolatedAsyncioTestCase):
+    _msec = 0.001
+    _some_number_1 = 7
+    _some_number_2 = 10
+
     def __init__(self, *args, **kwargs):
         super(Worm_, self).__init__(*args, **kwargs)
 

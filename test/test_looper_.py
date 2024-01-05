@@ -9,7 +9,7 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
     _some_number_1 = 7
     _some_number_2 = 10
 
-    async def test_loops_correct_number_of_times(self):
+    async def test_when_specified_loops_correct_number_of_times(self):
         counter = Counter()
         sut = Looper(counter.increment, self._msec, self._some_number_1)
         await sut.start()
@@ -22,7 +22,7 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
         expected = counter.read()
         self.assertEqual(actual, expected)
 
-    async def test_if_number_of_iterations_unspecified_runs_indefinitely(self):
+    async def test_if_unspecified_runs_indefinitely(self):
         # def func():
         #     pass
 
