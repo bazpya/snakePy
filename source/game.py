@@ -1,4 +1,5 @@
 from source.event import Event
+from source.event_hub import EventHub
 from source.global_refs import Direction
 from source.cell import Cell
 import random
@@ -10,9 +11,7 @@ class Game:
     _cells: list[list[Cell]]
     _row_count: int
     _col_count: int
-    _step_event: Event
-    _ate_event: Event
-    _death_event: Event
+    event_hub: EventHub
 
     def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
@@ -21,9 +20,7 @@ class Game:
         self._populate()
         self._link_neighbours()
         self._lay_walls()
-        self._step_event = Event()
-        self._death_event = Event()
-        self._ate_event = Event()
+        self.event_hub = EventHub()
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -76,12 +73,12 @@ class Game:
         col = self._col_count // 2
         return self._cells[row][col]
 
-    def add_worm(self) -> Cell:
+    def add_worm(self):
         centre = self._get_centre()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
-        self._worm = Worm(centre)
-        return centre
+        self._worm = Worm(centre, self.event_hub)
+        return self._worm
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1

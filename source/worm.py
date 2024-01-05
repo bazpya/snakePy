@@ -2,12 +2,14 @@ from source.cell import Cell
 from source.event_hub import EventHub
 from source.global_refs import Direction
 from collections import deque
+from source.looper import Looper
 
 
 class Worm:
     _cells: deque[Cell]
     _direction: Direction
     _events: EventHub
+    _looper: Looper
 
     def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
         self._cells = deque()
@@ -44,3 +46,7 @@ class Worm:
             previous_tail.be_blank()
         if self._events.stepped is not None:
             self._events.stepped.emit()
+
+    async def run(self):
+        self._looper = Looper(lambda *args: self.step(), interval=0.5, iterations=5)
+        await self._looper.start()

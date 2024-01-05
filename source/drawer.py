@@ -19,6 +19,7 @@ class Drawer:
         pass
 
     def draw(self, cells: list[list[Cell]]) -> None:
+        # self._window.flush()
         for row in cells:
             for cell in row:
                 ri = cell._row
@@ -40,3 +41,6 @@ class Drawer:
                 colour = self._colour_map[cellType]
                 square.setFill(colour)
                 square.draw(self._window)
+
+    def getMouse(self):
+        return self._window.getMouse()

@@ -43,5 +43,5 @@ class Looper:
 
     async def _cycle(self):
         await asyncio.sleep(self._interval)
-        self._func(*self._args, self)
+        self._func(*self._args)
         self.counter = self.counter + 1
