@@ -35,7 +35,7 @@ class Looper:
                 await self._cycle()
                 self._iterations -= 1
         self._end_callback()
-        return True
+        return self.counter
 
     def stop(self):
         self._should_continue = False

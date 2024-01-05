@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from source.looper import Looper
+from test.counter import Counter
 
 
 class Looper_(unittest.IsolatedAsyncioTestCase):
@@ -15,10 +16,17 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
         func.assert_called()
 
     async def test_repeates_correct_number_of_times(self):
-        func = MagicMock()
-        sut = Looper(func, self._msec, self._some_number_1)
-        result = await sut.start()
-        self.assertEqual(sut.counter, self._some_number_1)
+        counter = Counter()
+        sut = Looper(counter.increment, self._msec, self._some_number_1)
+        await sut.start()
+        self.assertEqual(counter.read(), self._some_number_1)
+
+    async def test_returns_actual_number_of_repetitions(self):
+        counter = Counter()
+        sut = Looper(counter.increment, self._msec, self._some_number_1)
+        actual = await sut.start()
+        expected = counter.read()
+        self.assertEqual(actual, expected)
 
     async def test_if_iterations_unspecified_runs_indefinitely(self):
         # def func():
