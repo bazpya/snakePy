@@ -14,12 +14,11 @@ class Drawer:
     }
 
     def __init__(self):
-        self._window = GraphWin("snakePy", 500, 500)
+        self._window = GraphWin("snakePy", 1500, 600)
         self._cell_size = 20
         pass
 
     def draw(self, cells: list[list[Cell]]) -> None:
-        # self._window.flush()
         for row in cells:
             for cell in row:
                 ri = cell._row
