@@ -34,7 +34,7 @@ class Game:
             self._cells.append(row)
 
     def _link_neighbours(self):
-        def visit(cell, ri, ci, acc):
+        def visit(cell: Cell, ri, ci, acc):
             has_up_neighbour = ri != 0
             has_left_neighbour = ci != 0
 
@@ -66,8 +66,7 @@ class Game:
 
     def _on_stepped(self, *args, **kwargs):
         self._add_to_diff(*args)
-        changed_cells = self._step_diff  # todo: is this necessary?
-        self.event_hub.ready_to_draw.emit(changed_cells)
+        self.event_hub.ready_to_draw.emit(self._step_diff)
         self._purge_diff()
 
     def get_cells(self):
