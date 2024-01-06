@@ -4,7 +4,7 @@ from enum import Enum
 class CellType(Enum):
     blank = 1
     wall = 2
-    worm = 3
+    snake = 3
     food = 4
 
 

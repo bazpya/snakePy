@@ -1,10 +1,10 @@
 from source.cell import Cell
-from source.worm import Worm
-from test.test_worm_ import Worm_
+from source.snake import Snake
+from test.test_snake_ import Snake_
 
 
-class Worm_init_(Worm_):
+class Snake_init_(Snake_):
     def test_init_sets_one_cell_only(self):
         cell = Cell(None, None)
-        sut = Worm(cell)
+        sut = Snake(cell)
         self.assertEqual(1, sut.get_length())

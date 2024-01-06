@@ -3,11 +3,11 @@ from source.event_hub import EventHub
 from source.global_refs import Direction
 from source.cell import Cell
 import random
-from source.worm import Worm
+from source.snake import Snake
 
 
 class Game:
-    _worm: Worm
+    _snake: Snake
     _cells: list[list[Cell]]
     _row_count: int
     _col_count: int
@@ -95,12 +95,12 @@ class Game:
         col = self._col_count // 2
         return self._cells[row][col]
 
-    def add_worm(self):
+    def add_snake(self):
         centre = self._get_centre()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
-        self._worm = Worm(centre, self.event_hub)
-        return self._worm
+        self._snake = Snake(centre, self.event_hub)
+        return self._snake
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1

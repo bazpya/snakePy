@@ -29,8 +29,8 @@ class Cell(CellConcept):
     def be_wall(self) -> None:
         self._type = CellType.wall
 
-    def be_worm(self) -> None:
-        self._type = CellType.worm
+    def be_snake(self) -> None:
+        self._type = CellType.snake
 
     def be_food(self) -> None:
         self._type = CellType.food
@@ -46,8 +46,8 @@ class Cell(CellConcept):
     def is_wall(self) -> bool:
         return self._type == CellType.wall
 
-    def is_worm(self) -> bool:
-        return self._type == CellType.worm
+    def is_snake(self) -> bool:
+        return self._type == CellType.snake
 
     def is_food(self) -> bool:
         return self._type == CellType.food

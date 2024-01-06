@@ -15,7 +15,7 @@ class Cell_(unittest.TestCase):
         self.assertEqual(expected, sut._type)
 
     def test_getter_and_attribute_return_same(self):
-        expected = CellType.worm
+        expected = CellType.snake
         sut = Cell(None, None, expected)
         self.assertEqual(sut.get_type(), sut._type)
 
@@ -24,10 +24,10 @@ class Cell_(unittest.TestCase):
         sut.be_wall()
         self.assertEqual(CellType.wall, sut.get_type())
 
-    def test_be_worm_makes_worm(self):
+    def test_be_snake_makes_snake(self):
         sut = Cell(None, None)
-        sut.be_worm()
-        self.assertEqual(CellType.worm, sut.get_type())
+        sut.be_snake()
+        self.assertEqual(CellType.snake, sut.get_type())
 
     def test_be_food_makes_food(self):
         sut = Cell(None, None)
@@ -39,16 +39,16 @@ class Cell_(unittest.TestCase):
         sut.be_blank()
         self.assertEqual(CellType.blank, sut.get_type())
 
-    def test_is_worm_works(self):
-        sut = Cell(None, None, CellType.worm)
-        self.assertTrue(sut.is_worm())
+    def test_is_snake_works(self):
+        sut = Cell(None, None, CellType.snake)
+        self.assertTrue(sut.is_snake())
 
     def test_init_sets_neighbours_to_none(self):
         sut = Cell(None, None)
         self.assertIsNone(sut.get_neighbour(Direction.right))
 
     def test_neighbour_setter_sets(self):
-        sut = Cell(None, None, CellType.worm)
+        sut = Cell(None, None, CellType.snake)
         neighbour = Cell(None, None, CellType.food)
         sut.set_neighbour(Direction.right, neighbour)
         self.assertEqual(neighbour, sut.get_neighbour(Direction.right))

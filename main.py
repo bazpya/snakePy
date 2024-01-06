@@ -3,7 +3,7 @@ from source.drawer import Drawer
 from source.game import Game
 
 game = Game(64, 3)
-worm = game.add_worm()
+snake = game.add_snake()
 game._drop_food()
 drawer = Drawer()
 drawer.draw(game.get_cells())
@@ -14,7 +14,7 @@ def redraw(*args, **kwargs):
 
 
 game.event_hub.ready_to_draw.subscribe(redraw)
-task = worm.run(0.1, 27)
+task = snake.run(0.1, 27)
 res = asyncio.get_event_loop().run_until_complete(task)
 
 drawer.getMouse()

@@ -5,7 +5,7 @@ from collections import deque
 from source.looper import Looper
 
 
-class Worm:
+class Snake:
     _cells: deque[Cell]
     _direction: Direction
     _events: EventHub
@@ -15,7 +15,7 @@ class Worm:
     def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
         self._cells = deque()
         self._cells.append(only_cell)
-        only_cell.be_worm()
+        only_cell.be_snake()
         self._direction = Direction.up
         self._events = events
         self._steps_taken = 0
@@ -34,12 +34,12 @@ class Worm:
         head = self.get_head()
         destination = head.get_neighbour(self._direction)
         is_fed = destination.is_food()
-        should_die = destination.is_wall() or destination.is_worm()
+        should_die = destination.is_wall() or destination.is_snake()
         if should_die:
             if self._events.died is not None:
                 self._events.died.emit()
         else:
-            destination.be_worm()
+            destination.be_snake()
             self._cells.append(destination)
             diff.append(destination)
         if is_fed:

@@ -185,12 +185,12 @@ class Game_(unittest.TestCase):
 
     # ==========================================
 
-    def test_add_worm_sets_one_cell(self):
+    def test_add_snake_sets_one_cell(self):
         fresh_sut = get_new_sut()
 
         def counter_func(cell: Cell, ri, ci, acc):
-            return acc + 1 if cell.is_worm() else acc
+            return acc + 1 if cell.is_snake() else acc
 
-        fresh_sut.add_worm()
+        fresh_sut.add_snake()
         count = fresh_sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(1, count)

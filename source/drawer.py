@@ -9,7 +9,7 @@ class Drawer:
     _colour_map = {
         CellType.wall: "red",
         CellType.blank: "black",
-        CellType.worm: "lime",
+        CellType.snake: "lime",
         CellType.food: "yellow",
     }
 

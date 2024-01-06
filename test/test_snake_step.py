@@ -1,33 +1,33 @@
 from source.global_refs import CellType
 from source.cell import Cell
-from source.worm import Worm
-from test.test_worm_ import Worm_
+from source.snake import Snake
+from test.test_snake_ import Snake_
 
 
-class Worm_step_(Worm_):
+class Snake_step_(Snake_):
     # ===============================  step-blank  ===============================
 
     def test_step_when_into_blank_moves_head(self):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         sut.step()
         self.assertEqual(destination, sut.get_head())
 
-    def test_step_when_into_blank_makes_new_cell_worm(self):
+    def test_step_when_into_blank_makes_new_cell_snake(self):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         sut.step()
-        self.assertTrue(destination.is_worm)
+        self.assertTrue(destination.is_snake)
 
     def test_step_when_into_blank_makes_tail_cell_blank(self):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         initial_tail = sut.get_tail()
         sut.step()
         self.assertTrue(initial_tail.is_blank())
@@ -36,7 +36,7 @@ class Worm_step_(Worm_):
         destination = Cell(None, None)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length, sut.get_length())
@@ -47,7 +47,7 @@ class Worm_step_(Worm_):
         destination = Cell(None, None, CellType.food)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length + 1, sut.get_length())
@@ -58,8 +58,8 @@ class Worm_step_(Worm_):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell(None, None)
         initial_head.get_neighbour = lambda whatever: destination
-        sut = Worm(initial_head, self._events)
+        sut = Snake(initial_head, self._events)
         try:
             sut.step()
         except Exception:
-            self.fail("Worm death event threw an error")
+            self.fail("Snake death event threw an error")

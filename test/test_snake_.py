@@ -4,13 +4,13 @@ from source.event import Event
 from source.event_hub import EventHub
 
 
-class Worm_(unittest.IsolatedAsyncioTestCase):
+class Snake_(unittest.IsolatedAsyncioTestCase):
     _msec = 0.001
     _some_number_1 = 7
     _some_number_2 = 10
 
     def __init__(self, *args, **kwargs):
-        super(Worm_, self).__init__(*args, **kwargs)
+        super(Snake_, self).__init__(*args, **kwargs)
 
         self._events = EventHub()
 
