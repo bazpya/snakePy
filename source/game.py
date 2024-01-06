@@ -12,7 +12,7 @@ class Game:
     _row_count: int
     _col_count: int
     event_hub: EventHub
-    _step_diff_cells: list[Cell] # todo: rename to _step_diff
+    _step_diff: list[Cell]
 
     def __init__(self, row_count: int, col_count: int = None):
         self._row_count = row_count
@@ -22,8 +22,8 @@ class Game:
         self._link_neighbours()
         self._lay_walls()
         self.event_hub = EventHub()
-        self.event_hub.stepped.subscribe(self._add_to_diff)
-        self._step_diff_cells = []
+        self._step_diff = []
+        self._subscribe_events()
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -61,6 +61,15 @@ class Game:
 
         self.iterate_cells(True, visit)
 
+    def _subscribe_events(self):
+        self.event_hub.stepped.subscribe(self._on_stepped)
+
+    def _on_stepped(self, *args, **kwargs):
+        self._add_to_diff(*args)
+        changed_cells = self._step_diff  # todo: is this necessary?
+        self.event_hub.ready_to_draw.emit(changed_cells)
+        self._purge_diff()
+
     def get_cells(self):
         return [x for row in self._cells for x in row]
 
@@ -69,10 +78,10 @@ class Game:
         return [x for x in flat_list_of_cells if x.is_blank()]
 
     def _add_to_diff(self, *args):
-        self._step_diff_cells.extend(*args)
+        self._step_diff.extend(*args)
 
     def _purge_diff(self):
-        self._step_diff_cells.clear()
+        self._step_diff.clear()
 
     def _drop_food(self) -> Cell:
         blank_cells = self._get_blank_cells()

@@ -9,12 +9,11 @@ drawer = Drawer()
 drawer.draw(game.get_cells())
 
 
-def update(*args, **kwargs):
-    drawer.draw(game._step_diff_cells)
-    game._purge_diff()
+def redraw(*args, **kwargs):
+    drawer.draw(*args)
 
 
-game.event_hub.stepped.subscribe(update)
+game.event_hub.ready_to_draw.subscribe(redraw)
 task = worm.run(0.1, 27)
 res = asyncio.get_event_loop().run_until_complete(task)
 
