@@ -30,6 +30,7 @@ class Worm:
         return len(self._cells)
 
     def step(self):
+        diff = []
         head = self.get_head()
         destination = head.get_neighbour(self._direction)
         is_fed = destination.is_food()
@@ -40,14 +41,16 @@ class Worm:
         else:
             destination.be_worm()
             self._cells.append(destination)
+            diff.append(destination)
         if is_fed:
             if self._events.ate is not None:
                 self._events.ate.emit()
         else:
             previous_tail = self._cells.popleft()
             previous_tail.be_blank()
+            diff.append(previous_tail)
         if self._events.stepped is not None:
-            self._events.stepped.emit()
+            self._events.stepped.emit(diff)
 
     async def run(self, interval: float = 0.5, steps_to_take: int = None):
         self._looper = Looper(
