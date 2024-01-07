@@ -10,17 +10,17 @@ class Cell_types_(Cell_):
         self.assertEqual(sut.get_type(), sut._type)
 
     def test_be_wall_makes_wall(self):
-        sut = Cell(None, None)
+        sut = Cell()
         sut.be_wall()
         self.assertEqual(CellType.wall, sut.get_type())
 
     def test_be_snake_makes_snake(self):
-        sut = Cell(None, None)
+        sut = Cell()
         sut.be_snake()
         self.assertEqual(CellType.snake, sut.get_type())
 
     def test_be_food_makes_food(self):
-        sut = Cell(None, None)
+        sut = Cell()
         sut.be_food()
         self.assertEqual(CellType.food, sut.get_type())
 

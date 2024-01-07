@@ -6,7 +6,7 @@ from test.test_snake_ import Snake_
 
 class Snake_run_(Snake_):
     def neighbour_getter(self, *args):
-        neighbour = Cell(None, None)
+        neighbour = Cell()
         neighbour.get_neighbour = self.neighbour_getter
         return neighbour
 
@@ -14,7 +14,7 @@ class Snake_run_(Snake_):
         counter = Counter()
         self._events.stepped.subscribe(counter.increment)
 
-        initial_head = Cell(None, None)
+        initial_head = Cell()
         initial_head.get_neighbour = self.neighbour_getter
         sut = Snake(initial_head, self._events)
         await sut.run(self._msec, self._some_number_1)

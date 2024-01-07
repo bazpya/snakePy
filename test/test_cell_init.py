@@ -6,7 +6,7 @@ from test.test_cell_ import Cell_
 class Cell_init_(Cell_):
     def test_init_with_unspecified_type_defaults_to_blank(self):
         expected = CellType.blank
-        sut = Cell(None, None)
+        sut = Cell()
         self.assertEqual(expected, sut._type)
 
     def test_init_with_specified_type_sets_type(self):
@@ -15,5 +15,5 @@ class Cell_init_(Cell_):
         self.assertEqual(expected, sut._type)
 
     def test_init_sets_neighbours_to_none(self):
-        sut = Cell(None, None)
+        sut = Cell()
         self.assertIsNone(sut.get_neighbour(Direction.right))

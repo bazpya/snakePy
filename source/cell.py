@@ -6,7 +6,9 @@ class CellConcept:
 
 
 class Cell(CellConcept):
-    def __init__(self, row: int, col: int, type: CellType = CellType.blank):
+    def __init__(
+        self, row: int = None, col: int = None, type: CellType = CellType.blank
+    ):
         self._row = row
         self._col = col
         self._type = type
