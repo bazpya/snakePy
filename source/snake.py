@@ -37,18 +37,19 @@ class Snake:
         should_die = destination.is_wall() or destination.is_snake()
         if should_die:
             if self._events.died is not None:
-                self._events.died.emit()
+                self._events.died.emit(self.get_length())
         else:
             destination.be_snake()
             self._cells.append(destination)
             diff.append(destination)
         if is_fed:
-            if self._events.ate is not None:
+            if self._events.ate is not None:  # todo: Replace with init validation
                 self._events.ate.emit()
         else:
-            previous_tail = self._cells.popleft()
-            previous_tail.be_blank()
-            diff.append(previous_tail)
+            if not should_die:
+                previous_tail = self._cells.popleft()
+                previous_tail.be_blank()
+                diff.append(previous_tail)
         if self._events.stepped is not None:
             self._events.stepped.emit(diff)
 

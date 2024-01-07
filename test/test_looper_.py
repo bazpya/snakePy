@@ -23,12 +23,7 @@ class Looper_(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(actual, expected)
 
     async def test_if_unspecified_runs_indefinitely(self):
-        # def func():
-        #     pass
-
-        # sut = Looper(func, self._msec)
-        # await sut.start()
-        self.skipTest("Find a way for this")
+        self.skipTest("todo")
 
     async def test_passes_args_to_func(self):
         cb = MagicMock()
