@@ -1,6 +1,6 @@
 from source.cell import Cell
 from source.snake import Snake
-from test.counter import Counter
+from test.helper.counter import Counter
 from test.test_snake_ import Snake_
 
 

@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
 from source.looper import Looper
-from test.counter import Counter
+from test.helper.counter import Counter
 
 
 class Looper_(unittest.IsolatedAsyncioTestCase):
