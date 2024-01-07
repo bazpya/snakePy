@@ -1,44 +1,39 @@
-import unittest
-from source.global_refs import Direction, CellType
 from source.game import Game
 from source.cell import Cell
-
-row_count = 17
-col_count = 18
-initial_sut = Game(row_count, col_count)
+from test.test_game_ import Game_
 
 
-class Game_(unittest.TestCase):
-    def get_new_sut(*args, **kwargs):
-        return Game(row_count, col_count)
+class Game_etc_(Game_):
+    def get_new_sut(self, *args, **kwargs):
+        return Game(self.row_count, self.col_count)
 
     def test_iterate_cells_hits_all_cells(self):
-        all_cells_count = row_count * col_count
+        all_cells_count = self.row_count * self.col_count
 
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        count = initial_sut.iterate_cells(True, counter_func, 0)
+        count = self.initial_sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(all_cells_count, count)
 
     def test_iterate_cells_hits_interior_cells(self):
-        interior_cells_count = (row_count - 2) * (col_count - 2)
+        interior_cells_count = (self.row_count - 2) * (self.col_count - 2)
 
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        count = initial_sut.iterate_cells(False, counter_func, 0)
+        count = self.initial_sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(interior_cells_count, count)
 
     def test_get_blank_cells_gets_blanks(self):
-        actual = initial_sut._get_blank_cells()
+        actual = self.initial_sut._get_blank_cells()
         for cell in actual:
             self.assertTrue(cell.is_blank())
 
     def test_get_blank_cells_gets_correct_number_of_cells(self):
-        supposed_blanks = initial_sut._get_blank_cells()
+        supposed_blanks = self.initial_sut._get_blank_cells()
         count = len(supposed_blanks)
-        self.assertEqual((row_count - 2) * (col_count - 2), count)
+        self.assertEqual((self.row_count - 2) * (self.col_count - 2), count)
 
     def test_drop_food_affects_one_cell(self):
         sut = self.get_new_sut()
