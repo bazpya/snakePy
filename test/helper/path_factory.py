@@ -37,3 +37,15 @@ class PathFactory:
         cells = PathFactory.make_list(pattern)
         PathFactory.link(cells)
         return cells[0]
+
+    @staticmethod
+    def neighbour_maker(*args):
+        neighbour = Cell()
+        neighbour.get_neighbour = PathFactory.neighbour_maker
+        return neighbour
+
+    @staticmethod
+    def make_infinite_chain() -> Cell:
+        origin = Cell()
+        origin.get_neighbour = PathFactory.neighbour_maker
+        return origin

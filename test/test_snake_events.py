@@ -1,5 +1,3 @@
-from source.global_refs import CellType
-from source.cell import Cell
 from source.snake import Snake
 from test.helper.path_factory import PathFactory
 from test.helper.counter import Counter
@@ -44,34 +42,36 @@ class Snake_events_(Snake_):
     # ======================  Changed Cells  ======================
 
     def test_step_into_blank_passes_changed_cells_to_stepped_event(self):
-        destination = Cell()
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        cells = PathFactory.make_list("bb")
+        PathFactory.link(cells)
+        origin = cells[0]
+        destination = cells[1]
+        sut = Snake(origin, self._events)
         sut.step()
-        self.stepped_callback.assert_called_with([destination, initial_head])
+        self.stepped_callback.assert_called_with([destination, origin])
 
     def test_step_into_food_passes_changed_cells_to_stepped_event(self):
-        destination = Cell(None, None, CellType.food)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        cells = PathFactory.make_list("bf")
+        PathFactory.link(cells)
+        origin = cells[0]
+        destination = cells[1]
+        sut = Snake(origin, self._events)
         sut.step()
         self.stepped_callback.assert_called_with([destination])
 
     def test_step_into_wall_passes_no_cells_to_stepped_event(self):
-        destination = Cell(None, None, CellType.wall)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        cells = PathFactory.make_list("bw")
+        PathFactory.link(cells)
+        origin = cells[0]
+        sut = Snake(origin, self._events)
         sut.step()
         self.stepped_callback.assert_called_with([])
 
     def test_step_into_snake_passes_no_cells_to_stepped_event(self):
-        destination = Cell(None, None, CellType.snake)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        cells = PathFactory.make_list("bs")
+        PathFactory.link(cells)
+        origin = cells[0]
+        sut = Snake(origin, self._events)
         sut.step()
         self.stepped_callback.assert_called_with([])
 
