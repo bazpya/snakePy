@@ -10,7 +10,7 @@ class Snake_events_(Snake_):
     # ======================  Events  ======================
 
     def test_step_into_blank_emits_the_right_events(self):
-        first_cell = PathFactory.make("bb")
+        first_cell = PathFactory.make_chain("bb")
         sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
@@ -18,7 +18,7 @@ class Snake_events_(Snake_):
         self.died_callback.assert_not_called()
 
     def test_step_into_wall_emits_the_right_events(self):
-        first_cell = PathFactory.make("bw")
+        first_cell = PathFactory.make_chain("bw")
         sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
@@ -26,7 +26,7 @@ class Snake_events_(Snake_):
         self.died_callback.assert_called()
 
     def test_step_into_snake_emits_the_right_events(self):
-        first_cell = PathFactory.make("bs")
+        first_cell = PathFactory.make_chain("bs")
         sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
@@ -34,7 +34,7 @@ class Snake_events_(Snake_):
         self.died_callback.assert_called()
 
     def test_step_when_into_food_emits_the_right_events(self):
-        first_cell = PathFactory.make("bf")
+        first_cell = PathFactory.make_chain("bf")
         sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
@@ -78,14 +78,14 @@ class Snake_events_(Snake_):
     # ======================  Death  ======================
 
     def test_passes_length_to_died_event_single(self):
-        first_cell = PathFactory.make("bw")
+        first_cell = PathFactory.make_chain("bw")
         sut = Snake(first_cell, self._events)
         sut.step()
         self.died_callback.assert_called_with(1)
 
     def test_passes_length_to_died_event(self):
         path_pattern = "bbffbbs"
-        path_handle = PathFactory.make(path_pattern)
+        path_handle = PathFactory.make_chain(path_pattern)
         sut = Snake(path_handle, self._events)
         for i in range(0, 6):
             sut.step()
@@ -95,7 +95,7 @@ class Snake_events_(Snake_):
         counter = Counter()
         self._events.stepped.subscribe(counter.increment)
         path_pattern = "bbffbbs"
-        path_handle = PathFactory.make(path_pattern)
+        path_handle = PathFactory.make_chain(path_pattern)
         sut = Snake(path_handle, self._events)
         await sut.run(self._msec, 20)
         actual = counter.read()

@@ -11,26 +11,29 @@ class PathFactory:
         return func
 
     @staticmethod
-    def make(pattern: str) -> Cell:
-        handle: Cell = None
-        previous: Cell = None
+    def make_list(pattern: str) -> list[Cell]:
         map = {
             "b": CellType.blank,
             "f": CellType.food,
             "s": CellType.snake,
             "w": CellType.wall,
         }
+        res: list[Cell] = []
         for i, char in enumerate(pattern):
             type = map[char]
             cell = Cell(None, None, type)
-            if i == 0:
-                handle = cell
-            else:
-                previous.get_neighbour = PathFactory._create_func(cell)
-            previous = cell
-
-        return handle
+            res.append(cell)
+        return res
 
     @staticmethod
     def link(cells: list[Cell]) -> Cell:
-        pass # todo
+        for i, cell in enumerate(cells[:-1]):
+            next = cells[i + 1]
+            cell.get_neighbour = PathFactory._create_func(next)
+        return cells[0]
+
+    @staticmethod
+    def make_chain(pattern: str) -> Cell:
+        cells = PathFactory.make_list(pattern)
+        PathFactory.link(cells)
+        return cells[0]
