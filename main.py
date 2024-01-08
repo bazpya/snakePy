@@ -14,7 +14,7 @@ def redraw(*args, **kwargs):
 
 
 game.event_hub.ready_to_draw.subscribe(redraw)
-task = snake.run(0.1, 27)
+task = snake.run(0.03)
 res = asyncio.get_event_loop().run_until_complete(task)
 
 drawer.getMouse()
