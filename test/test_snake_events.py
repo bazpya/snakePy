@@ -1,6 +1,8 @@
 from source.global_refs import CellType
 from source.cell import Cell
 from source.snake import Snake
+from test.helper.cell_factory import CellFactory
+from test.helper.counter import Counter
 from test.test_snake_ import Snake_
 
 
@@ -83,10 +85,30 @@ class Snake_events_(Snake_):
 
     # ======================  Death  ======================
 
-    def test_passes_length_to_died_event(self):
+    def test_passes_length_to_died_event_single(self):
         destination = Cell(None, None, CellType.wall)
         initial_head = Cell()
         initial_head.get_neighbour = lambda whatever: destination
         sut = Snake(initial_head, self._events)
         sut.step()
         self.died_callback.assert_called_with(1)
+
+    def test_passes_length_to_died_event(self):
+        path_pattern = "bbffbbs"
+        path_handle = CellFactory.make(path_pattern)
+        sut = Snake(path_handle, self._events)
+        for i in range(0, 6):
+            sut.step()
+        self.died_callback.assert_called_with(3)
+
+    async def test_makes_snake_stop(self):
+        counter = Counter()
+        self._events.stepped.subscribe(counter.increment)
+        path_pattern = "bbffbbs"
+        path_handle = CellFactory.make(path_pattern)
+        sut = Snake(path_handle, self._events)
+        await sut.run(self._msec, 20)
+        actual = counter.read()
+        self.assertEqual(actual, len(path_pattern) - 1)
+
+    # ======================  ?????  ======================

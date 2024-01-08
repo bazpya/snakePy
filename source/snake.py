@@ -18,6 +18,7 @@ class Snake:
         only_cell.be_snake()
         self._direction = Direction.up
         self._events = events
+        self._looper = None
         self._steps_taken = 0
 
     def get_head(self):  # todo: see if you can remove this
@@ -35,7 +36,10 @@ class Snake:
         destination = head.get_neighbour(self._direction)
         is_fed = destination.is_food()
         should_die = destination.is_wall() or destination.is_snake()
+        should_live = not should_die
         if should_die:
+            if self._looper is not None:
+                self._looper.stop()
             if self._events.died is not None:
                 self._events.died.emit(self.get_length())
         else:
@@ -46,7 +50,7 @@ class Snake:
             if self._events.ate is not None:  # todo: Replace with init validation
                 self._events.ate.emit()
         else:
-            if not should_die:
+            if should_live:
                 previous_tail = self._cells.popleft()
                 previous_tail.be_blank()
                 diff.append(previous_tail)
