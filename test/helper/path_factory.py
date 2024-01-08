@@ -2,7 +2,7 @@ from source.global_refs import CellType
 from source.cell import Cell
 
 
-class CellFactory:
+class PathFactory:
     @staticmethod
     def _create_func(cell: Cell):
         def func(*args, **kwargs):
@@ -26,7 +26,7 @@ class CellFactory:
             if i == 0:
                 handle = cell
             else:
-                previous.get_neighbour = CellFactory._create_func(cell)
+                previous.get_neighbour = PathFactory._create_func(cell)
             previous = cell
 
         return handle

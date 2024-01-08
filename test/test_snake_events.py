@@ -1,7 +1,7 @@
 from source.global_refs import CellType
 from source.cell import Cell
 from source.snake import Snake
-from test.helper.cell_factory import CellFactory
+from test.helper.path_factory import PathFactory
 from test.helper.counter import Counter
 from test.test_snake_ import Snake_
 
@@ -95,7 +95,7 @@ class Snake_events_(Snake_):
 
     def test_passes_length_to_died_event(self):
         path_pattern = "bbffbbs"
-        path_handle = CellFactory.make(path_pattern)
+        path_handle = PathFactory.make(path_pattern)
         sut = Snake(path_handle, self._events)
         for i in range(0, 6):
             sut.step()
@@ -105,7 +105,7 @@ class Snake_events_(Snake_):
         counter = Counter()
         self._events.stepped.subscribe(counter.increment)
         path_pattern = "bbffbbs"
-        path_handle = CellFactory.make(path_pattern)
+        path_handle = PathFactory.make(path_pattern)
         sut = Snake(path_handle, self._events)
         await sut.run(self._msec, 20)
         actual = counter.read()

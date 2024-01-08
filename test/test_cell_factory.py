@@ -1,7 +1,7 @@
 import unittest
 from source.cell import CellType, Cell
 from source.global_refs import Direction
-from test.helper.cell_factory import CellFactory
+from test.helper.path_factory import PathFactory
 
 
 class Cell_factory_(unittest.TestCase):
@@ -14,7 +14,7 @@ class Cell_factory_(unittest.TestCase):
 
     def test_single_cells(self):
         for key, val in self._map.items():
-            res = CellFactory.make(key)
+            res = PathFactory.make(key)
             self.assertEqual(res.get_type(), val)
 
     def test_multi(self):
@@ -30,7 +30,7 @@ class Cell_factory_(unittest.TestCase):
             CellType.snake,
             CellType.wall,
         ]
-        runner = CellFactory.make(pattern)
+        runner = PathFactory.make(pattern)
         for type in types:
             self.assertEqual(runner.get_type(), type)
             runner = runner.get_neighbour(Direction.left)
