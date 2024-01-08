@@ -10,40 +10,32 @@ class Snake_events_(Snake_):
     # ======================  Events  ======================
 
     def test_step_into_blank_emits_the_right_events(self):
-        destination = Cell(None, None, CellType.blank)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        first_cell = PathFactory.make("bb")
+        sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_not_called()
 
     def test_step_into_wall_emits_the_right_events(self):
-        destination = Cell(None, None, CellType.wall)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        first_cell = PathFactory.make("bw")
+        sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_called()
 
     def test_step_into_snake_emits_the_right_events(self):
-        destination = Cell(None, None, CellType.snake)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        first_cell = PathFactory.make("bs")
+        sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_called()
 
     def test_step_when_into_food_emits_the_right_events(self):
-        destination = Cell(None, None, CellType.food)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        first_cell = PathFactory.make("bf")
+        sut = Snake(first_cell, self._events)
         sut.step()
         self.stepped_callback.assert_called()
         self.ate_callback.assert_called()
@@ -86,10 +78,8 @@ class Snake_events_(Snake_):
     # ======================  Death  ======================
 
     def test_passes_length_to_died_event_single(self):
-        destination = Cell(None, None, CellType.wall)
-        initial_head = Cell()
-        initial_head.get_neighbour = lambda whatever: destination
-        sut = Snake(initial_head, self._events)
+        first_cell = PathFactory.make("bw")
+        sut = Snake(first_cell, self._events)
         sut.step()
         self.died_callback.assert_called_with(1)
 

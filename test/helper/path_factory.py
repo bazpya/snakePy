@@ -30,3 +30,7 @@ class PathFactory:
             previous = cell
 
         return handle
+
+    @staticmethod
+    def link(cells: list[Cell]) -> Cell:
+        pass # todo

@@ -4,7 +4,7 @@ from source.global_refs import Direction
 from test.helper.path_factory import PathFactory
 
 
-class Cell_factory_(unittest.TestCase):
+class Path_factory_(unittest.TestCase):
     _map = {
         "b": CellType.blank,
         "f": CellType.food,
