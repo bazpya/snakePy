@@ -2,9 +2,9 @@ import asyncio
 from source.drawer import Drawer
 from source.game import Game
 
-game = Game(64, 3)
+game = Game(3, 64)
 snake = game.add_snake()
-game._drop_food()
+game._add_food()
 drawer = Drawer()
 drawer.draw(game.get_cells())
 

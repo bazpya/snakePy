@@ -23,8 +23,8 @@ class Drawer:
             ri = cell._row
             ci = cell._col
 
-            ver_offset = ri * self._cell_size
-            hor_offset = ci * self._cell_size
+            hor_offset = ri * self._cell_size
+            ver_offset = ci * self._cell_size
 
             left = hor_offset
             right = left + self._cell_size

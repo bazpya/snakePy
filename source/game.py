@@ -82,7 +82,7 @@ class Game:
     def _purge_diff(self):
         self._step_diff.clear()
 
-    def _drop_food(self) -> Cell:
+    def _add_food(self) -> Cell:
         blank_cells = self._get_blank_cells()
         food_cell = random.choice(blank_cells)
         food_cell.be_food()
@@ -94,8 +94,18 @@ class Game:
         col = self._col_count // 2
         return self._cells[row][col]
 
+    def _get_origin(self, hor_dir: Direction = None, ver_dir: Direction = None) -> Cell:
+        runner = self._get_centre()
+        if hor_dir is not None:
+            while runner.get_neighbour(hor_dir).is_blank():
+                runner = runner.get_neighbour(hor_dir)
+        if ver_dir is not None:
+            while runner.get_neighbour(ver_dir).is_blank():
+                runner = runner.get_neighbour(ver_dir)
+        return runner
+
     def add_snake(self):
-        centre = self._get_centre()
+        centre = self._get_origin(Direction.right)
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
         self._snake = Snake(centre, self.event_hub)

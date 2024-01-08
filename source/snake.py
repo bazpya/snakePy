@@ -16,7 +16,7 @@ class Snake:
         self._cells = deque()
         self._cells.append(only_cell)
         only_cell.be_snake()
-        self._direction = Direction.up
+        self._direction = Direction.left
         self._events = events
         self._looper = None
         self._steps_taken = 0

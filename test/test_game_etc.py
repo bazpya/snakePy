@@ -38,7 +38,7 @@ class Game_etc_(Game_):
 
     def test_drop_food_affects_one_cell(self):
         sut = self.make_sut()
-        food_cell = sut._drop_food()
+        food_cell = sut._add_food()
 
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_food() else acc
