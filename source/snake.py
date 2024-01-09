@@ -58,7 +58,5 @@ class Snake:
             self._events.stepped.emit(diff)
 
     async def run(self, interval: float = 0.5, steps_to_take: int = None):
-        self._looper = Looper(
-            lambda *args: self.step(), interval=interval, iterations=steps_to_take
-        )
+        self._looper = Looper(self.step, interval=interval, iterations=steps_to_take)
         await self._looper.start()
