@@ -3,13 +3,13 @@ from source.event_hub import EventHub
 from source.global_refs import Direction
 from collections import deque
 from source.looper_interval import LooperInterval
+from source.looper_sync import LooperSync
 
 
 class Snake:
     _cells: deque[Cell]
     _direction: Direction
     _events: EventHub
-    _looper: LooperInterval
     _steps_taken: int
 
     def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
@@ -57,6 +57,12 @@ class Snake:
         if self._events.stepped is not None:
             self._events.stepped.emit(diff)
 
-    async def run(self, interval: float = 0.5, steps_to_take: int = None):
-        self._looper = LooperInterval(self.step, interval=interval, iterations=steps_to_take)
+    async def run_async(self, interval: float = 0.5, steps_to_take: int = None):
+        self._looper = LooperInterval(
+            self.step, interval=interval, iterations=steps_to_take
+        )
         await self._looper.start()
+
+    def run_sync(self, steps_to_take: int = None):
+        self._looper = LooperSync(self.step, iterations=steps_to_take)
+        self._looper.start()
