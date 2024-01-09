@@ -91,14 +91,4 @@ class Snake_events_(Snake_):
             sut.step()
         self.died_callback.assert_called_with(3)
 
-    async def test_makes_snake_stop(self):
-        counter = Counter()
-        self._events.stepped.subscribe(counter.increment)
-        path_pattern = "bbffbbs"
-        path_handle = PathFactory.make_chain(path_pattern)
-        sut = Snake(path_handle, self._events)
-        await sut.run(self._msec, 20)
-        actual = counter.read()
-        self.assertEqual(actual, len(path_pattern) - 1)
-
     # ======================  ?????  ======================

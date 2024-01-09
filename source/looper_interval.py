@@ -1,7 +1,7 @@
 import asyncio
 
 
-class Looper:
+class LooperInterval:
     _iterations: int
     counter: int
     _interval: float
