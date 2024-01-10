@@ -36,7 +36,7 @@ class Game_etc_(Game_):
         count = len(supposed_blanks)
         self.assertEqual((self.row_count - 2) * (self.col_count - 2), count)
 
-    def test_drop_food_affects_one_cell(self):
+    def test_add_food_without_args_affects_one_cell(self):
         sut = self.make_sut()
         food_cell = sut._add_food()
 
@@ -45,6 +45,16 @@ class Game_etc_(Game_):
 
         count = sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(1, count)
+
+    def test_add_food_with_specific_number_adds_correct_amount(self):
+        sut = self.make_sut()
+        food_cell = sut._add_food(self._some_number_1)
+
+        def counter_func(cell: Cell, ri, ci, acc):
+            return acc + 1 if cell.is_food() else acc
+
+        count = sut.iterate_cells(False, counter_func, 0)
+        self.assertEqual(count, self._some_number_1)
 
     def test_get_centre_for_large_odd_numbers(self):
         expected = 8

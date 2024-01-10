@@ -8,7 +8,7 @@ switch = args[1] if len(args) > 1 else None
 
 game = Game(3, 64)
 snake = game.add_snake()
-game._add_food()
+game._add_food(14)
 drawer = Drawer()
 drawer.draw(game.get_cells())
 

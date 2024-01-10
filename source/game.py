@@ -82,12 +82,13 @@ class Game:
     def _purge_diff(self):
         self._step_diff.clear()
 
-    def _add_food(self) -> Cell:
+    def _add_food(self, count: int = 1) -> Cell:
         blank_cells = self._get_blank_cells()
-        food_cell = random.choice(blank_cells)
-        food_cell.be_food()
-        self._add_to_diff([food_cell])
-        return food_cell
+        cells = random.sample(blank_cells, count)
+        for cell in cells:
+            cell.be_food()
+        self._add_to_diff(cells)
+        return cells
 
     def _get_centre(self) -> Cell:
         row = self._row_count // 2
