@@ -1,3 +1,7 @@
+import random
+from unittest.mock import MagicMock
+from source.cell import Cell
+from source.global_refs import Direction
 from source.snake import Snake
 from test.helper.path_factory import PathFactory
 from test.test_snake_ import Snake_
@@ -55,3 +59,14 @@ class Snake_step_(Snake_):
             sut.step()
         except Exception:
             self.fail("Snake death event threw an error")
+
+    # ===============================  step-blank  ===============================
+
+    def test_step_pops_from_steering(self):
+        origin = Cell()
+        origin.get_neighbour = MagicMock()
+        sut = Snake(origin, self._events)
+        dir = random.choice(list(Direction))
+        sut.steering_enque(dir)
+        sut.step()
+        origin.get_neighbour.assert_called_once_with(dir)
