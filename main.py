@@ -5,11 +5,13 @@ from source.game import Game
 
 args = sys.argv
 switch = args[1] if len(args) > 1 else None
-
-game = Game(3, 64)
+row_count = 40
+col_count = 40
+cell_size = 20
+game = Game(row_count, col_count)
 snake = game.add_snake()
 game._add_food(14)
-drawer = Drawer()
+drawer = Drawer(cell_size, row_count, col_count)
 drawer.draw(game.get_cells())
 
 

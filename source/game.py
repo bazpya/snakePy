@@ -106,7 +106,7 @@ class Game:
         return runner
 
     def add_snake(self):
-        centre = self._get_origin(Direction.right)
+        centre = self._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
         self._snake = Snake(centre, self.event_hub)
