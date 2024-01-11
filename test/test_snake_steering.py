@@ -14,11 +14,12 @@ class Snake_steering_(Snake_):
         for dir in Direction:
             self.assertEqual(sut._steering_deque(), dir)
 
-    def test_enque_only_adds_if_different_from_previous(self):
+    def test_enque_only_adds_if_perpendicular_to_previous(self):
         sut = Snake(Cell(), self._events)
         for dir in Direction:
             sut.steering_enque(dir)
             sut.steering_enque(dir)
+            sut.steering_enque(dir.get_opposite())
 
         self.assertEqual(len(sut._steering), len(Direction))
 

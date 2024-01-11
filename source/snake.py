@@ -73,7 +73,7 @@ class Snake:
     def steering_enque(self, dir: Direction):
         if len(self._steering) > 0:
             previous = self._steering[-1]
-            if dir == previous:
+            if dir.is_aligned(previous):
                 return
         self._steering.append(dir)
 
