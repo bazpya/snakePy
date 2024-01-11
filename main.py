@@ -1,7 +1,9 @@
+import random
 import sys
 import asyncio
 from source.drawer import Drawer
 from source.game import Game
+from source.global_refs import Direction
 
 args = sys.argv
 switch = args[1] if len(args) > 1 else None
@@ -17,6 +19,14 @@ drawer.draw(game.get_cells())
 
 def redraw(*args, **kwargs):
     drawer.draw(*args)
+
+
+def steer(*args, **kwargs):
+    dir = random.choice(list(Direction))
+    snake.steering_enque(dir)
+
+
+game.event_hub.stepped.subscribe(steer)
 
 
 if switch == "headless":
