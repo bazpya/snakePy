@@ -1,4 +1,3 @@
-import random
 from unittest.mock import MagicMock
 from source.cell import Cell
 from source.direction import Direction
@@ -66,7 +65,7 @@ class Snake_step_(Snake_):
         origin = Cell()
         origin.get_neighbour = MagicMock()
         sut = Snake(origin, self._events)
-        dir = random.choice(list(Direction))
+        dir = Direction.up
         sut.steering_enque(dir)
         sut.step()
         origin.get_neighbour.assert_called_once_with(dir)

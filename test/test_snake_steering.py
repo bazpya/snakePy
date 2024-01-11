@@ -23,6 +23,16 @@ class Snake_steering_(Snake_):
 
         self.assertEqual(len(sut._steering), len(Direction))
 
+    def test_enque_with_empty_queue_only_adds_if_perpendicular_to_current(self):
+        sut = Snake(Cell(), self._events)
+        for dir in Direction:
+            sut._steering.clear()
+            sut._direction = dir
+            sut.steering_enque(dir)
+            sut.steering_enque(dir.get_opposite())
+
+        self.assertEqual(len(sut._steering), 0)
+
     def test_deque_when_empty_queue_gets_current_direction(self):
         origin = PathFactory.make_infinite_chain()
         sut = Snake(origin, self._events)

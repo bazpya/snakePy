@@ -75,6 +75,9 @@ class Snake:
             previous = self._steering[-1]
             if dir.is_aligned(previous):
                 return
+        else:
+            if dir.is_aligned(self._direction):
+                return
         self._steering.append(dir)
 
     def _steering_deque(self):
