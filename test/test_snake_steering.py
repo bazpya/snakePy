@@ -23,7 +23,7 @@ class Snake_steering_(Snake_):
         self.assertEqual(len(sut._steering), len(Direction))
 
     def test_deque_when_empty_queue_gets_current_direction(self):
-        origin = PathFactory.make_chain("bbbbbbb")
+        origin = PathFactory.make_infinite_chain()
         sut = Snake(origin, self._events)
         for dir in Direction:
             sut._direction = dir
