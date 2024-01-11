@@ -1,6 +1,5 @@
 from source.snake import Snake
 from test.helper.path_factory import PathFactory
-from test.helper.counter import Counter
 from test.test_snake_ import Snake_
 
 

@@ -1,6 +1,6 @@
 import unittest
-from source.cell import CellType, Cell
-from source.global_refs import Direction
+from source.cell import CellType
+from source.direction import Direction
 from test.helper.path_factory import PathFactory
 
 

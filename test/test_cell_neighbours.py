@@ -1,5 +1,5 @@
 from source.cell import CellType, Cell
-from source.global_refs import Direction
+from source.direction import Direction
 from test.test_cell_ import Cell_
 
 

@@ -1,9 +1,9 @@
 import random
 import sys
 import asyncio
+from source.direction import Direction
 from source.drawer import Drawer
 from source.game import Game
-from source.global_refs import Direction
 
 args = sys.argv
 switch = args[1] if len(args) > 1 else None

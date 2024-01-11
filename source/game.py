@@ -1,6 +1,5 @@
-from source.event import Event
+from source.direction import Direction
 from source.event_hub import EventHub
-from source.global_refs import Direction
 from source.cell import Cell
 import random
 from source.snake import Snake

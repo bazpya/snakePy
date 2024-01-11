@@ -1,4 +1,5 @@
-from source.global_refs import CellType, Direction
+from source.direction import Direction
+from source.global_refs import CellType
 
 
 class CellConcept:

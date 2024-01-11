@@ -1,5 +1,5 @@
 import unittest
-from source.global_refs import Direction
+from source.direction import Direction
 
 
 class Direction_(unittest.TestCase):
