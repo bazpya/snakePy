@@ -71,13 +71,9 @@ class Snake:
         self._looper.start()
 
     def steering_enque(self, dir: Direction):
-        if len(self._steering) > 0:
-            previous = self._steering[-1]
-            if dir.is_aligned(previous):
-                return
-        else:
-            if dir.is_aligned(self._direction):
-                return
+        last = self._steering[-1] if len(self._steering) > 0 else self._direction
+        if dir.is_aligned(last):
+            return
         self._steering.append(dir)
 
     def _steering_deque(self):
