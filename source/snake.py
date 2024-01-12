@@ -38,7 +38,7 @@ class Snake:
         self._direction = self._steering_deque()
         destination = head.get_neighbour(self._direction)
         is_fed = destination.is_food()
-        should_die = destination.is_wall() or destination.is_snake()
+        should_die = destination.is_deadly()
         should_live = not should_die
         if should_die:
             if self._looper is not None:

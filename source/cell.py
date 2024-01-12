@@ -55,6 +55,9 @@ class Cell(CellConcept):
     def is_food(self) -> bool:
         return self._type == CellType.food
 
+    def is_deadly(self) -> bool:
+        return self.is_wall() or self.is_snake()
+
     # ====================  Neighbours  ====================
 
     def set_neighbour(self, direction: Direction, neighbour: "Cell") -> None:

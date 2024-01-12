@@ -12,7 +12,7 @@ col_count = 40
 cell_size = 20
 game = Game(row_count, col_count)
 snake = game.add_snake()
-game._add_food(14)
+game._add_food(80)
 drawer = Drawer(cell_size, row_count, col_count)
 drawer.draw(game.get_cells())
 
