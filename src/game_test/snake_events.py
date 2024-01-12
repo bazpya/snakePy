@@ -1,6 +1,6 @@
-from source.snake import Snake
-from test.helper.path_factory import PathFactory
-from test.test_snake_ import Snake_
+from src.game.snake import Snake
+from src.game_test.helper.path_factory import PathFactory
+from src.game_test.snake_ import Snake_
 
 
 class Snake_events_(Snake_):

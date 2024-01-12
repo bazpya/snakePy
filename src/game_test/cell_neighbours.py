@@ -1,6 +1,6 @@
-from source.cell import CellType, Cell
-from source.direction import Direction
-from test.test_cell_ import Cell_
+from src.game.cell import CellType, Cell
+from src.game.direction import Direction
+from src.game_test.cell_ import Cell_
 
 
 class Cell_neighbours_(Cell_):

@@ -1,4 +1,4 @@
-from test.test_game_ import Game_
+from src.game_test.game_ import Game_
 
 
 class Game_areas_(Game_):

@@ -1,6 +1,6 @@
-from source.game import Game
-from source.cell import Cell
-from test.test_game_ import Game_
+from src.game.game import Game
+from src.game.cell import Cell
+from src.game_test.game_ import Game_
 
 
 class Game_etc_(Game_):

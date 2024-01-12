@@ -1,7 +1,7 @@
 import unittest
-from source.cell import CellType
-from source.direction import Direction
-from test.helper.path_factory import PathFactory
+from src.game.cell import CellType
+from src.game.direction import Direction
+from src.game_test.helper.path_factory import PathFactory
 
 
 class Path_factory_(unittest.TestCase):

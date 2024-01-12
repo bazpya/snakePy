@@ -1,5 +1,5 @@
-from source.direction import Direction
-from source.global_refs import CellType
+from src.game.direction import Direction
+from src.game.global_refs import CellType
 
 
 class CellConcept:

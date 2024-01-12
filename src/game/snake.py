@@ -1,9 +1,9 @@
-from source.cell import Cell
-from source.direction import Direction
-from source.event_hub import EventHub
+from src.game.cell import Cell
+from src.game.direction import Direction
+from src.game.event_hub import EventHub
 from collections import deque
-from source.looper_interval import LooperInterval
-from source.looper_sync import LooperSync
+from src.game.looper_interval import LooperInterval
+from src.game.looper_sync import LooperSync
 
 
 class Snake:

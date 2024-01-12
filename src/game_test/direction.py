@@ -1,5 +1,5 @@
 import unittest
-from source.direction import Direction
+from src.game.direction import Direction
 
 
 class Direction_(unittest.TestCase):

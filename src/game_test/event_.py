@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import MagicMock
-from source.event import Event
+from src.game.event import Event
 
 
 class Event_(unittest.TestCase):

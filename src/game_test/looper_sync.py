@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-from source.looper_sync import LooperSync
-from test.helper.counter import Counter
+from src.game.looper_sync import LooperSync
+from src.game_test.helper.counter import Counter
 
 
 class LooperSync_(unittest.TestCase):

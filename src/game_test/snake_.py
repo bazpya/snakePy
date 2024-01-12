@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-from source.event import Event
-from source.event_hub import EventHub
+from src.game.event import Event
+from src.game.event_hub import EventHub
 
 
 class Snake_(unittest.IsolatedAsyncioTestCase):

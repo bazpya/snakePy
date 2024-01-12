@@ -1,5 +1,5 @@
-from source.cell import CellType, Cell
-from test.test_cell_ import Cell_
+from src.game.cell import CellType, Cell
+from src.game_test.cell_ import Cell_
 
 
 class Cell_types_(Cell_):

@@ -1,5 +1,5 @@
-from source.global_refs import CellType
-from source.cell import Cell
+from src.game.global_refs import CellType
+from src.game.cell import Cell
 
 
 class PathFactory:

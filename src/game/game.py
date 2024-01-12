@@ -1,8 +1,8 @@
-from source.direction import Direction
-from source.event_hub import EventHub
-from source.cell import Cell
+from src.game.direction import Direction
+from src.game.event_hub import EventHub
+from src.game.cell import Cell
 import random
-from source.snake import Snake
+from src.game.snake import Snake
 
 
 class Game:

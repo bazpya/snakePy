@@ -1,4 +1,4 @@
-from source.event import Event
+from src.game.event import Event
 
 
 class EventHub:
