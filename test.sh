@@ -1,2 +1,2 @@
 #!
-python -m unittest discover -s src/game_test/ -p "*.py"
+python -m unittest discover -s "src" -p "*_.py"

@@ -10,9 +10,9 @@
             "args": [
                 "discover",
                 "-s",
-                "src/game_test/",
+                "src",
                 "-p",
-                "*.py"
+                "*_.py"
             ]
         },
         {
