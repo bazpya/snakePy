@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Unit Tests",
+            "name": "Test-All",
             "type": "python",
             "request": "launch",
             "module": "unittest",
@@ -13,7 +13,44 @@
                 "src",
                 "-p",
                 "*_.py"
-            ]
+            ],
+            "env": {
+                "TF_ENABLE_ONEDNN_OPTS": "0"
+            }
+        },
+        {
+            "name": "Test-Game",
+            "type": "python",
+            "request": "launch",
+            "module": "unittest",
+            "justMyCode": true,
+            "args": [
+                "discover",
+                "-s",
+                "src/game_test",
+                "-p",
+                "*_.py"
+            ],
+            "env": {
+                "TF_ENABLE_ONEDNN_OPTS": "0"
+            }
+        },
+        {
+            "name": "Test-ML",
+            "type": "python",
+            "request": "launch",
+            "module": "unittest",
+            "justMyCode": true,
+            "args": [
+                "discover",
+                "-s",
+                "src/ml_test",
+                "-p",
+                "*_.py"
+            ],
+            "env": {
+                "TF_ENABLE_ONEDNN_OPTS": "0"
+            }
         },
         {
             "name": "With-UI",
