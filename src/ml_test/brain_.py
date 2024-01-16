@@ -1,6 +1,6 @@
 import unittest
 import tensorflow as tf
-from src.game.global_refs import Anonym
+from src.anonym import Anonym
 from src.game.direction import Direction
 from src.ml.brain import Brain
 

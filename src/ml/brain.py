@@ -1,6 +1,6 @@
 import keras
 from keras import layers
-from src.game.global_refs import Anonym
+from src.anonym import Anonym
 from src.game.direction import Direction
 
 
