@@ -17,8 +17,15 @@ class Brain_(unittest.TestCase):
 
     def test_init_makes_correct_layer_sizes(self):
         sut = Brain(self._model_params)
-        for i, layer in enumerate(sut._model.layers):
-            self.assertEqual(layer.units, self._model_params.layer_sizes[i])
+        for i, size in enumerate(self._model_params.layer_sizes):
+            layer = sut._model.layers[i]
+            self.assertEqual(layer.units, size)
+
+    def test_init_adds_correct_output_layer_size(self):
+        sut = Brain(self._model_params)
+        last_layer = sut._model.layers[-1]
+        output_layer_size = last_layer.units
+        self.assertEqual(output_layer_size, Brain._output_layer_size)
 
     def test_decide_returns_a_direction(self):
         sut = Brain(self._model_params)
