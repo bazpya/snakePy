@@ -4,7 +4,7 @@ from src.anonym import Anonym
 from src.game.direction import Direction
 
 
-class Brain:
+class Player:
     _output_layer_size: int = 3
     _model: None
 

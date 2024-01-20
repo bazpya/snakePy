@@ -1,10 +1,10 @@
 import unittest
 import tensorflow as tf
-from src.ml.brain import Brain
+from ml.player import Player
 from src.anonym import Anonym
 
 
-class Brain_(unittest.TestCase):
+class Player_(unittest.TestCase):
     _model_params = Anonym(
         input_size=10,
         layer_sizes=[2, 3, 4, 5],
@@ -15,4 +15,4 @@ class Brain_(unittest.TestCase):
     )
 
     def _get_sut(self):
-        return Brain(self._model_params)
+        return Player(self._model_params)
