@@ -1,6 +1,6 @@
 import unittest
 import tensorflow as tf
-from ml.player import Player
+from src.ml.player import Player
 from src.anonym import Anonym
 
 

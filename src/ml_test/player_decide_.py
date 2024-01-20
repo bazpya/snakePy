@@ -1,4 +1,4 @@
-from ml_test.player_ import Player_
+from src.ml_test.player_ import Player_
 from src.game.direction import Turn
 
 

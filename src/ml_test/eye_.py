@@ -1,6 +1,6 @@
 import unittest
 import tensorflow as tf
-from ml.eye import Eye
+from src.ml.eye import Eye
 
 input_size = 8
 

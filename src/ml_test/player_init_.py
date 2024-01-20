@@ -1,8 +1,13 @@
-from ml.player import Player
-from ml_test.player_ import Player_
+import tensorflow as tf
+from src.ml.player import Player
+from src.ml_test.player_ import Player_
 
 
 class Player_init_(Player_):
+    def test_init_makes_correct_type_of_model(self):
+        sut = self._get_sut()
+        self.assertIsInstance(sut._model, tf.keras.Sequential)
+
     def test_init_makes_correct_number_of_layers(self):
         sut = self._get_sut()
         expected = len(self._model_params.layer_sizes) + 1
