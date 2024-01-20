@@ -3,6 +3,12 @@ from src.ml_test.brain_ import Brain_
 
 
 class Brain_init_(Brain_):
+    def test_init_makes_correct_number_of_layers(self):
+        sut = self._get_sut()
+        expected = len(self._model_params.layer_sizes) + 1
+        actual = len(sut._model.layers)
+        self.assertEqual(actual, expected)
+
     def test_init_makes_correct_layer_sizes(self):
         sut = self._get_sut()
         for i, size in enumerate(self._model_params.layer_sizes):
