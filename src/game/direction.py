@@ -1,6 +1,12 @@
 from enum import Enum
 
 
+class Turn(Enum):
+    left = -1
+    ahead = 0
+    right = 1
+
+
 class Direction(Enum):
     up = 0
     right = 1
@@ -16,3 +22,7 @@ class Direction(Enum):
     def get_opposite(self) -> "Direction":
         value = (self.value + 2) % len(Direction)
         return Direction(value)
+
+    def turn(self, turn: Turn) -> "Direction":
+        val = (self.value + turn.value) % len(Direction)
+        return Direction(val)

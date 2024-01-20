@@ -1,7 +1,7 @@
 import keras
 from keras import layers
 from src.anonym import Anonym
-from src.game.direction import Direction
+from src.game.direction import Turn
 
 
 class Player:
@@ -45,8 +45,8 @@ class Player:
 
         self._model = keras.Sequential(model_layers)
 
-    def decide(self) -> Direction:
-        return Direction.down
+    def decide(self) -> Turn:
+        return Turn.left
 
     # #getNextDirection() {
     #     const brainOutputTensor = this.#think();
