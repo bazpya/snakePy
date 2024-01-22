@@ -1,5 +1,6 @@
 import keras
 from keras import layers
+import tensorflow as tf
 from src.anonym import Anonym
 from src.game.direction import Turn
 
@@ -7,9 +8,11 @@ from src.game.direction import Turn
 class Player:
     _output_layer_size: int = 3
     _model: None
+    _input_size: int
 
     def __init__(self, model_params: Anonym):
         model_layers = []
+        self._input_size = model_params.input_size
 
         # Add input layer
         input_layer = layers.Dense(
@@ -18,7 +21,7 @@ class Player:
             use_bias=model_params.use_bias,
             kernel_initializer=model_params.kernel_initialiser,
             bias_initializer=model_params.bias_initialiser,
-            input_shape=[model_params.input_size],
+            input_shape=(model_params.input_size,),
         )
         model_layers.append(input_layer)
 
@@ -45,8 +48,11 @@ class Player:
 
         self._model = keras.Sequential(model_layers)
 
-    def decide(self) -> Turn:
-        return Turn.left
+    def decide(self, input: tf.Tensor) -> Turn:
+        brain_output = self._model.predict(input)[0]
+        index = tf.math.argmax(brain_output).numpy()
+        shifted_index = index - 1
+        return Turn(shifted_index)
 
     # #getNextDirection() {
     #     const brainOutputTensor = this.#think();
