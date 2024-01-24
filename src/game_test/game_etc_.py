@@ -90,6 +90,6 @@ class Game_etc_(Game_):
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_snake() else acc
 
-        sut.add_snake()
+        sut._add_snake()
         count = sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(1, count)

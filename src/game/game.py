@@ -104,12 +104,23 @@ class Game:
                 runner = runner.get_neighbour(ver_dir)
         return runner
 
-    def add_snake(self):
+    def _add_snake(self):
         centre = self._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
         self._snake = Snake(centre, self.event_hub)
         return self._snake
+
+    def run_sync(self, steps_to_take: int = None):
+        self._add_snake()
+        self._snake.run_sync(steps_to_take)
+
+    async def run_async(self, interval: float = 0.5, steps_to_take: int = None):
+        self._add_snake()
+        await self._snake.run_async(interval, steps_to_take)
+
+    def steering_enque(self, dir: Direction):
+        self._snake.steering_enque(dir)
 
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1
