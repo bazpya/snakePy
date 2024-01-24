@@ -1,8 +1,7 @@
-import random
 import sys
 import asyncio
+from src.ml.player_fake import PlayerFake
 from src.config import Config
-from src.game.direction import Direction
 from src.game.drawer import Drawer
 from src.game.game import Game
 
@@ -20,18 +19,19 @@ game = Game(row_count, col_count)
 game._add_food(food_count)
 drawer = Drawer(cell_size, row_count, col_count)
 drawer.draw(game.get_cells())
+player = PlayerFake()
 
 
 def redraw(*args, **kwargs):
     drawer.draw(*args)
 
 
-def steer(*args, **kwargs):
-    dir = random.choice(list(Direction))
-    game.steering_enque(dir)
+def turn(*args, **kwargs):
+    turn = player.decide()
+    game.turn(turn)
 
 
-game.event_hub.stepped.subscribe(steer)
+game.event_hub.stepped.subscribe(turn)
 
 
 if is_headless:
