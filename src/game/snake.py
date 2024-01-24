@@ -1,5 +1,5 @@
 from src.game.cell import Cell
-from src.game.direction import Direction
+from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
 from collections import deque
 from src.game.looper_interval import LooperInterval
@@ -70,14 +70,19 @@ class Snake:
         self._looper = LooperSync(self.step, iterations=steps_to_take)
         self._looper.start()
 
+    def _get_latest_input(self):
+        return self._directions[-1] if self._directions else self._direction
+
     def direction_enque(self, dir: Direction):
-        last = self._directions[-1] if len(self._directions) > 0 else self._direction
+        last = self._get_latest_input()
         if dir.is_aligned(last):
             return
         self._directions.append(dir)
 
     def _direction_deque(self):
-        if len(self._directions) > 0:
-            return self._directions.popleft()
-        else:
-            return self._direction
+        return self._directions.popleft() if self._directions else self._direction
+
+    def turn(self, turn: Turn):
+        latest_input = self._get_latest_input()
+        next_dir = latest_input.turn(turn)
+        self.direction_enque(next_dir)

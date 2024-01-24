@@ -1,4 +1,4 @@
-from src.game.direction import Direction
+from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
 from src.game.cell import Cell
 import random
@@ -146,3 +146,6 @@ class Game:
 
     def steering_enque(self, dir: Direction):
         self._snake.direction_enque(dir)
+
+    def turn(self, turn: Turn):
+        self._snake.turn(turn)
