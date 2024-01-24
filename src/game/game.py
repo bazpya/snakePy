@@ -60,13 +60,24 @@ class Game:
 
         self.iterate_cells(True, visit)
 
-    def _subscribe_events(self):
-        self.event_hub.stepped.subscribe(self._on_stepped)
+    def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
+        row_index_lower_bound = 0 if include_boundaries else 1
+        row_index_upper_bound = (
+            self._row_count if include_boundaries else (self._row_count - 1)
+        )
+        col_index_lower_bound = 0 if include_boundaries else 1
+        col_index_upper_bound = (
+            self._col_count if include_boundaries else (self._col_count - 1)
+        )
 
-    def _on_stepped(self, *args, **kwargs):
-        self._add_to_diff(*args)
-        self.event_hub.ready_to_draw.emit(self._step_diff)
-        self._purge_diff()
+        accumulator = initial_value
+
+        for row_index in range(row_index_lower_bound, row_index_upper_bound):
+            for col_index in range(col_index_lower_bound, col_index_upper_bound):
+                this_cell = self._cells[row_index][col_index]
+                accumulator = visit_func(this_cell, row_index, col_index, accumulator)
+
+        return accumulator
 
     def get_cells(self):
         return [x for row in self._cells for x in row]
@@ -111,6 +122,14 @@ class Game:
         self._snake = Snake(centre, self.event_hub)
         return self._snake
 
+    def _subscribe_events(self):
+        self.event_hub.stepped.subscribe(self._on_stepped)
+
+    def _on_stepped(self, *args, **kwargs):
+        self._add_to_diff(*args)
+        self.event_hub.ready_to_draw.emit(self._step_diff)
+        self._purge_diff()
+
     def run_sync(self, steps_to_take: int = None):
         self._add_snake()
         self._snake.run_sync(steps_to_take)
@@ -121,22 +140,3 @@ class Game:
 
     def steering_enque(self, dir: Direction):
         self._snake.steering_enque(dir)
-
-    def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
-        row_index_lower_bound = 0 if include_boundaries else 1
-        row_index_upper_bound = (
-            self._row_count if include_boundaries else (self._row_count - 1)
-        )
-        col_index_lower_bound = 0 if include_boundaries else 1
-        col_index_upper_bound = (
-            self._col_count if include_boundaries else (self._col_count - 1)
-        )
-
-        accumulator = initial_value
-
-        for row_index in range(row_index_lower_bound, row_index_upper_bound):
-            for col_index in range(col_index_lower_bound, col_index_upper_bound):
-                this_cell = self._cells[row_index][col_index]
-                accumulator = visit_func(this_cell, row_index, col_index, accumulator)
-
-        return accumulator
