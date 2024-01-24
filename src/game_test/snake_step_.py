@@ -73,6 +73,6 @@ class Snake_step_(Snake_):
         sut = Snake(origin)
         sut._events = self._events
         dir = Direction.up
-        sut.steering_enque(dir)
+        sut.direction_enque(dir)
         sut.step()
         origin.get_neighbour.assert_called_once_with(dir)

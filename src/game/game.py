@@ -145,4 +145,4 @@ class Game:
         await self._snake.run_async(interval, steps_to_take)
 
     def steering_enque(self, dir: Direction):
-        self._snake.steering_enque(dir)
+        self._snake.direction_enque(dir)

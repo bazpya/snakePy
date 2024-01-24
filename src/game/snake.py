@@ -11,7 +11,7 @@ class Snake:
     _direction: Direction
     _events: EventHub
     _steps_taken: int
-    _steering: deque[Direction]
+    _directions: deque[Direction]
 
     def __init__(self, only_cell: Cell) -> None:
         self._cells = deque()
@@ -21,7 +21,7 @@ class Snake:
         self._events = EventHub()
         self._looper = None
         self._steps_taken = 0
-        self._steering = deque()
+        self._directions = deque()
 
     def get_head(self):  # todo: see if you can remove this
         return self._cells[-1]
@@ -35,7 +35,7 @@ class Snake:
     def step(self):
         diff = []
         head = self.get_head()
-        self._direction = self._steering_deque()
+        self._direction = self._direction_deque()
         destination = head.get_neighbour(self._direction)
         is_fed = destination.is_food()
         should_die = destination.is_deadly()
@@ -70,14 +70,14 @@ class Snake:
         self._looper = LooperSync(self.step, iterations=steps_to_take)
         self._looper.start()
 
-    def steering_enque(self, dir: Direction):
-        last = self._steering[-1] if len(self._steering) > 0 else self._direction
+    def direction_enque(self, dir: Direction):
+        last = self._directions[-1] if len(self._directions) > 0 else self._direction
         if dir.is_aligned(last):
             return
-        self._steering.append(dir)
+        self._directions.append(dir)
 
-    def _steering_deque(self):
-        if len(self._steering) > 0:
-            return self._steering.popleft()
+    def _direction_deque(self):
+        if len(self._directions) > 0:
+            return self._directions.popleft()
         else:
             return self._direction
