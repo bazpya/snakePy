@@ -19,29 +19,21 @@ game = Game(row_count, col_count)
 game._add_food(food_count)
 drawer = Drawer(cell_size, row_count, col_count)
 drawer.draw(game.get_cells())
-player = PlayerFake()
+player = PlayerFake(game)
 
 
 def redraw(*args, **kwargs):
     drawer.draw(*args)
 
 
-def turn(*args, **kwargs):
-    turn = player.decide()
-    game.turn(turn)
-
-
-game.events.stepped.subscribe(turn)
-
-
 if is_headless:
     drawer.getMouse()
-    game.run_sync()
+    player.play_sync()
     drawer.draw(game.get_cells())
     drawer.getMouse()
 else:
     game.events.ready_to_draw.subscribe(redraw)
-    task = game.run_async(interval)
+    task = player.play_async(interval)
     res = asyncio.get_event_loop().run_until_complete(task)
 
     drawer.getMouse()
