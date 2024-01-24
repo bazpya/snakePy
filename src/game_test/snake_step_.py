@@ -14,7 +14,8 @@ class Snake_step_(Snake_):
         PathFactory.link(cells)
         origin = cells[0]
         destination = cells[1]
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         sut.step()
         self.assertEqual(destination, sut.get_head())
 
@@ -23,19 +24,22 @@ class Snake_step_(Snake_):
         PathFactory.link(cells)
         origin = cells[0]
         destination = cells[1]
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         sut.step()
         self.assertTrue(destination.is_snake())
 
     def test_step_when_into_blank_makes_tail_cell_blank(self):
         origin = PathFactory.make_chain("bb")
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_blank())
 
     def test_step_when_into_blank_keeps_length_same(self):
         origin = PathFactory.make_chain("bb")
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length, sut.get_length())
@@ -44,7 +48,8 @@ class Snake_step_(Snake_):
 
     def test_step_when_into_food_increments_length(self):
         origin = PathFactory.make_chain("bf")
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length + 1, sut.get_length())
@@ -53,7 +58,8 @@ class Snake_step_(Snake_):
 
     def test_step_when_into_wall_without_death_event_does_nothing(self):
         origin = PathFactory.make_chain("bf")
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         try:
             sut.step()
         except Exception:
@@ -64,7 +70,8 @@ class Snake_step_(Snake_):
     def test_step_pops_from_steering(self):
         origin = Cell()
         origin.get_neighbour = MagicMock()
-        sut = Snake(origin, self._events)
+        sut = Snake(origin)
+        sut._events = self._events
         dir = Direction.up
         sut.steering_enque(dir)
         sut.step()

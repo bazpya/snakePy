@@ -22,7 +22,6 @@ class Game:
         self._lay_walls()
         self.event_hub = EventHub()
         self._step_diff = []
-        self._subscribe_events()
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -119,16 +118,23 @@ class Game:
         centre = self._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
-        self._snake = Snake(centre, self.event_hub)
+        self._snake = Snake(centre)
+        self._snake._events.stepped.subscribe(self._on_stepped)
+        self._snake._events.ate.subscribe(self._on_ate)
+        self._snake._events.died.subscribe(self._on_died)
         return self._snake
-
-    def _subscribe_events(self):
-        self.event_hub.stepped.subscribe(self._on_stepped)
 
     def _on_stepped(self, *args, **kwargs):
         self._add_to_diff(*args)
         self.event_hub.ready_to_draw.emit(self._step_diff)
         self._purge_diff()
+        self.event_hub.stepped.emit(*args, **kwargs)
+
+    def _on_ate(self, *args, **kwargs):
+        self.event_hub.ate.emit(*args, **kwargs)
+
+    def _on_died(self, *args, **kwargs):
+        self.event_hub.died.emit(*args, **kwargs)
 
     def run_sync(self, steps_to_take: int = None):
         self._add_snake()

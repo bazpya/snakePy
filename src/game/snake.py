@@ -13,12 +13,12 @@ class Snake:
     _steps_taken: int
     _steering: deque[Direction]
 
-    def __init__(self, only_cell: Cell, events: EventHub = None) -> None:
+    def __init__(self, only_cell: Cell) -> None:
         self._cells = deque()
         self._cells.append(only_cell)
         only_cell.be_snake()
         self._direction = Direction.left  # todo: randommise this
-        self._events = events
+        self._events = EventHub()
         self._looper = None
         self._steps_taken = 0
         self._steering = deque()
