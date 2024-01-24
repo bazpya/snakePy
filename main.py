@@ -31,7 +31,7 @@ def turn(*args, **kwargs):
     game.turn(turn)
 
 
-game.event_hub.stepped.subscribe(turn)
+game.events.stepped.subscribe(turn)
 
 
 if is_headless:
@@ -40,7 +40,7 @@ if is_headless:
     drawer.draw(game.get_cells())
     drawer.getMouse()
 else:
-    game.event_hub.ready_to_draw.subscribe(redraw)
+    game.events.ready_to_draw.subscribe(redraw)
     task = game.run_async(interval)
     res = asyncio.get_event_loop().run_until_complete(task)
 

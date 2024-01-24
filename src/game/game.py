@@ -10,7 +10,7 @@ class Game:
     _cells: list[list[Cell]]
     _row_count: int
     _col_count: int
-    event_hub: EventHub
+    events: EventHub
     _step_diff: list[Cell]
 
     def __init__(self, row_count: int, col_count: int = None):
@@ -20,7 +20,7 @@ class Game:
         self._populate()
         self._link_neighbours()
         self._lay_walls()
-        self.event_hub = EventHub()
+        self.events = EventHub()
         self._step_diff = []
 
     def _populate(self):
@@ -126,15 +126,15 @@ class Game:
 
     def _on_stepped(self, *args, **kwargs):
         self._add_to_diff(*args)
-        self.event_hub.ready_to_draw.emit(self._step_diff)
+        self.events.ready_to_draw.emit(self._step_diff)
         self._purge_diff()
-        self.event_hub.stepped.emit(*args, **kwargs)
+        self.events.stepped.emit(*args, **kwargs)
 
     def _on_ate(self, *args, **kwargs):
-        self.event_hub.ate.emit(*args, **kwargs)
+        self.events.ate.emit(*args, **kwargs)
 
     def _on_died(self, *args, **kwargs):
-        self.event_hub.died.emit(*args, **kwargs)
+        self.events.died.emit(*args, **kwargs)
 
     def run_sync(self, steps_to_take: int = None):
         self._add_snake()
