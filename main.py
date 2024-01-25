@@ -22,17 +22,13 @@ drawer.draw(game.get_cells())
 player = PlayerFake(game)
 
 
-def redraw(*args, **kwargs):
-    drawer.draw(*args)
-
-
 if is_headless:
     drawer.getMouse()
     player.play_sync()
     drawer.draw(game.get_cells())
     drawer.getMouse()
 else:
-    game.events.ready_to_draw.subscribe(redraw)
+    game.events.ready_to_draw.subscribe(drawer.draw)
     task = player.play_async(interval)
     res = asyncio.get_event_loop().run_until_complete(task)
 
