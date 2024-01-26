@@ -9,7 +9,6 @@ class Game_events_(Game_):
     # ======================  Blank  ======================
 
     def test_blank_step_emits_the_right_events(self):
-        self._sut._events = self._events
         origin = PathFactory.make_chain("bb")
         snake = Snake(origin)
         self._sut._bind(snake)
@@ -20,7 +19,6 @@ class Game_events_(Game_):
         self.ready_to_draw_callback.assert_called()
 
     def test_blank_step_passes_diff_to_stepped_event(self):
-        self._sut._events = self._events
         cells = PathFactory.make_list("bb")
         PathFactory.link(cells)
         origin = cells[0]
@@ -33,7 +31,6 @@ class Game_events_(Game_):
     # # ======================  Food  ======================
 
     def test_food_step_emits_the_right_events(self):
-        self._sut._events = self._events
         origin = PathFactory.make_chain("bf")
         snake = Snake(origin)
         self._sut._bind(snake)
@@ -44,7 +41,6 @@ class Game_events_(Game_):
         self.ready_to_draw_callback.assert_called()
 
     def test_food_step_passes_diff_to_stepped_event(self):
-        self._sut._events = self._events
         cells = PathFactory.make_list("bf")
         PathFactory.link(cells)
         origin = cells[0]
@@ -57,7 +53,6 @@ class Game_events_(Game_):
     # # ======================  Death  ======================
 
     def test_death_step_emits_the_right_events(self):
-        self._sut._events = self._events
         origin = PathFactory.make_chain("bs")
         snake = Snake(origin)
         self._sut._bind(snake)
@@ -68,7 +63,6 @@ class Game_events_(Game_):
         self.ready_to_draw_callback.assert_called()
 
     def test_death_step_passes_no_cells_to_stepped_event(self):
-        self._sut._events = self._events
         origin = PathFactory.make_chain("bw")
         snake = Snake(origin)
         self._sut._bind(snake)
@@ -76,7 +70,6 @@ class Game_events_(Game_):
         self.stepped_callback.assert_called_with([])
 
     def test_death_step_passes_correct_result_to_died_event_single_cell(self):
-        self._sut._events = self._events
         origin = PathFactory.make_chain("bw")
         snake = Snake(origin)
         self._sut._bind(snake)
@@ -86,7 +79,6 @@ class Game_events_(Game_):
         self.assertEqual(result.steps_taken, 1)
 
     def test_death_step_passes_correct_result_to_died_event_multi_cell(self):
-        self._sut._events = self._events  # todo: take it to setUp
         path_pattern = "bbffbbs"
         origin = PathFactory.make_chain(path_pattern)
         snake = Snake(origin)
@@ -98,8 +90,8 @@ class Game_events_(Game_):
         self.assertEqual(result.length, 3)
         self.assertEqual(result.steps_taken, len(path_pattern) - 1)
 
+    # todo:
     # def test_death_step_passes_turs_taken_to_died_event(self):
-    #     self._sut._events = self._events
     #     turns = [Turn.left, Turn.right, Turn.ahead, Turn.ahead, Turn.right]
     #     for turn in turns:
     #         self._sut.turn(turn)
