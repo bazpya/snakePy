@@ -44,7 +44,7 @@ class Snake_step_(Snake_):
         sut.step()
         self.assertEqual(initial_length, sut.get_length())
 
-    def test_step_pops_from_steering(self):
+    def test_step_into_blank_pops_from_steering(self):
         origin = Cell()
         sut = Snake(origin)
         origin.get_neighbour = MagicMock()
@@ -53,7 +53,7 @@ class Snake_step_(Snake_):
         sut.step()
         origin.get_neighbour.assert_called_once_with(dir)
 
-    def test_step_when_reached_step_count_dies(self):
+    def test_step_into_blank_when_reached_step_count_dies(self):
         origin = PathFactory.make_infinite_chain()
         sut = Snake(origin, self._some_number_2)
         sut._events = self._events
@@ -69,6 +69,13 @@ class Snake_step_(Snake_):
         initial_length = sut.get_length()
         sut.step()
         self.assertEqual(initial_length + 1, sut.get_length())
+
+    def test_step_into_food_when_reached_step_count_dies(self):
+        origin = PathFactory.make_chain("f" * (self._some_number_2 + 1))
+        sut = Snake(origin, self._some_number_2)
+        sut._events = self._events
+        sut.run_sync()
+        self.died_callback.assert_called_with(self._some_number_2)
 
     # ===============================  step-wall  ===============================
 
