@@ -1,3 +1,4 @@
+from src.game.Result import GameResult
 from src.game.global_refs import CellType
 from src.game.game import Game
 from src.game.cell import Cell
@@ -66,3 +67,9 @@ class Game_etc_(Game_):
 
     def test_add_snake_sets_one_cell(self):
         self.assertCellCount(self._sut, CellType.snake, 1)
+
+    def test_run_sync_after_specified_number_of_steps_emits_died_event(self):
+        self._sut._events = self._events
+        self._sut.run_sync(self._some_number_1 + 10)
+        result: GameResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.steps_taken, self._some_number_1)

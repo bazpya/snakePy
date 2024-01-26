@@ -13,6 +13,7 @@ class Game:
     _col_count: int
     _events: EventHub
     _step_diff: list[Cell]
+    _turns: list[Turn]
 
     def __init__(
         self, row_count: int, col_count: int = None, init_food_count: int = None
@@ -29,6 +30,7 @@ class Game:
         self._ini_food_count = init_food_count if init_food_count else 1
         self._add_food(self._ini_food_count)
         self._bind()
+        self._turns = []
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -144,7 +146,7 @@ class Game:
         self._events.ate.emit(*args, **kwargs)
 
     def _on_died(self, snake_res: SnakeResult):
-        res = GameResult(self._row_count, self._col_count, [], [], snake_res)
+        res = GameResult(self._row_count, self._col_count, [], self._turns, snake_res)
         self._events.died.emit(res)
 
     def run_sync(self, steps_to_take: int = None):
@@ -157,4 +159,5 @@ class Game:
         self._snake.direction_enque(dir)
 
     def turn(self, turn: Turn):
+        self._turns.append(turn)
         self._snake.turn(turn)
