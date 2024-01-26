@@ -21,9 +21,6 @@ class LooperSync_(unittest.TestCase):
         expected = counter.read()
         self.assertEqual(actual, expected)
 
-    def test_if_unspecified_runs_indefinitely(self):
-        self.skipTest("todo")
-
     def test_passes_args_to_func(self):
         cb = MagicMock()
 

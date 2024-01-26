@@ -22,9 +22,6 @@ class LooperInterval_(unittest.IsolatedAsyncioTestCase):
         expected = counter.read()
         self.assertEqual(actual, expected)
 
-    async def test_if_unspecified_runs_indefinitely(self):
-        self.skipTest("todo")
-
     async def test_passes_args_to_func(self):
         cb = MagicMock()
 

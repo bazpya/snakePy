@@ -4,9 +4,9 @@ from src.game_test.snake_ import Snake_
 
 
 class Snake_events_(Snake_):
-    # ======================  Events  ======================
+    # ======================  Blank  ======================
 
-    def test_step_into_blank_emits_the_right_events(self):
+    def test_blank_emits_the_right_events(self):
         origin = PathFactory.make_chain("bb")
         sut = Snake(origin)
         sut._events = self._events
@@ -15,36 +15,7 @@ class Snake_events_(Snake_):
         self.ate_callback.assert_not_called()
         self.died_callback.assert_not_called()
 
-    def test_step_into_wall_emits_the_right_events(self):
-        origin = PathFactory.make_chain("bw")
-        sut = Snake(origin)
-        sut._events = self._events
-        sut.step()
-        self.stepped_callback.assert_called()
-        self.ate_callback.assert_not_called()
-        self.died_callback.assert_called()
-
-    def test_step_into_snake_emits_the_right_events(self):
-        origin = PathFactory.make_chain("bs")
-        sut = Snake(origin)
-        sut._events = self._events
-        sut.step()
-        self.stepped_callback.assert_called()
-        self.ate_callback.assert_not_called()
-        self.died_callback.assert_called()
-
-    def test_step_when_into_food_emits_the_right_events(self):
-        origin = PathFactory.make_chain("bf")
-        sut = Snake(origin)
-        sut._events = self._events
-        sut.step()
-        self.stepped_callback.assert_called()
-        self.ate_callback.assert_called()
-        self.died_callback.assert_not_called()
-
-    # ======================  Changed Cells  ======================
-
-    def test_step_into_blank_passes_changed_cells_to_stepped_event(self):
+    def test_blank_passes_diff_to_stepped_event(self):
         cells = PathFactory.make_list("bb")
         PathFactory.link(cells)
         origin = cells[0]
@@ -54,7 +25,18 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([origin, destination])
 
-    def test_step_into_food_passes_changed_cells_to_stepped_event(self):
+    # ======================  Food  ======================
+
+    def test_food_emits_the_right_events(self):
+        origin = PathFactory.make_chain("bf")
+        sut = Snake(origin)
+        sut._events = self._events
+        sut.step()
+        self.stepped_callback.assert_called()
+        self.ate_callback.assert_called()
+        self.died_callback.assert_not_called()
+
+    def test_food_passes_diff_to_stepped_event(self):
         cells = PathFactory.make_list("bf")
         PathFactory.link(cells)
         origin = cells[0]
@@ -64,7 +46,18 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([destination])
 
-    def test_step_into_wall_passes_no_cells_to_stepped_event(self):
+    # ======================  Death  ======================
+
+    def test_death_emits_the_right_events(self):
+        origin = PathFactory.make_chain("bs")
+        sut = Snake(origin)
+        sut._events = self._events
+        sut.step()
+        self.stepped_callback.assert_called()
+        self.ate_callback.assert_not_called()
+        self.died_callback.assert_called()
+
+    def test_death_passes_no_cells_to_stepped_event(self):
         cells = PathFactory.make_list("bw")
         PathFactory.link(cells)
         origin = cells[0]
@@ -73,25 +66,14 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([])
 
-    def test_step_into_snake_passes_no_cells_to_stepped_event(self):
-        cells = PathFactory.make_list("bs")
-        PathFactory.link(cells)
-        origin = cells[0]
-        sut = Snake(origin)
-        sut._events = self._events
-        sut.step()
-        self.stepped_callback.assert_called_with([])
-
-    # ======================  Death  ======================
-
-    def test_passes_length_to_died_event_single_cell(self):
+    def test_death_passes_length_to_died_event_single_cell(self):
         origin = PathFactory.make_chain("bw")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.died_callback.assert_called_with(1)
 
-    def test_passes_length_to_died_event_multi_cell(self):
+    def test_death_passes_length_to_died_event_multi_cell(self):
         path_pattern = "bbffbbs"
         origin = PathFactory.make_chain(path_pattern)
         sut = Snake(origin)
