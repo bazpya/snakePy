@@ -9,7 +9,7 @@ from src.game_test.snake_ import Snake_
 class Snake_step_(Snake_):
     # ===============================  step-blank  ===============================
 
-    def test_step_when_into_blank_moves_head(self):
+    def test_step_into_blank_moves_head(self):
         cells = PathFactory.make_list("bb")
         PathFactory.link(cells)
         origin = cells[0]
@@ -19,7 +19,7 @@ class Snake_step_(Snake_):
         sut.step()
         self.assertEqual(destination, sut.get_head())
 
-    def test_step_when_into_blank_makes_new_cell_snake(self):
+    def test_step_into_blank_makes_new_cell_snake(self):
         cells = PathFactory.make_list("bb")
         PathFactory.link(cells)
         origin = cells[0]
@@ -29,14 +29,14 @@ class Snake_step_(Snake_):
         sut.step()
         self.assertTrue(destination.is_snake())
 
-    def test_step_when_into_blank_makes_tail_cell_blank(self):
+    def test_step_into_blank_makes_tail_cell_blank(self):
         origin = PathFactory.make_chain("bb")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_blank())
 
-    def test_step_when_into_blank_keeps_length_same(self):
+    def test_step_into_blank_keeps_length_same(self):
         origin = PathFactory.make_chain("bb")
         sut = Snake(origin)
         sut._events = self._events
@@ -44,9 +44,21 @@ class Snake_step_(Snake_):
         sut.step()
         self.assertEqual(initial_length, sut.get_length())
 
+    def test_step_pops_from_steering(self):
+        origin = Cell()
+        sut = Snake(origin)
+        origin.get_neighbour = MagicMock()
+        dir = Direction.up
+        sut.direction_enque(dir)
+        sut.step()
+        origin.get_neighbour.assert_called_once_with(dir)
+
+    # def test_step_when_reached_step_count_dies(self):
+    #     self.assertTrue(False)
+
     # ===============================  step-food  ===============================
 
-    def test_step_when_into_food_increments_length(self):
+    def test_step_into_food_increments_length(self):
         origin = PathFactory.make_chain("bf")
         sut = Snake(origin)
         sut._events = self._events
@@ -56,7 +68,7 @@ class Snake_step_(Snake_):
 
     # ===============================  step-wall  ===============================
 
-    def test_step_when_into_wall_without_death_event_does_nothing(self):
+    def test_step_into_wall_without_death_event_does_nothing(self):
         origin = PathFactory.make_chain("bf")
         sut = Snake(origin)
         sut._events = self._events
@@ -64,15 +76,3 @@ class Snake_step_(Snake_):
             sut.step()
         except Exception:
             self.fail("Snake death event threw an error")
-
-    # ===============================  step-blank  ===============================
-
-    def test_step_pops_from_steering(self):
-        origin = Cell()
-        origin.get_neighbour = MagicMock()
-        sut = Snake(origin)
-        sut._events = self._events
-        dir = Direction.up
-        sut.direction_enque(dir)
-        sut.step()
-        origin.get_neighbour.assert_called_once_with(dir)

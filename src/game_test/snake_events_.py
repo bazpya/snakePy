@@ -52,7 +52,7 @@ class Snake_events_(Snake_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called_with([destination, origin])
+        self.stepped_callback.assert_called_with([origin, destination])
 
     def test_step_into_food_passes_changed_cells_to_stepped_event(self):
         cells = PathFactory.make_list("bf")
