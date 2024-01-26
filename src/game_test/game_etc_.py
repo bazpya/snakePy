@@ -1,3 +1,4 @@
+from src.game.global_refs import CellType
 from src.game.game import Game
 from src.game.cell import Cell
 from src.game_test.game_ import Game_
@@ -64,8 +65,4 @@ class Game_etc_(Game_):
         self.assertEqual(expected, actual)
 
     def test_add_snake_sets_one_cell(self):
-        def counter_func(cell: Cell, ri, ci, acc):
-            return acc + 1 if cell.is_snake() else acc
-
-        count = self._sut.iterate_cells(True, counter_func, 0)
-        self.assertEqual(1, count)
+        self.assertCellCount(self._sut, CellType.snake, 1)

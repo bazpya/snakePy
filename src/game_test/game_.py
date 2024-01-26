@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+from src.game.cell import Cell
+from src.game.global_refs import CellType
 from src.game.game import Game
 from src.game.event import Event
 from src.game.event_hub import EventHub
@@ -35,3 +37,10 @@ class Game_(unittest.TestCase):
 
     def setUp(self):
         self._sut = Game(self.row_count, self.col_count)
+
+    def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
+        def counter_func(cell: Cell, ri, ci, acc):
+            return acc + 1 if cell._type == cell_type else acc
+
+        actual = game.iterate_cells(False, counter_func, 0)
+        self.assertEqual(actual, expected)
