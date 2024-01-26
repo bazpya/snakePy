@@ -8,6 +8,7 @@ from src.game.event_hub import EventHub
 class Game_(unittest.TestCase):
     _some_number_1 = 7
     _some_number_2 = 10
+    _sut: Game
 
     def __init__(self, *args, **kwargs):
         super(Game_, self).__init__(*args, **kwargs)
@@ -32,5 +33,5 @@ class Game_(unittest.TestCase):
         self.ready_to_draw_callback = MagicMock()
         self._events.ready_to_draw.subscribe(self.ready_to_draw_callback)
 
-    def make_sut(self, *args, **kwargs):
-        return Game(self.row_count, self.col_count)
+    def setUp(self):
+        self._sut = Game(self.row_count, self.col_count)

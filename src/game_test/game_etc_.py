@@ -10,8 +10,7 @@ class Game_etc_(Game_):
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        sut = self.make_sut()
-        count = sut.iterate_cells(True, counter_func, 0)
+        count = self._sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(all_cells_count, count)
 
     def test_iterate_cells_hits_interior_cells(self):
@@ -20,41 +19,36 @@ class Game_etc_(Game_):
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        sut = self.make_sut()
-        count = sut.iterate_cells(False, counter_func, 0)
+        count = self._sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(interior_cells_count, count)
 
     def test_get_blank_cells_gets_blanks(self):
-        sut = self.make_sut()
-        actual = sut._get_blank_cells()
+        actual = self._sut._get_blank_cells()
         for cell in actual:
             self.assertTrue(cell.is_blank())
 
     def test_get_blank_cells_gets_correct_number_of_cells(self):
-        sut = self.make_sut()
-        supposed_blanks = sut._get_blank_cells()
+        supposed_blanks = self._sut._get_blank_cells()
         actual = len(supposed_blanks)
         expected = (self.row_count - 2) * (self.col_count - 2) - 1
         self.assertEqual(actual, expected)
 
     def test_add_food_without_args_affects_one_cell(self):
-        sut = self.make_sut()
-        food_cell = sut._add_food()
+        food_cell = self._sut._add_food()
 
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_food() else acc
 
-        count = sut.iterate_cells(False, counter_func, 0)
+        count = self._sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(1, count)
 
     def test_add_food_with_specific_number_adds_correct_amount(self):
-        sut = self.make_sut()
-        food_cell = sut._add_food(self._some_number_1)
+        food_cell = self._sut._add_food(self._some_number_1)
 
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_food() else acc
 
-        count = sut.iterate_cells(False, counter_func, 0)
+        count = self._sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(count, self._some_number_1)
 
     def test_get_centre_for_large_odd_numbers(self):
@@ -86,11 +80,8 @@ class Game_etc_(Game_):
         self.assertEqual(expected, actual)
 
     def test_add_snake_sets_one_cell(self):
-        sut = self.make_sut()
-
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1 if cell.is_snake() else acc
 
-        # sut._add_snake()
-        count = sut.iterate_cells(True, counter_func, 0)
+        count = self._sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(1, count)
