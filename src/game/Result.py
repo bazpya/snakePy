@@ -11,17 +11,16 @@ class SnakeResult:
 class GameResult:
     def __init__(
         self,
-        width: int,
-        height: int,
-        steps_taken: int,
-        length: int,
+        row_count: int,
+        col_count: int,
         foods: list[Cell],
         turns: list[Turn],
+        snake_res: SnakeResult,
     ) -> None:
-        self.width = width
-        self.height = height
-        self.steps_taken = steps_taken
-        self.length = length
+        self.row_count = row_count
+        self.col_count = col_count
+        self.steps_taken = snake_res.steps_taken
+        self.length = snake_res.length
         self.foods = foods
         self.turns = turns
 

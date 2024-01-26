@@ -1,3 +1,4 @@
+from src.game.Result import GameResult, SnakeResult
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
 from src.game.cell import Cell
@@ -10,7 +11,7 @@ class Game:
     _cells: list[list[Cell]]
     _row_count: int
     _col_count: int
-    events: EventHub
+    _events: EventHub
     _step_diff: list[Cell]
 
     def __init__(self, row_count: int, col_count: int = None):
@@ -20,8 +21,10 @@ class Game:
         self._populate()
         self._link_neighbours()
         self._lay_walls()
-        self.events = EventHub()
+        self._events = EventHub()
         self._step_diff = []
+        self._add_snake()
+        self._bind()
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -114,34 +117,36 @@ class Game:
                 runner = runner.get_neighbour(ver_dir)
         return runner
 
-    def _add_snake(self):
+    def _add_snake(self) -> None:
         centre = self._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
         self._snake = Snake(centre)
-        self._snake._events.stepped.subscribe(self._on_stepped)
-        self._snake._events.ate.subscribe(self._on_ate)
-        self._snake._events.died.subscribe(self._on_died)
-        return self._snake
+
+    def _bind(self, snake: Snake = None) -> None:
+        s = snake if snake else self._snake
+        self._snake = s
+        s._events.stepped.subscribe(self._on_stepped)
+        s._events.ate.subscribe(self._on_ate)
+        s._events.died.subscribe(self._on_died)
 
     def _on_stepped(self, *args, **kwargs):
         self._add_to_diff(*args)
-        self.events.ready_to_draw.emit(self._step_diff)
+        self._events.ready_to_draw.emit(self._step_diff)
         self._purge_diff()
-        self.events.stepped.emit(*args, **kwargs)
+        self._events.stepped.emit(*args, **kwargs)
 
     def _on_ate(self, *args, **kwargs):
-        self.events.ate.emit(*args, **kwargs)
+        self._events.ate.emit(*args, **kwargs)
 
-    def _on_died(self, *args, **kwargs):
-        self.events.died.emit(*args, **kwargs)
+    def _on_died(self, snake_res: SnakeResult):
+        res = GameResult(self._row_count, self._col_count, [], [], snake_res)
+        self._events.died.emit(res)
 
     def run_sync(self, steps_to_take: int = None):
-        self._add_snake()
         self._snake.run_sync(steps_to_take)
 
     async def run_async(self, interval: float = 0.5, steps_to_take: int = None):
-        self._add_snake()
         await self._snake.run_async(interval, steps_to_take)
 
     def steering_enque(self, dir: Direction):

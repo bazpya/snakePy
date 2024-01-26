@@ -1,3 +1,4 @@
+from src.game.cell import Cell
 from src.game_test.game_ import Game_
 
 
@@ -27,8 +28,9 @@ class Game_areas_(Game_):
             self.assertTrue(cell.is_wall)
 
     def test_interior_cells_are_blank(self):
-        def visit(cell, ri, ci, acc):
-            self.assertTrue(cell.is_blank())
+        def visit(cell: Cell, ri, ci, acc):
+            self.assertTrue(cell.is_blank() or cell == origin)
 
         sut = self.make_sut()
+        origin = sut._snake.get_head()
         sut.iterate_cells(False, visit)
