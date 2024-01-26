@@ -3,6 +3,13 @@ from src.game.cell import Cell
 
 
 class PathFactory:
+    _map = {
+        "b": CellType.blank,
+        "f": CellType.food,
+        "s": CellType.snake,
+        "w": CellType.wall,
+    }
+
     @staticmethod
     def _create_func(cell: Cell):
         def func(*args, **kwargs):
@@ -12,15 +19,9 @@ class PathFactory:
 
     @staticmethod
     def make_list(pattern: str) -> list[Cell]:
-        map = {
-            "b": CellType.blank,
-            "f": CellType.food,
-            "s": CellType.snake,
-            "w": CellType.wall,
-        }
         res: list[Cell] = []
         for i, char in enumerate(pattern):
-            type = map[char]
+            type = PathFactory._map[char]
             cell = Cell(None, None, type)
             res.append(cell)
         return res
@@ -39,13 +40,7 @@ class PathFactory:
         return cells[0]
 
     @staticmethod
-    def neighbour_maker(*args):
-        neighbour = Cell()
-        neighbour.get_neighbour = PathFactory.neighbour_maker
-        return neighbour
-
-    @staticmethod
-    def make_infinite_chain() -> Cell:
-        origin = Cell()
-        origin.get_neighbour = PathFactory.neighbour_maker
-        return origin
+    def make_infinite_chain(*a) -> Cell:
+        cell = Cell()
+        cell.get_neighbour = PathFactory.make_infinite_chain
+        return cell

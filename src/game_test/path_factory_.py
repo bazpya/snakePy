@@ -13,6 +13,7 @@ class Path_factory_(unittest.TestCase):
     }
 
     # ======================  Make List  ======================
+
     def test_make_list_gets_right_number_of_cells(self):
         res = PathFactory.make_list("bfsw")
         self.assertEqual(len(res), 4)
@@ -57,3 +58,18 @@ class Path_factory_(unittest.TestCase):
         for type in types:
             self.assertEqual(runner.get_type(), type)
             runner = runner.get_neighbour(Direction.left)
+
+    # ======================  Make Infinite Chain  ======================
+
+    def test_make_infinite_chain_creates_blank_chain(self):
+        runner = PathFactory.make_infinite_chain()
+        for i in range(6):
+            self.assertEqual(runner.get_type(), CellType.blank)
+            runner = runner.get_neighbour(Direction.left)
+
+    # def test_make_infinite_chain_makes_correct_cell_type(self):
+    #     type = CellType.food
+    #     runner = PathFactory.make_infinite_chain(cell_type=type)
+    #     for i in range(6):
+    #         self.assertEqual(runner.get_type(), type)
+    #         runner = runner.get_neighbour(Direction.left)
