@@ -2,6 +2,7 @@ from unittest.mock import MagicMock
 from src.game.cell import Cell
 from src.game.direction import Direction
 from src.game.snake import Snake
+from src.game.Result import SnakeResult
 from src.game_test.helper.path_factory import PathFactory
 from src.game_test.snake_ import Snake_
 
@@ -58,7 +59,9 @@ class Snake_step_(Snake_):
         sut = Snake(origin, self._some_number_2)
         sut._events = self._events
         sut.run_sync()
-        self.died_callback.assert_called_with(1)
+        result: SnakeResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.length, 1)
+        self.assertEqual(result.steps_taken, self._some_number_2)
 
     # ===============================  step-food  ===============================
 
@@ -75,7 +78,9 @@ class Snake_step_(Snake_):
         sut = Snake(origin, self._some_number_2)
         sut._events = self._events
         sut.run_sync()
-        self.died_callback.assert_called_with(self._some_number_2)
+        result: SnakeResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.length, self._some_number_2)
+        self.assertEqual(result.steps_taken, self._some_number_2)
 
     # ===============================  step-wall  ===============================
 

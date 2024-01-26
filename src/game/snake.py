@@ -1,7 +1,8 @@
+from collections import deque
+from src.game.Result import SnakeResult
 from src.game.cell import Cell
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
-from collections import deque
 from src.game.looper_interval import LooperInterval
 from src.game.looper_sync import LooperSync
 
@@ -75,7 +76,8 @@ class Snake:
         if self._looper:
             self._looper.stop()
         if self._events.died is not None:
-            self._events.died.emit(self.get_length())
+            result = SnakeResult(self._steps_taken, self.get_length())
+            self._events.died.emit(result)
 
     def _get_latest_input(self):
         return self._directions[-1] if self._directions else self._direction

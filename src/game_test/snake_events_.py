@@ -1,4 +1,5 @@
 from src.game.snake import Snake
+from src.game.Result import SnakeResult
 from src.game_test.helper.path_factory import PathFactory
 from src.game_test.snake_ import Snake_
 
@@ -25,7 +26,7 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([origin, destination])
 
-    # ======================  Food  ======================
+    # # ======================  Food  ======================
 
     def test_food_emits_the_right_events(self):
         origin = PathFactory.make_chain("bf")
@@ -46,7 +47,7 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([destination])
 
-    # ======================  Death  ======================
+    # # ======================  Death  ======================
 
     def test_death_emits_the_right_events(self):
         origin = PathFactory.make_chain("bs")
@@ -66,20 +67,24 @@ class Snake_events_(Snake_):
         sut.step()
         self.stepped_callback.assert_called_with([])
 
-    def test_death_passes_length_to_died_event_single_cell(self):
+    def test_death_passes_correct_result_to_died_event_single_cell(self):
         origin = PathFactory.make_chain("bw")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.died_callback.assert_called_with(1)
+        result: SnakeResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.length, 1)
+        self.assertEqual(result.steps_taken, 1)
 
-    def test_death_passes_length_to_died_event_multi_cell(self):
+    def test_death_passes_correct_result_to_died_event_multi_cell(self):
         path_pattern = "bbffbbs"
         origin = PathFactory.make_chain(path_pattern)
         sut = Snake(origin)
         sut._events = self._events
-        for i in range(0, 6):
+        for i in range(0, len(path_pattern) - 1):
             sut.step()
-        self.died_callback.assert_called_with(3)
+        result: SnakeResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.length, 3)
+        self.assertEqual(result.steps_taken, len(path_pattern) - 1)
 
     # ======================  ?????  ======================
