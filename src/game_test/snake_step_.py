@@ -53,8 +53,12 @@ class Snake_step_(Snake_):
         sut.step()
         origin.get_neighbour.assert_called_once_with(dir)
 
-    # def test_step_when_reached_step_count_dies(self):
-    #     self.assertTrue(False)
+    def test_step_when_reached_step_count_dies(self):
+        origin = PathFactory.make_infinite_chain()
+        sut = Snake(origin, self._some_number_2)
+        sut._events = self._events
+        sut.run_sync()
+        self.died_callback.assert_called_with(1)
 
     # ===============================  step-food  ===============================
 

@@ -84,14 +84,14 @@ class Snake_events_(Snake_):
 
     # ======================  Death  ======================
 
-    def test_passes_length_to_died_event_single(self):
+    def test_passes_length_to_died_event_single_cell(self):
         origin = PathFactory.make_chain("bw")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.died_callback.assert_called_with(1)
 
-    def test_passes_length_to_died_event(self):
+    def test_passes_length_to_died_event_multi_cell(self):
         path_pattern = "bbffbbs"
         origin = PathFactory.make_chain(path_pattern)
         sut = Snake(origin)

@@ -11,10 +11,11 @@ class Snake:
     _direction: Direction
     _events: EventHub
     _steps_taken: int
+    _steps_to_take: int
     _directions: deque[Direction]
     _diff: list[Cell]
 
-    def __init__(self, only_cell: Cell) -> None:
+    def __init__(self, only_cell: Cell, steps_to_take: int = 0) -> None:
         self._cells = deque()
         self._cells.append(only_cell)
         only_cell.be_snake()
@@ -22,6 +23,7 @@ class Snake:
         self._events = EventHub()
         self._looper = None
         self._steps_taken = 0
+        self._steps_to_take = steps_to_take
         self._directions = deque()
         self._diff = []
 
@@ -35,8 +37,9 @@ class Snake:
         return len(self._cells)
 
     def step(self):
+        self._steps_taken += 1
         next = self._get_next_cell()
-        should_die = next.is_deadly()
+        should_die = next.is_deadly() or self._steps_taken == self._steps_to_take
         if should_die:
             self._die()
         else:
