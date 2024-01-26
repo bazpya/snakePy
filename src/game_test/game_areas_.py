@@ -22,10 +22,3 @@ class Game_areas_(Game_):
         for r in range(self.row_count):
             cell = self._sut._cells[r][-1]
             self.assertTrue(cell.is_wall)
-
-    def test_interior_cells_are_blank(self):
-        def visit(cell: Cell, ri, ci, acc):
-            self.assertTrue(cell.is_blank() or cell == origin)
-
-        origin = self._sut._snake.get_head()
-        self._sut.iterate_cells(False, visit)

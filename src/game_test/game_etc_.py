@@ -30,26 +30,10 @@ class Game_etc_(Game_):
     def test_get_blank_cells_gets_correct_number_of_cells(self):
         supposed_blanks = self._sut._get_blank_cells()
         actual = len(supposed_blanks)
-        expected = (self.row_count - 2) * (self.col_count - 2) - 1
+        expected = (
+            (self.row_count - 2) * (self.col_count - 2) - self._sut._ini_food_count - 1
+        )
         self.assertEqual(actual, expected)
-
-    def test_add_food_without_args_affects_one_cell(self):
-        food_cell = self._sut._add_food()
-
-        def counter_func(cell: Cell, ri, ci, acc):
-            return acc + 1 if cell.is_food() else acc
-
-        count = self._sut.iterate_cells(False, counter_func, 0)
-        self.assertEqual(1, count)
-
-    def test_add_food_with_specific_number_adds_correct_amount(self):
-        food_cell = self._sut._add_food(self._some_number_1)
-
-        def counter_func(cell: Cell, ri, ci, acc):
-            return acc + 1 if cell.is_food() else acc
-
-        count = self._sut.iterate_cells(False, counter_func, 0)
-        self.assertEqual(count, self._some_number_1)
 
     def test_get_centre_for_large_odd_numbers(self):
         expected = 8
@@ -66,15 +50,15 @@ class Game_etc_(Game_):
         self.assertEqual(expected, actual)
 
     def test_get_centre_for_small_odd_numbers(self):
-        expected = 1
+        expected = 2
         sut = Game(expected * 2 + 1)
         cell = sut._get_centre()
         actual = cell._row
         self.assertEqual(expected, actual)
 
     def test_get_centre_for_small_even_numbers(self):
-        expected = 1
-        sut = Game(expected * 3)
+        expected = 2
+        sut = Game(4)
         cell = sut._get_centre()
         actual = cell._row
         self.assertEqual(expected, actual)

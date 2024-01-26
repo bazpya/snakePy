@@ -14,7 +14,9 @@ class Game:
     _events: EventHub
     _step_diff: list[Cell]
 
-    def __init__(self, row_count: int, col_count: int = None):
+    def __init__(
+        self, row_count: int, col_count: int = None, init_food_count: int = None
+    ):
         self._row_count = row_count
         self._col_count = row_count if col_count is None else col_count
         self._cells = []
@@ -24,6 +26,8 @@ class Game:
         self._events = EventHub()
         self._step_diff = []
         self._add_snake()
+        self._ini_food_count = init_food_count if init_food_count else 1
+        self._add_food(self._ini_food_count)
         self._bind()
 
     def _populate(self):
