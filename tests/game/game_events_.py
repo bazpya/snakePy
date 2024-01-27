@@ -1,3 +1,4 @@
+from src.game.direction import Turn
 from src.game.snake import Snake
 from src.game.Result import GameResult
 from tests.game.game_ import Game_
@@ -82,22 +83,19 @@ class Game_events_(Game_):
         origin = CellFactory.make_chain(pattern)
         snake = Snake(origin)
         self._sut._bind(snake)
-        for i in range(0, len(pattern) - 1):  # todo: replace with run(5)
-            snake.step()
-
+        snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.length, 3)
         self.assertEqual(result.steps_taken, len(pattern) - 1)
 
-    # todo:
-    # def test_death_passes_turs_taken_to_died_event(self):
-    #     turns = [Turn.left, Turn.right, Turn.ahead, Turn.ahead, Turn.right]
-    #     for turn in turns:
-    #         self._sut.turn(turn)
-    #     self._sut.run_sync(2)
-    #     self.died_callback.assert_called_once()
-    #     # result: GameResult = self.died_callback.call_args[0][0]
-    #     # self.assertEqual(result.turns, turns)
+    def test_death_passes_turs_taken_to_died_event(self):
+        turns = [Turn.left, Turn.right, Turn.ahead, Turn.ahead, Turn.right]
+        for turn in turns:
+            self._sut.turn(turn)
+        self._sut.run_sync()
+        self.died_callback.assert_called_once()
+        result: GameResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.turns, turns)
 
     def test_death_passes_foods_taken_to_died_event(self):
         self.skipTest("todo")
