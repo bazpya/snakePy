@@ -40,7 +40,7 @@ class Snake:
     def step(self):
         self._steps_taken += 1
         next = self._get_next_cell()
-        should_die = next.is_deadly() or self._steps_taken == self._steps_to_take
+        should_die = next.is_deadly()
         if should_die:
             self._die()
         else:
@@ -96,12 +96,19 @@ class Snake:
         next_dir = latest_input.turn(turn)
         self.direction_enque(next_dir)
 
-    async def run_async(self, interval: float = 0.5, steps_to_take: int = None):
+    async def run_async(self, interval: float = 0.5):
         self._looper = LooperInterval(
-            self.step, interval=interval, iterations=steps_to_take
+            func=self.step,
+            interval=interval,
+            iterations=self._steps_to_take,
+            end_callback=self._die,
         )
         await self._looper.start()
 
-    def run_sync(self, steps_to_take: int = None):
-        self._looper = LooperSync(self.step, iterations=steps_to_take)
+    def run_sync(self):
+        self._looper = LooperSync(
+            func=self.step,
+            iterations=self._steps_to_take,
+            end_callback=self._die,
+        )
         self._looper.start()

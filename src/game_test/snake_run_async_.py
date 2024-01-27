@@ -10,19 +10,19 @@ class Snake_run_async_(Snake_):
         self._events.stepped.subscribe(counter.increment)
 
         origin = PathFactory.make_infinite_chain()
-        sut = Snake(origin)
+        sut = Snake(origin, self._small_number)
         sut._events = self._events
-        await sut.run_async(self._msec, self._some_number_1)
+        await sut.run_async(self._msec)
         actual = counter.read()
-        self.assertEqual(actual, self._some_number_1)
+        self.assertEqual(actual, self._small_number)
 
     async def test_run_async_into_snake_makes_snake_stop(self):
         counter = Counter()
         self._events.stepped.subscribe(counter.increment)
         path_pattern = "bbffbbs"
         origin = PathFactory.make_chain(path_pattern)
-        sut = Snake(origin)
+        sut = Snake(origin, self._large_number)
         sut._events = self._events
-        await sut.run_async(self._msec, 20)
+        await sut.run_async(self._msec)
         actual = counter.read()
         self.assertEqual(actual, len(path_pattern) - 1)

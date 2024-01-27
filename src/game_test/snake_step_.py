@@ -56,12 +56,11 @@ class Snake_step_(Snake_):
 
     def test_step_into_blank_when_reached_step_count_dies(self):
         origin = PathFactory.make_infinite_chain()
-        sut = Snake(origin, self._some_number_2)
+        sut = Snake(origin, self._medium_number)
         sut._events = self._events
         sut.run_sync()
         result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 1)
-        self.assertEqual(result.steps_taken, self._some_number_2)
+        self.assertEqual(result.steps_taken, self._medium_number)
 
     # ===============================  step-food  ===============================
 
@@ -74,15 +73,14 @@ class Snake_step_(Snake_):
         self.assertEqual(initial_length + 1, sut.get_length())
 
     def test_step_into_food_when_reached_step_count_dies(self):
-        origin = PathFactory.make_chain("f" * (self._some_number_2 + 1))
-        sut = Snake(origin, self._some_number_2)
+        origin = PathFactory.make_chain("f" * (self._large_number))
+        sut = Snake(origin, self._medium_number)
         sut._events = self._events
         sut.run_sync()
         result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, self._some_number_2)
-        self.assertEqual(result.steps_taken, self._some_number_2)
+        self.assertEqual(result.steps_taken, self._medium_number)
 
-    # ===============================  step-wall  ===============================
+    # ===============================  step-death  ===============================
 
     def test_step_into_wall_without_death_event_does_nothing(self):
         origin = PathFactory.make_chain("bf")

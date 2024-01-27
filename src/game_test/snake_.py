@@ -6,12 +6,14 @@ from src.game.event_hub import EventHub
 
 class Snake_(unittest.IsolatedAsyncioTestCase):
     _msec = 0.001
-    _some_number_1 = 7
-    _some_number_2 = 10
+    _small_number = 7
+    _medium_number = 10
+    _large_number = 20
 
     def __init__(self, *args, **kwargs):
         super(Snake_, self).__init__(*args, **kwargs)
 
+    def setUp(self):
         self._events = EventHub()
 
         self._events.stepped = Event()
