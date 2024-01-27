@@ -3,7 +3,7 @@ from src.game.cell import Cell
 from src.game.direction import Direction
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
-from src.game_test.helper.path_factory import PathFactory
+from game_test.helper.cell_factory import CellFactory
 from src.game_test.snake_ import Snake_
 
 
@@ -11,8 +11,8 @@ class Snake_step_(Snake_):
     # ===============================  step-blank  ===============================
 
     def test_step_into_blank_moves_head(self):
-        cells = PathFactory.make_list("bb")
-        PathFactory.link(cells)
+        cells = CellFactory.make_list("bb")
+        CellFactory.link(cells)
         origin = cells[0]
         destination = cells[1]
         sut = Snake(origin)
@@ -21,8 +21,8 @@ class Snake_step_(Snake_):
         self.assertEqual(destination, sut.get_head())
 
     def test_step_into_blank_makes_new_cell_snake(self):
-        cells = PathFactory.make_list("bb")
-        PathFactory.link(cells)
+        cells = CellFactory.make_list("bb")
+        CellFactory.link(cells)
         origin = cells[0]
         destination = cells[1]
         sut = Snake(origin)
@@ -31,14 +31,14 @@ class Snake_step_(Snake_):
         self.assertTrue(destination.is_snake())
 
     def test_step_into_blank_makes_tail_cell_blank(self):
-        origin = PathFactory.make_chain("bb")
+        origin = CellFactory.make_chain("bb")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_blank())
 
     def test_step_into_blank_keeps_length_same(self):
-        origin = PathFactory.make_chain("bb")
+        origin = CellFactory.make_chain("bb")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
@@ -55,7 +55,7 @@ class Snake_step_(Snake_):
         origin.get_neighbour.assert_called_once_with(dir)
 
     def test_step_into_blank_when_reached_step_count_dies(self):
-        origin = PathFactory.make_infinite_chain()
+        origin = CellFactory.make_infinite_chain()
         sut = Snake(origin, self._medium_number)
         sut._events = self._events
         sut.run_sync()
@@ -65,7 +65,7 @@ class Snake_step_(Snake_):
     # ===============================  step-food  ===============================
 
     def test_step_into_food_increments_length(self):
-        origin = PathFactory.make_chain("bf")
+        origin = CellFactory.make_chain("bf")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
@@ -73,7 +73,7 @@ class Snake_step_(Snake_):
         self.assertEqual(initial_length + 1, sut.get_length())
 
     def test_step_into_food_when_reached_step_count_dies(self):
-        origin = PathFactory.make_chain("f" * (self._large_number))
+        origin = CellFactory.make_chain("f" * (self._large_number))
         sut = Snake(origin, self._medium_number)
         sut._events = self._events
         sut.run_sync()
@@ -83,7 +83,7 @@ class Snake_step_(Snake_):
     # ===============================  step-death  ===============================
 
     def test_step_into_wall_without_death_event_does_nothing(self):
-        origin = PathFactory.make_chain("bf")
+        origin = CellFactory.make_chain("bf")
         sut = Snake(origin)
         sut._events = self._events
         try:

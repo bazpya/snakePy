@@ -1,7 +1,7 @@
 from src.game.cell import Cell
 from src.game.direction import Direction, Turn
 from src.game.snake import Snake
-from src.game_test.helper.path_factory import PathFactory
+from game_test.helper.cell_factory import CellFactory
 from src.game_test.snake_ import Snake_
 
 
@@ -33,7 +33,7 @@ class Snake_directions_(Snake_):
             self.assertEqual(len(sut._directions), 0)
 
     def test_deque_when_empty_queue_gets_current_direction(self):
-        origin = PathFactory.make_infinite_chain()
+        origin = CellFactory.make_infinite_chain()
         sut = Snake(origin)
         for dir in Direction:
             sut._direction = dir
