@@ -12,10 +12,10 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called()
+        self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_not_called()
-        self.ready_to_draw_callback.assert_called()
+        self.ready_to_draw_callback.assert_called_once()
 
     def test_blank_step_passes_diff_to_stepped_event(self):
         cells = CellFactory.make_list("bb")
@@ -34,10 +34,10 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called()
-        self.ate_callback.assert_called()
+        self.stepped_callback.assert_called_once()
+        self.ate_callback.assert_called_once()
         self.died_callback.assert_not_called()
-        self.ready_to_draw_callback.assert_called()
+        self.ready_to_draw_callback.assert_called_once()
 
     def test_food_step_passes_diff_to_stepped_event(self):
         cells = CellFactory.make_list("bf")
@@ -47,7 +47,7 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called_with([next])
+        self.stepped_callback.assert_called_once_with([next])
 
     # # ======================  Death  ======================
 
@@ -56,17 +56,17 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called()
+        self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
-        self.died_callback.assert_called()
-        self.ready_to_draw_callback.assert_called()
+        self.died_callback.assert_called_once()
+        self.ready_to_draw_callback.assert_called_once()
 
     def test_death_step_passes_no_cells_to_stepped_event(self):
         origin = CellFactory.make_chain("bw")
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called_with([])
+        self.stepped_callback.assert_called_once_with([])
 
     def test_death_step_passes_correct_result_to_died_event_single_cell(self):
         origin = CellFactory.make_chain("bw")
@@ -95,7 +95,7 @@ class Game_events_(Game_):
     #     for turn in turns:
     #         self._sut.turn(turn)
     #     self._sut.run_sync(2)
-    #     self.died_callback.assert_called()
+    #     self.died_callback.assert_called_once()
     #     # result: GameResult = self.died_callback.call_args[0][0]
     #     # self.assertEqual(result.turns, turns)
 

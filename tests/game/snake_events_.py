@@ -12,7 +12,7 @@ class Snake_events_(Snake_sync_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called()
+        self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_not_called()
 
@@ -33,8 +33,8 @@ class Snake_events_(Snake_sync_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called()
-        self.ate_callback.assert_called()
+        self.stepped_callback.assert_called_once()
+        self.ate_callback.assert_called_once()
         self.died_callback.assert_not_called()
 
     def test_food_passes_diff_to_stepped_event(self):
@@ -45,7 +45,7 @@ class Snake_events_(Snake_sync_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called_with([destination])
+        self.stepped_callback.assert_called_once_with([destination])
 
     # # ======================  Death  ======================
 
@@ -54,9 +54,9 @@ class Snake_events_(Snake_sync_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called()
+        self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
-        self.died_callback.assert_called()
+        self.died_callback.assert_called_once()
 
     def test_death_passes_no_cells_to_stepped_event(self):
         cells = CellFactory.make_list("bw")
@@ -65,7 +65,7 @@ class Snake_events_(Snake_sync_):
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called_with([])
+        self.stepped_callback.assert_called_once_with([])
 
     def test_death_passes_correct_result_to_died_event_single_cell(self):
         origin = CellFactory.make_chain("bw")
