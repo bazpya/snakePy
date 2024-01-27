@@ -16,6 +16,7 @@ class Snake:
     _directions: deque[Direction]
     _diff: list[Cell]
     _is_dead: bool
+    ms = 0.001
 
     def __init__(self, only_cell: Cell, steps_to_take: int = 0) -> None:
         self._cells = deque()
@@ -101,7 +102,7 @@ class Snake:
         next_dir = latest_input.turn(turn)
         self.direction_enque(next_dir)
 
-    async def run_async(self, interval: float = 0.5):
+    async def run_async(self, interval: float = ms):
         self._looper = LooperInterval(
             func=self.step,
             interval=interval,

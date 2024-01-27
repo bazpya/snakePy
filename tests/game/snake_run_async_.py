@@ -11,7 +11,7 @@ class Snake_run_async_(Snake_async_):
         origin = CellFactory.make_infinite_chain()
         sut = Snake(origin, self.few)
         sut._events = self._events
-        await sut.run_async(self.msec)
+        await sut.run_async()
         actual = counter.read()
         self.assertEqual(actual, self.few)
 
@@ -22,15 +22,14 @@ class Snake_run_async_(Snake_async_):
         origin = CellFactory.make_chain(pattern)
         sut = Snake(origin)
         sut._events = self._events
-        await sut.run_async(self.msec)
+        await sut.run_async()
         actual = counter.read()
         self.assertEqual(actual, len(pattern) - 1)
 
-    # todo: see why this takes so long
-    # async def test_run_async_into_death_emits_died_event(self):
-    #     pattern = "bbffbbs"
-    #     origin = CellFactory.make_chain(pattern)
-    #     sut = Snake(origin)
-    #     sut._events = self._events
-    #     await sut.run_async()
-    #     self.died_callback.assert_called_once()
+    async def test_run_async_into_death_emits_died_event(self):
+        pattern = "bbffbbs"
+        origin = CellFactory.make_chain(pattern)
+        sut = Snake(origin)
+        sut._events = self._events
+        await sut.run_async()
+        self.died_callback.assert_called_once()
