@@ -1,10 +1,10 @@
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory
-from tests.game.snake_ import Snake_
+from tests.game.snake_ import Snake_sync_
 
 
-class Snake_events_(Snake_):
+class Snake_events_(Snake_sync_):
     # ======================  Blank  ======================
 
     def test_blank_emits_the_right_events(self):

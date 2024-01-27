@@ -2,10 +2,10 @@ from src.game.cell import Cell
 from src.game.direction import Direction, Turn
 from src.game.snake import Snake
 from tests.game.helper.cell_factory import CellFactory
-from tests.game.snake_ import Snake_
+from tests.game.snake_ import Snake_sync_
 
 
-class Snake_directions_(Snake_):
+class Snake_directions_(Snake_sync_):
     def test_enque_and_deque_preserve_order(self):
         sut = Snake(Cell())
         for dir in Direction:

@@ -1,10 +1,10 @@
 from src.game.snake import Snake
 from tests.game.helper.counter import Counter
 from tests.game.helper.cell_factory import CellFactory
-from tests.game.snake_ import Snake_
+from tests.game.snake_ import Snake_sync_
 
 
-class Snake_run_sync_(Snake_):
+class Snake_run_sync_(Snake_sync_):
     def test_run_sync_when_specified_takes_correct_number_of_steps(self):
         counter = Counter()
         origin = CellFactory.make_infinite_chain()

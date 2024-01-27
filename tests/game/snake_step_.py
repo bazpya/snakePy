@@ -4,10 +4,10 @@ from src.game.direction import Direction
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory
-from tests.game.snake_ import Snake_
+from tests.game.snake_ import Snake_sync_
 
 
-class Snake_step_(Snake_):
+class Snake_step_(Snake_sync_):
     # ===============================  step-blank  ===============================
 
     def test_step_into_blank_moves_head(self):
@@ -21,7 +21,7 @@ class Snake_step_(Snake_):
         self.assertEqual(destination, sut.get_head())
 
     def test_step_into_blank_makes_new_cell_snake(self):
-        cells = CellFactory.make_list("bb")
+        cells = CellFactory.make_list("bbbf")
         CellFactory.link(cells)
         origin = cells[0]
         destination = cells[1]
@@ -31,14 +31,14 @@ class Snake_step_(Snake_):
         self.assertTrue(destination.is_snake())
 
     def test_step_into_blank_makes_tail_cell_blank(self):
-        origin = CellFactory.make_chain("bb")
+        origin = CellFactory.make_chain("bbbf")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_blank())
 
     def test_step_into_blank_keeps_length_same(self):
-        origin = CellFactory.make_chain("bb")
+        origin = CellFactory.make_chain("bbbf")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
@@ -65,14 +65,14 @@ class Snake_step_(Snake_):
     # ===============================  step-food  ===============================
 
     def test_step_into_food_leaves_tail_cell_snake(self):
-        origin = CellFactory.make_chain("bf")
+        origin = CellFactory.make_chain("bffff")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_snake())
 
     def test_step_into_food_increments_length(self):
-        origin = CellFactory.make_chain("bf")
+        origin = CellFactory.make_chain("bffff")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
