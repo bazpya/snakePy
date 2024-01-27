@@ -23,3 +23,11 @@ class Snake_run_sync_(Snake_sync_):
         sut.run_sync()
         actual = counter.read()
         self.assertEqual(actual, len(pattern) - 1)
+
+    def test_run_sync_into_death_emits_died_event(self):
+        pattern = "bbffbbs"
+        origin = CellFactory.make_chain(pattern)
+        sut = Snake(origin)
+        sut._events = self._events
+        sut.run_sync()
+        self.died_callback.assert_called_once()

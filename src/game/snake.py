@@ -15,6 +15,7 @@ class Snake:
     _steps_to_take: int
     _directions: deque[Direction]
     _diff: list[Cell]
+    _is_dead: bool
 
     def __init__(self, only_cell: Cell, steps_to_take: int = 0) -> None:
         self._cells = deque()
@@ -27,6 +28,7 @@ class Snake:
         self._steps_to_take = steps_to_take
         self._directions = deque()
         self._diff = []
+        self._is_dead = False
 
     def get_head(self):
         return self._cells[-1]
@@ -73,7 +75,10 @@ class Snake:
         self._diff = []
 
     def _die(self):
+        if self._is_dead:
+            return
         if self._looper:
+            self._is_dead = True
             self._looper.stop()
         if self._events.died is not None:
             result = SnakeResult(self._steps_taken, self.get_length())
