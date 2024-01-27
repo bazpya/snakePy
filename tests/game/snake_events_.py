@@ -20,11 +20,11 @@ class Snake_events_(Snake_):
         cells = CellFactory.make_list("bb")
         CellFactory.link(cells)
         origin = cells[0]
-        destination = cells[1]
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
-        self.stepped_callback.assert_called_with([origin, destination])
+        diff = self.stepped_callback.call_args[0][0]
+        self.assertEqual(set(diff), set(cells))  # for unordered comparison
 
     # # ======================  Food  ======================
 

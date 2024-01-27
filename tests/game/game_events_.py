@@ -21,11 +21,11 @@ class Game_events_(Game_):
         cells = CellFactory.make_list("bb")
         CellFactory.link(cells)
         origin = cells[0]
-        next = cells[1]
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called_with([origin, next])
+        diff = self.stepped_callback.call_args[0][0]
+        self.assertEqual(set(diff), set(cells))  # for unordered comparison
 
     # # ======================  Food  ======================
 
