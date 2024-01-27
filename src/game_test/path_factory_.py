@@ -1,3 +1,4 @@
+import random
 import unittest
 from src.game.cell import CellType
 from src.game.direction import Direction
@@ -57,7 +58,16 @@ class Path_factory_(unittest.TestCase):
         runner = PathFactory.make_chain(pattern)
         for type in types:
             self.assertEqual(runner.get_type(), type)
-            runner = runner.get_neighbour(Direction.left)
+            runner = runner.get_neighbour(random.choice(list(Direction)))
+
+    def test_make_chain_makes_correct_length(self):
+        pattern = "bfswbbfsw"
+        runner = PathFactory.make_chain(pattern)
+        length = 1
+        while runner.get_neighbour(random.choice(list(Direction))) is not None:
+            length += 1
+            runner = runner.get_neighbour(random.choice(list(Direction)))
+        self.assertEqual(length, len(pattern))
 
     # ======================  Make Infinite Chain  ======================
 
