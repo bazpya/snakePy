@@ -32,7 +32,7 @@ class Game_etc_(Game_):
         supposed_blanks = self._sut._get_blank_cells()
         actual = len(supposed_blanks)
         expected = (
-            (self.row_count - 2) * (self.col_count - 2) - self._sut._ini_food_count - 1
+            (self.row_count - 2) * (self.col_count - 2) - self._sut._init_food_count - 1
         )
         self.assertEqual(actual, expected)
 
@@ -66,9 +66,3 @@ class Game_etc_(Game_):
 
     def test_add_snake_sets_one_cell(self):
         self.assertCellCount(self._sut, CellType.snake, 1)
-
-    # todo:
-    # def test_run_sync_after_specified_number_of_steps_emits_died_event(self):
-    #     self._sut.run_sync(self._few + 10)
-    #     result: GameResult = self.died_callback.call_args[0][0]
-    #     self.assertEqual(result.steps_taken, self._few)

@@ -12,8 +12,8 @@ class Game_(Test_):
 
     def __init__(self, *args, **kwargs):
         super(Game_, self).__init__(*args, **kwargs)
-        self.row_count = 2 * self.few
-        self.col_count = 2 * self.some
+        self.row_count = 2 * self.some
+        self.col_count = 2 * self.many
 
         self._events = EventHub()
 

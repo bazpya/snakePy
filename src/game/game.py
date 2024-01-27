@@ -14,23 +14,29 @@ class Game:
     _events: EventHub
     _step_diff: list[Cell]
     _turns: list[Turn]
+    _steps_to_take: int
 
     def __init__(
-        self, row_count: int, col_count: int = None, init_food_count: int = None
+        self,
+        row_count: int,
+        col_count: int = 0,
+        init_food_count: int = 0,
+        steps_to_take: int = 0,
     ):
         self._row_count = row_count
-        self._col_count = row_count if col_count is None else col_count
+        self._col_count = col_count if col_count else row_count
         self._cells = []
+        self._turns = []
+        self._steps_to_take = steps_to_take
+        self._events = EventHub()
+        self._step_diff = []
+        self._init_food_count = init_food_count if init_food_count else 1
         self._populate()
         self._link_neighbours()
         self._lay_walls()
-        self._events = EventHub()
-        self._step_diff = []
         self._add_snake()
-        self._ini_food_count = init_food_count if init_food_count else 1
-        self._add_food(self._ini_food_count)
+        self._add_food(self._init_food_count)
         self._bind()
-        self._turns = []
 
     def _populate(self):
         for row_index in range(self._row_count):
@@ -127,7 +133,7 @@ class Game:
         centre = self._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
-        self._snake = Snake(centre)
+        self._snake = Snake(centre, self._steps_to_take)
 
     def _bind(self, snake: Snake = None) -> None:
         s = snake if snake else self._snake
@@ -149,11 +155,11 @@ class Game:
         res = GameResult(self._row_count, self._col_count, [], self._turns, snake_res)
         self._events.died.emit(res)
 
-    def run_sync(self, steps_to_take: int = None):
-        self._snake.run_sync(steps_to_take)
+    def run_sync(self):
+        self._snake.run_sync()
 
-    async def run_async(self, interval: float = 0.5, steps_to_take: int = None):
-        await self._snake.run_async(interval, steps_to_take)
+    async def run_async(self, interval: float = 0.5):
+        await self._snake.run_async(interval)
 
     def steering_enque(self, dir: Direction):
         self._snake.direction_enque(dir)
