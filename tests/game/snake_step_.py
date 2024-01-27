@@ -64,6 +64,13 @@ class Snake_step_(Snake_):
 
     # ===============================  step-food  ===============================
 
+    def test_step_into_food_leaves_tail_cell_snake(self):
+        origin = CellFactory.make_chain("bf")
+        sut = Snake(origin)
+        sut._events = self._events
+        sut.step()
+        self.assertTrue(origin.is_snake())
+
     def test_step_into_food_increments_length(self):
         origin = CellFactory.make_chain("bf")
         sut = Snake(origin)
