@@ -13,9 +13,9 @@ class Game:
     _col_count: int
     events: EventHub
     _step_diff: list[Cell]
-    _turns: list[Turn]
+    _turns_taken: list[Turn]
     _steps_to_take: int
-    _foods_eaten: list[Cell]
+    _foods_given: list[Cell]
 
     def __init__(
         self,
@@ -27,8 +27,8 @@ class Game:
         self._row_count = row_count
         self._col_count = col_count if col_count else row_count
         self._cells = []
-        self._turns = []
-        self._foods_eaten = []
+        self._turns_taken = []
+        self._foods_given = []
         self._steps_to_take = steps_to_take
         self.events = EventHub()
         self._step_diff = []
@@ -37,7 +37,7 @@ class Game:
         self._link_neighbours()
         self._lay_walls()
         self._add_snake()
-        self._add_food(self._init_food_count)
+        self._give_food(self._init_food_count)
         self._bind()
 
     def _populate(self):
@@ -108,11 +108,12 @@ class Game:
     def _purge_diff(self):
         self._step_diff.clear()
 
-    def _add_food(self, count: int = 1) -> Cell:
+    def _give_food(self, count: int = 1) -> Cell:
         blank_cells = self._get_blank_cells()
         cells = random.sample(blank_cells, count)
         for cell in cells:
             cell.be_food()
+            self._foods_given.append(cell)
         self._add_to_diff(cells)
         return cells
 
@@ -150,13 +151,17 @@ class Game:
         self._purge_diff()
         self.events.stepped.emit(*args, **kwargs)
 
-    def _on_ate(self, food_cell: Cell):
-        self._foods_eaten.append(food_cell)
-        self.events.ate.emit(food_cell)
+    def _on_ate(self):
+        self._give_food()
+        self.events.ate.emit()
 
     def _on_died(self, snake_res: SnakeResult):
         res = GameResult(
-            self._row_count, self._col_count, self._foods_eaten, self._turns, snake_res
+            self._row_count,
+            self._col_count,
+            self._foods_given,
+            self._turns_taken,
+            snake_res,
         )
         self.events.died.emit(res)
 
@@ -170,5 +175,5 @@ class Game:
         self._snake.direction_enque(dir)
 
     def turn(self, turn: Turn):
-        self._turns.append(turn)
+        self._turns_taken.append(turn)
         self._snake.turn(turn)

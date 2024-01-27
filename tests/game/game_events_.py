@@ -104,4 +104,4 @@ class Game_events_(Game_):
         self._sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(len(result.foods), 2)
+        self.assertEqual(len(result.foods), 3)
