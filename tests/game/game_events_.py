@@ -97,5 +97,11 @@ class Game_events_(Game_):
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.turns, turns)
 
-    def test_death_passes_foods_taken_to_died_event(self):
-        self.skipTest("todo")
+    def test_death_passes_correct_number_of_foods_taken_to_died_event(self):
+        pattern = "bbffbbs"
+        origin = CellFactory.make_chain(pattern)
+        snake = Snake(origin)
+        self._sut._bind(snake)
+        snake.run_sync()
+        result: GameResult = self.died_callback.call_args[0][0]
+        self.assertEqual(len(result.foods), 2)

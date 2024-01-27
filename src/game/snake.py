@@ -48,7 +48,7 @@ class Snake:
         else:
             if next.is_food():
                 if self._events.ate is not None:
-                    self._events.ate.emit()
+                    self._events.ate.emit(next)  # todo: Test emitted food cell
             else:
                 self._drag_tail()
             self._move_head(next)
