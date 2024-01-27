@@ -1,4 +1,5 @@
 from collections import deque
+from src.game.global_refs import CauseOfDeath
 from src.game.Result import SnakeResult
 from src.game.cell import Cell
 from src.game.direction import Direction, Turn
@@ -43,9 +44,9 @@ class Snake:
     def step(self):
         self._steps_taken += 1
         next = self._get_next_cell()
-        should_die = next.is_deadly()
-        if should_die:
-            self._die()
+        if next.is_deadly():
+            cause = CauseOfDeath.wall if next.is_wall() else CauseOfDeath.snake
+            self._die(cause)
         else:
             if next.is_food():
                 if self._events.ate is not None:
@@ -75,14 +76,18 @@ class Snake:
             self._events.stepped.emit(self._diff)
         self._diff = []
 
-    def _die(self):
+    def _die(self, cause: CauseOfDeath = CauseOfDeath.steps_taken):
         if self._is_dead:
             return
         if self._looper:
             self._is_dead = True
             self._looper.stop()
         if self._events.died is not None:
-            result = SnakeResult(self._steps_taken, self.get_length())
+            result = SnakeResult(
+                self._steps_taken,
+                self.get_length(),
+                cause,
+            )
             self._events.died.emit(result)
 
     def _get_latest_input(self):

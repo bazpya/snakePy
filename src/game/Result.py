@@ -1,11 +1,18 @@
+from src.game.global_refs import CauseOfDeath
 from src.game.cell import Cell
 from src.game.direction import Turn
 
 
 class SnakeResult:
-    def __init__(self, steps_taken: int, length: int) -> None:
+    def __init__(
+        self,
+        steps_taken: int,
+        length: int,
+        cause_of_death: CauseOfDeath,
+    ) -> None:
         self.steps_taken = steps_taken
         self.length = length
+        self.cause_of_death = cause_of_death
 
 
 class GameResult:
@@ -23,6 +30,7 @@ class GameResult:
         self.length = snake_res.length
         self.foods = foods
         self.turns = turns
+        self.cause_of_death = snake_res.cause_of_death
 
 
 class PlayerResult:

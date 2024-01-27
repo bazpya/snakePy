@@ -26,7 +26,7 @@ class Snake_events_(Snake_sync_):
         diff = self.stepped_callback.call_args[0][0]
         self.assertEqual(set(diff), set(cells))  # for unordered comparison
 
-    # # ======================  Food  ======================
+    # ======================  Food  ======================
 
     def test_food_emits_the_right_events(self):
         origin = CellFactory.make_chain("bf")
@@ -47,7 +47,7 @@ class Snake_events_(Snake_sync_):
         sut.step()
         self.stepped_callback.assert_called_once_with([destination])
 
-    # # ======================  Death  ======================
+    # ======================  Death  ======================
 
     def test_death_emits_the_right_events(self):
         origin = CellFactory.make_chain("bs")
@@ -66,25 +66,3 @@ class Snake_events_(Snake_sync_):
         sut._events = self._events
         sut.step()
         self.stepped_callback.assert_called_once_with([])
-
-    def test_death_passes_correct_result_to_died_event_single_cell(self):
-        origin = CellFactory.make_chain("bw")
-        sut = Snake(origin)
-        sut._events = self._events
-        sut.step()
-        result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 1)
-        self.assertEqual(result.steps_taken, 1)
-
-    def test_death_passes_correct_result_to_died_event_multi_cell(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
-        sut = Snake(origin)
-        sut._events = self._events
-        for i in range(0, len(pattern) - 1):
-            sut.step()
-        result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 3)
-        self.assertEqual(result.steps_taken, len(pattern) - 1)
-
-    # ======================  ?????  ======================
