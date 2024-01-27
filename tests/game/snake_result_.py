@@ -44,7 +44,7 @@ class Snake_result_(Snake_sync_):
         result: SnakeResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.length, 3)
 
-    # ======================  Length  ======================
+    # ======================  Cause of Death  ======================
 
     def test_emits_died_event_with_cause_of_death_wall(self):
         origin = CellFactory.make_chain("bbbfbbw")

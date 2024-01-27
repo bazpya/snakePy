@@ -1,7 +1,7 @@
-from src.game.direction import Turn
 from src.game.snake import Snake
-from src.game.Result import GameResult
+from src.game.game import Game
 from tests.game.game_ import Game_
+from tests.game.helper.counter import Counter
 from tests.game.helper.cell_factory import CellFactory
 
 
@@ -69,39 +69,11 @@ class Game_events_(Game_):
         snake.step()
         self.stepped_callback.assert_called_once_with([])
 
-    def test_death_passes_correct_result_to_died_event_single_cell(self):
-        origin = CellFactory.make_chain("bw")
-        snake = Snake(origin)
-        self._sut._bind(snake)
-        snake.step()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 1)
-        self.assertEqual(result.steps_taken, 1)
-
-    def test_death_passes_correct_result_to_died_event_multi_cell(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
-        snake = Snake(origin)
-        self._sut._bind(snake)
-        snake.run_sync()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 3)
-        self.assertEqual(result.steps_taken, len(pattern) - 1)
-
-    def test_death_passes_turs_taken_to_died_event(self):
-        turns = [Turn.left, Turn.right, Turn.ahead, Turn.ahead, Turn.right]
-        for turn in turns:
-            self._sut.turn(turn)
-        self._sut.run_sync()
+    def test_run_sync_at_specified_number_of_steps_emits_died_event(self):
+        counter = Counter()
+        sut = Game(self.row_count, self.col_count, steps_to_take=self.few)
+        sut.events = self._events
+        sut.events.stepped.subscribe(counter.increment)
+        sut.run_sync()
         self.died_callback.assert_called_once()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.turns, turns)
-
-    def test_death_passes_correct_number_of_foods_taken_to_died_event(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
-        snake = Snake(origin)
-        self._sut._bind(snake)
-        snake.run_sync()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(len(result.foods), 3)
+        self.assertEqual(counter.read(), self.few)
