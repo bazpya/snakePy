@@ -1,25 +1,22 @@
-import unittest
+from tests.test_ import Test_
 from unittest.mock import MagicMock
 from src.game.looper_sync import LooperSync
-from src.game_test.helper.counter import Counter
+from tests.game.helper.counter import Counter
 
 
-class LooperSync_(unittest.TestCase):
-    _small_number = 7
-    _medium_number = 10
-    _large_number = 20
+class LooperSync_(Test_):
     _counter: Counter
 
     def setUp(self):
         self._counter = Counter()
 
     def test_when_specified_iterates_correct_number_of_times(self):
-        sut = LooperSync(self._counter.increment, self._small_number)
+        sut = LooperSync(self._counter.increment, self.few)
         sut.start()
-        self.assertEqual(self._counter.read(), self._small_number)
+        self.assertEqual(self._counter.read(), self.few)
 
     def test_when_unspecified_iterations_runs_indefinitely(self):
-        expected = self._large_number
+        expected = self.many
 
         def step_func():
             self._counter.increment()
@@ -32,7 +29,7 @@ class LooperSync_(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_returns_number_of_times_looped(self):
-        sut = LooperSync(self._counter.increment, self._small_number)
+        sut = LooperSync(self._counter.increment, self.few)
         actual = sut.start()
         expected = self._counter.read()
         self.assertEqual(actual, expected)
@@ -53,6 +50,6 @@ class LooperSync_(unittest.TestCase):
     def test_invokes_end_callback(self):
         func = MagicMock()
         end_cb = MagicMock()
-        sut = LooperSync(func, self._small_number, end_callback=end_cb)
+        sut = LooperSync(func, self.few, end_callback=end_cb)
         result = sut.start()
         end_cb.assert_called_once()

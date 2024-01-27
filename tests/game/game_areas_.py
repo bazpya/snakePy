@@ -1,5 +1,4 @@
-from src.game.cell import Cell
-from src.game_test.game_ import Game_
+from tests.game.game_ import Game_
 
 
 class Game_areas_(Game_):

@@ -1,5 +1,5 @@
 import tensorflow as tf
-from src.ml_test.player_ import Player_
+from tests.ml.player_ import Player_
 from src.game.direction import Turn
 
 

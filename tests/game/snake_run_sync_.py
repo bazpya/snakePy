@@ -1,18 +1,18 @@
 from src.game.snake import Snake
-from src.game_test.helper.counter import Counter
-from game_test.helper.cell_factory import CellFactory
-from src.game_test.snake_ import Snake_
+from tests.game.helper.counter import Counter
+from tests.game.helper.cell_factory import CellFactory
+from tests.game.snake_ import Snake_
 
 
 class Snake_run_sync_(Snake_):
     def test_run_sync_when_specified_takes_correct_number_of_steps(self):
         counter = Counter()
         origin = CellFactory.make_infinite_chain()
-        sut = Snake(origin, self._small_number)
+        sut = Snake(origin, self.few)
         sut._events.stepped.subscribe(counter.increment)
         sut.run_sync()
         actual = counter.read()
-        self.assertEqual(actual, self._small_number)
+        self.assertEqual(actual, self.few)
 
     def test_run_sync_into_death_makes_snake_stop(self):
         counter = Counter()

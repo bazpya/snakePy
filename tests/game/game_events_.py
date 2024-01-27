@@ -1,8 +1,7 @@
-from src.game.direction import Turn
 from src.game.snake import Snake
 from src.game.Result import GameResult
-from src.game_test.game_ import Game_
-from game_test.helper.cell_factory import CellFactory
+from tests.game.game_ import Game_
+from tests.game.helper.cell_factory import CellFactory
 
 
 class Game_events_(Game_):

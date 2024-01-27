@@ -3,8 +3,8 @@ from src.game.cell import Cell
 from src.game.direction import Direction
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
-from game_test.helper.cell_factory import CellFactory
-from src.game_test.snake_ import Snake_
+from tests.game.helper.cell_factory import CellFactory
+from tests.game.snake_ import Snake_
 
 
 class Snake_step_(Snake_):
@@ -56,11 +56,11 @@ class Snake_step_(Snake_):
 
     def test_step_into_blank_when_reached_step_count_dies(self):
         origin = CellFactory.make_infinite_chain()
-        sut = Snake(origin, self._medium_number)
+        sut = Snake(origin, self.some)
         sut._events = self._events
         sut.run_sync()
         result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.steps_taken, self._medium_number)
+        self.assertEqual(result.steps_taken, self.some)
 
     # ===============================  step-food  ===============================
 
@@ -73,12 +73,12 @@ class Snake_step_(Snake_):
         self.assertEqual(initial_length + 1, sut.get_length())
 
     def test_step_into_food_when_reached_step_count_dies(self):
-        origin = CellFactory.make_chain("f" * (self._large_number))
-        sut = Snake(origin, self._medium_number)
+        origin = CellFactory.make_chain("f" * (self.many))
+        sut = Snake(origin, self.some)
         sut._events = self._events
         sut.run_sync()
         result: SnakeResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.steps_taken, self._medium_number)
+        self.assertEqual(result.steps_taken, self.some)
 
     # ===============================  step-death  ===============================
 

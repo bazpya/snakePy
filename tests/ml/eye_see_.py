@@ -1,5 +1,5 @@
 import tensorflow as tf
-from src.ml_test.eye_ import Eye_
+from tests.ml.eye_ import Eye_
 from src.ml.eye import Eye
 
 input_size = 8

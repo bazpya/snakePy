@@ -1,10 +1,10 @@
-import unittest
+from tests.test_ import Test_
 import tensorflow as tf
 from src.ml.player import Player
 from src.anonym import Anonym
 
 
-class Player_(unittest.TestCase):
+class Player_(Test_):
     _model_params = Anonym(
         input_size=10,
         layer_sizes=[2, 3, 4, 5],

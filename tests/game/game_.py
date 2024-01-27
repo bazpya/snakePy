@@ -1,4 +1,4 @@
-import unittest
+from tests.test_ import Test_
 from unittest.mock import MagicMock
 from src.game.cell import Cell
 from src.game.global_refs import CellType
@@ -7,15 +7,13 @@ from src.game.event import Event
 from src.game.event_hub import EventHub
 
 
-class Game_(unittest.TestCase):
-    _some_number_1 = 7
-    _some_number_2 = 10
+class Game_(Test_):
     _sut: Game
 
     def __init__(self, *args, **kwargs):
         super(Game_, self).__init__(*args, **kwargs)
-        self.row_count = 2 * self._some_number_1
-        self.col_count = 2 * self._some_number_2
+        self.row_count = 2 * self.few
+        self.col_count = 2 * self.some
 
         self._events = EventHub()
 

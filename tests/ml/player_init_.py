@@ -1,6 +1,6 @@
 import tensorflow as tf
 from src.ml.player import Player
-from src.ml_test.player_ import Player_
+from tests.ml.player_ import Player_
 
 
 class Player_init_(Player_):

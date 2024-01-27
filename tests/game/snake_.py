@@ -1,15 +1,10 @@
-import unittest
 from unittest.mock import MagicMock
 from src.game.event import Event
 from src.game.event_hub import EventHub
+from tests.test_ import Test_async_
 
 
-class Snake_(unittest.IsolatedAsyncioTestCase):
-    _msec = 0.001
-    _small_number = 7
-    _medium_number = 10
-    _large_number = 20
-
+class Snake_(Test_async_):
     def __init__(self, *args, **kwargs):
         super(Snake_, self).__init__(*args, **kwargs)
 

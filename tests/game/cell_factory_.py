@@ -1,11 +1,11 @@
 import random
-import unittest
+from tests.test_ import Test_
 from src.game.cell import CellType
 from src.game.direction import Direction
-from game_test.helper.cell_factory import CellFactory
+from tests.game.helper.cell_factory import CellFactory
 
 
-class Cell_factory_(unittest.TestCase):
+class Cell_factory_(Test_):
     _map = {
         "b": CellType.blank,
         "f": CellType.food,

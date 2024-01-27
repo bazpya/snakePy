@@ -1,7 +1,7 @@
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
-from game_test.helper.cell_factory import CellFactory
-from src.game_test.snake_ import Snake_
+from tests.game.helper.cell_factory import CellFactory
+from tests.game.snake_ import Snake_
 
 
 class Snake_events_(Snake_):

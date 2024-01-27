@@ -10,7 +10,7 @@
             "args": [
                 "discover",
                 "-s",
-                "src",
+                "tests",
                 "-p",
                 "*_.py"
             ],
@@ -27,7 +27,7 @@
             "args": [
                 "discover",
                 "-s",
-                "src/game_test",
+                "tests/game",
                 "-p",
                 "*_.py"
             ],
@@ -44,7 +44,7 @@
             "args": [
                 "discover",
                 "-s",
-                "src/ml_test",
+                "tests/ml",
                 "-p",
                 "*_.py"
             ],

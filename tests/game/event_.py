@@ -1,9 +1,9 @@
-import unittest
+from tests.test_ import Test_
 from unittest.mock import MagicMock
 from src.game.event import Event
 
 
-class Event_(unittest.TestCase):
+class Event_(Test_):
     def test_emit_invokes_callback(self):
         sut = Event()
         callback = MagicMock()

@@ -1,8 +1,8 @@
-import unittest
+from tests.test_ import Test_
 from src.game.direction import Direction, Turn
 
 
-class Direction_(unittest.TestCase):
+class Direction_(Test_):
     def test_is_aligned(self):
         self.assertTrue(Direction.up.is_aligned(Direction.up))
         self.assertTrue(Direction.up.is_aligned(Direction.down))

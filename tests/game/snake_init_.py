@@ -1,6 +1,6 @@
 from src.game.cell import Cell
 from src.game.snake import Snake
-from src.game_test.snake_ import Snake_
+from tests.game.snake_ import Snake_
 
 
 class Snake_init_(Snake_):
