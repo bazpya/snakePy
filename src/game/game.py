@@ -11,7 +11,7 @@ class Game:
     _cells: list[list[Cell]]
     _row_count: int
     _col_count: int
-    _events: EventHub
+    events: EventHub
     _step_diff: list[Cell]
     _turns: list[Turn]
     _steps_to_take: int
@@ -28,7 +28,7 @@ class Game:
         self._cells = []
         self._turns = []
         self._steps_to_take = steps_to_take
-        self._events = EventHub()
+        self.events = EventHub()
         self._step_diff = []
         self._init_food_count = init_food_count if init_food_count else 1
         self._populate()
@@ -144,16 +144,16 @@ class Game:
 
     def _on_stepped(self, *args, **kwargs):
         self._add_to_diff(*args)
-        self._events.ready_to_draw.emit(self._step_diff)
+        self.events.ready_to_draw.emit(self._step_diff)
         self._purge_diff()
-        self._events.stepped.emit(*args, **kwargs)
+        self.events.stepped.emit(*args, **kwargs)
 
     def _on_ate(self, *args, **kwargs):
-        self._events.ate.emit(*args, **kwargs)
+        self.events.ate.emit(*args, **kwargs)
 
     def _on_died(self, snake_res: SnakeResult):
         res = GameResult(self._row_count, self._col_count, [], self._turns, snake_res)
-        self._events.died.emit(res)
+        self.events.died.emit(res)
 
     def run_sync(self):
         self._snake.run_sync()

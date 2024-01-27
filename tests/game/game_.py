@@ -35,7 +35,7 @@ class Game_(Test_):
 
     def setUp(self):
         self._sut = Game(self.row_count, self.col_count)
-        self._sut._events = self._events
+        self._sut.events = self._events
 
     def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
         def counter_func(cell: Cell, ri, ci, acc):

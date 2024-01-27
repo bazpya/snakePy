@@ -8,7 +8,7 @@ class PlayerFake:
 
     def __init__(self, game: Game, *args, **kwargs):
         self._game = game
-        game._events.stepped.subscribe(self.send_game_input)
+        game.events.stepped.subscribe(self.send_game_input)
 
     def decide(self, *args, **kwargs) -> Turn:
         return random.choice(list(Turn))
