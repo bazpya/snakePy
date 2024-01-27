@@ -20,7 +20,7 @@ class Snake_run_async_(Snake_async_):
         self._events.stepped.subscribe(counter.increment)
         pattern = "bbffbbs"
         origin = CellFactory.make_chain(pattern)
-        sut = Snake(origin, self.many)
+        sut = Snake(origin)
         sut._events = self._events
         await sut.run_async(self.msec)
         actual = counter.read()
