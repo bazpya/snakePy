@@ -15,7 +15,7 @@ class Snake_run_async_(Snake_async_):
         actual = counter.read()
         self.assertEqual(actual, self.few)
 
-    async def test_run_async_into_snake_makes_snake_stop(self):
+    async def test_run_async_into_death_makes_snake_stop(self):
         counter = Counter()
         self._events.stepped.subscribe(counter.increment)
         pattern = "bbffbbs"

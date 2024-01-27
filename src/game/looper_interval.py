@@ -14,7 +14,7 @@ class LooperInterval:
         self,
         func: object,
         interval: float,
-        iterations: int = None,
+        iterations: int = 0,
         end_callback: object = lambda: None,
         args: tuple = (),
     ):
@@ -27,13 +27,13 @@ class LooperInterval:
 
     async def start(self):
         self._should_continue = True
-        if self._iterations is None:
-            while self._should_continue:
-                await self._cycle()
-        else:
+        if self._iterations:
             while self._should_continue and self._iterations > 0:
                 await self._cycle()
                 self._iterations -= 1
+        else:
+            while self._should_continue:
+                await self._cycle()
         self._end_callback()
         return self.counter
 
@@ -44,4 +44,4 @@ class LooperInterval:
     async def _cycle(self):
         await asyncio.sleep(self._interval)
         self._func(*self._args)
-        self.counter = self.counter + 1
+        self.counter += 1
