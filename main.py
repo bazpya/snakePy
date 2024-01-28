@@ -25,9 +25,8 @@ for i in range(0, player_count):
         player.play_sync()
         print("done")
     else:
-        drawer = Drawer(cell_size, row_count, col_count)
-        drawer.draw(game.get_cells())
-        game.events.ready_to_draw.subscribe(drawer.draw_diff)
+        drawer = Drawer(cell_size)
+        drawer.bind(game)
         task = player.play_async(interval)
         res = asyncio.get_event_loop().run_until_complete(task)
         drawer.getMouse()

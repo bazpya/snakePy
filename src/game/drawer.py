@@ -1,3 +1,4 @@
+from src.game.game import Game
 from src.game.Diff import GameDiff
 from src.game.cell import Cell
 from src.game.global_refs import CellType
@@ -7,8 +8,7 @@ from src.game.graphics import GraphWin, Point, Rectangle
 class Drawer:
     _window: GraphWin
     _cell_size: int
-    _row_count: int
-    _col_count: int
+    _game: Game
     _colour_map = {
         CellType.wall: "red",
         CellType.blank: "black",
@@ -16,16 +16,18 @@ class Drawer:
         CellType.food: "yellow",
     }
 
-    def __init__(self, cell_size: int, row_count: int, col_count: int = None):
+    def __init__(self, cell_size: int):
         self._cell_size = cell_size
-        self._row_count = row_count
-        self._col_count = row_count if col_count is None else col_count
-        height = self._row_count * self._cell_size
-        width = self._col_count * self._cell_size
-        self._window = GraphWin("snakePy", width, height)
-        pass
 
-    def draw(self, cells: list[Cell]) -> None:
+    def bind(self, game: Game):
+        height = game._row_count * self._cell_size
+        width = game._col_count * self._cell_size
+        game.events.ready_to_draw.subscribe(self.draw_diff)
+        self._window = GraphWin("snakePy", width, height)
+        self._draw(game.get_cells())
+        self._game = game
+
+    def _draw(self, cells: list[Cell]) -> None:
         for cell in cells:
             ri = cell._row
             ci = cell._col
@@ -48,7 +50,7 @@ class Drawer:
             square.draw(self._window)
 
     def draw_diff(self, diff: GameDiff):
-        self.draw(diff.flatten())
+        self._draw(diff.flatten())
 
     def getMouse(self):
         return self._window.getMouse()
