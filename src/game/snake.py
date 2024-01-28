@@ -1,4 +1,5 @@
 from collections import deque
+from src.game.Diff import SnakeDiff
 from src.game.global_refs import CauseOfDeath
 from src.game.Result import SnakeResult
 from src.game.cell import Cell
@@ -15,7 +16,7 @@ class Snake:
     _steps_taken: int
     _steps_to_take: int
     _directions: deque[Direction]
-    _diff: list[Cell]
+    _diff: SnakeDiff
     _is_dead: bool
     ms = 0.001
 
@@ -29,7 +30,7 @@ class Snake:
         self._steps_taken = 0
         self._steps_to_take = steps_to_take
         self._directions = deque()
-        self._diff = []
+        self._diff = SnakeDiff()
         self._is_dead = False
 
     def get_head(self):
@@ -64,17 +65,17 @@ class Snake:
     def _move_head(self, cell: Cell):
         cell.be_snake()
         self._cells.append(cell)
-        self._diff.append(cell)
+        self._diff.add_snake(cell)
 
     def _drag_tail(self):
         tail = self._cells.popleft()
         tail.be_blank()
-        self._diff.append(tail)
+        self._diff.add_blank(tail)
 
     def _after_step(self):
         if self._events.stepped is not None:
             self._events.stepped.emit(self._diff)
-        self._diff = []
+        self._purge_diff()
 
     def _die(self, cause: CauseOfDeath = CauseOfDeath.steps_taken):
         if self._is_dead:
@@ -89,6 +90,9 @@ class Snake:
                 cause,
             )
             self._events.died.emit(result)
+
+    def _purge_diff(self):
+        self._diff = SnakeDiff()
 
     def _get_latest_input(self):
         return self._directions[-1] if self._directions else self._direction

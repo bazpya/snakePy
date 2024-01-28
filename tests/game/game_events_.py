@@ -1,3 +1,4 @@
+from src.game.Diff import GameDiff
 from src.game.snake import Snake
 from src.game.game import Game
 from tests.game.game_ import Game_
@@ -22,11 +23,13 @@ class Game_events_(Game_):
         cells = CellFactory.make_list("bb")
         CellFactory.link(cells)
         origin = cells[0]
+        next = cells[1]
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        diff = self.stepped_callback.call_args[0][0]
-        self.assertEqual(set(diff), set(cells))  # for unordered comparison
+        diff: GameDiff = self.stepped_callback.call_args[0][0]
+        self.assertListEqual(diff.blanks, [origin])
+        self.assertListEqual(diff.snakes, [next])
 
     # # ======================  Food  ======================
 
@@ -48,7 +51,10 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called_once_with([next])
+        self.stepped_callback.assert_called_once()
+        diff: GameDiff = self.stepped_callback.call_args[0][0]
+        self.assertListEmpty(diff.blanks)
+        self.assertListEqual(diff.snakes, [next])
 
     # # ======================  Death  ======================
 
@@ -67,7 +73,11 @@ class Game_events_(Game_):
         snake = Snake(origin)
         self._sut._bind(snake)
         snake.step()
-        self.stepped_callback.assert_called_once_with([])
+        self.stepped_callback.assert_called_once()
+        diff: GameDiff = self.stepped_callback.call_args[0][0]
+        self.assertListEmpty(diff.blanks)
+        self.assertListEmpty(diff.snakes)
+        self.assertListLength(diff.foods, 1)
 
     def test_run_sync_at_specified_number_of_steps_emits_died_event(self):
         counter = Counter()

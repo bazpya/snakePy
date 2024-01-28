@@ -1,3 +1,4 @@
+from src.game.Diff import GameDiff, SnakeDiff
 from src.game.Result import GameResult, SnakeResult
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
@@ -12,10 +13,10 @@ class Game:
     _row_count: int
     _col_count: int
     events: EventHub
-    _step_diff: list[Cell]
+    _diff: GameDiff
     _turns_taken: list[Turn]
     _steps_to_take: int
-    _foods_given: list[Cell]
+    _foods_given: list[Cell]  # todo: remove
 
     def __init__(
         self,
@@ -28,10 +29,10 @@ class Game:
         self._col_count = col_count if col_count else row_count
         self._cells = []
         self._turns_taken = []
-        self._foods_given = []
+        self._foods_given = []  # todo: remove
         self._steps_to_take = steps_to_take
         self.events = EventHub()
-        self._step_diff = []
+        self._diff = GameDiff()
         self._init_food_count = init_food_count if init_food_count else 1
         self._populate()
         self._link_neighbours()
@@ -102,19 +103,16 @@ class Game:
         flat_list_of_cells = self.get_cells()
         return [x for x in flat_list_of_cells if x.is_blank()]
 
-    def _add_to_diff(self, *args):
-        self._step_diff.extend(*args)
-
     def _purge_diff(self):
-        self._step_diff.clear()
+        self._diff = GameDiff()
 
     def _give_food(self, count: int = 1) -> Cell:
         blank_cells = self._get_blank_cells()
         cells = random.sample(blank_cells, count)
         for cell in cells:
             cell.be_food()
+            self._diff.add_food(cells)
             self._foods_given.append(cell)
-        self._add_to_diff(cells)
         return cells
 
     def _get_centre(self) -> Cell:
@@ -145,11 +143,11 @@ class Game:
         s._events.ate.subscribe(self._on_ate)
         s._events.died.subscribe(self._on_died)
 
-    def _on_stepped(self, *args, **kwargs):
-        self._add_to_diff(*args)
-        self.events.ready_to_draw.emit(self._step_diff)
+    def _on_stepped(self, snake_diff: SnakeDiff):
+        self._diff.add(snake_diff)
+        self.events.ready_to_draw.emit(self._diff.flatten())
+        self.events.stepped.emit(self._diff)
         self._purge_diff()
-        self.events.stepped.emit(*args, **kwargs)
 
     def _on_ate(self):
         self._give_food()
