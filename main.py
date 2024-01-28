@@ -17,9 +17,8 @@ interval = Config.get("game.interval")
 player_count: int = 1
 
 for i in range(0, player_count):
-    game = Game(row_count, col_count)
+    game = Game(row_count, col_count, food_count)
     player = PlayerFake(game)
-    game._give_food(food_count)
 
     if is_headless:
         player.play_sync()
