@@ -1,5 +1,6 @@
 import sys
 import asyncio
+from src.game.Result import GameResult
 from src.ml.player_fake import PlayerFake
 from src.config import Config
 from src.game.drawer import Drawer
@@ -16,13 +17,18 @@ interval = Config.get("game.interval")
 
 player_count: int = 1
 
+
+def print_res(res: GameResult):
+    print(res.serialise())
+
+
 for i in range(0, player_count):
     game = Game(row_count, col_count, food_count)
     player = PlayerFake(game)
+    game.events.died.subscribe(print_res)
 
     if is_headless:
         player.play_sync()
-        print("done")
     else:
         drawer = Drawer(cell_size)
         drawer.bind(game)

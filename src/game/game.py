@@ -10,8 +10,8 @@ from src.game.snake import Snake
 class Game:
     _snake: Snake
     _cells: list[list[Cell]]
-    _row_count: int
-    _col_count: int
+    row_count: int
+    col_count: int
     events: EventHub
     _diff: GameDiff
     _steps_to_take: int
@@ -23,8 +23,8 @@ class Game:
         init_food_count: int = 0,
         steps_to_take: int = 0,
     ):
-        self._row_count = row_count
-        self._col_count = col_count if col_count else row_count
+        self.row_count = row_count
+        self.col_count = col_count if col_count else row_count
         self._cells = []
         self._steps_to_take = steps_to_take
         self.events = EventHub()
@@ -38,9 +38,9 @@ class Game:
         self._bind()
 
     def _populate(self):
-        for row_index in range(self._row_count):
+        for row_index in range(self.row_count):
             row = []
-            for col_index in range(self._col_count):
+            for col_index in range(self.col_count):
                 cell = Cell(row_index, col_index)
                 row.append(cell)
             self._cells.append(row)
@@ -64,9 +64,9 @@ class Game:
 
     def _lay_walls(self):
         def visit(cell, ri, ci, acc):
-            should_be_wall = ri in [0, self._row_count - 1] or ci in [
+            should_be_wall = ri in [0, self.row_count - 1] or ci in [
                 0,
-                self._col_count - 1,
+                self.col_count - 1,
             ]
             if should_be_wall:
                 cell.be_wall()
@@ -76,11 +76,11 @@ class Game:
     def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
         row_index_lower_bound = 0 if include_boundaries else 1
         row_index_upper_bound = (
-            self._row_count if include_boundaries else (self._row_count - 1)
+            self.row_count if include_boundaries else (self.row_count - 1)
         )
         col_index_lower_bound = 0 if include_boundaries else 1
         col_index_upper_bound = (
-            self._col_count if include_boundaries else (self._col_count - 1)
+            self.col_count if include_boundaries else (self.col_count - 1)
         )
 
         accumulator = initial_value
@@ -111,8 +111,8 @@ class Game:
         return cells
 
     def _get_centre(self) -> Cell:
-        row = self._row_count // 2
-        col = self._col_count // 2
+        row = self.row_count // 2
+        col = self.col_count // 2
         return self._cells[row][col]
 
     def _get_origin(self, hor_dir: Direction = None, ver_dir: Direction = None) -> Cell:
@@ -148,11 +148,7 @@ class Game:
         self.events.ate.emit()
 
     def _on_died(self, snake_res: SnakeResult):
-        res = GameResult(
-            self._row_count,
-            self._col_count,
-            snake_res,
-        )
+        res = GameResult(self.row_count, self.col_count, snake_res)
         self.events.died.emit(res)
 
     def run_sync(self):

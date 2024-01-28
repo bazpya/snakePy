@@ -13,7 +13,7 @@ class Game_init_(Game_):
 
     def test_init_with_only_one_dimension_creates_square(self):
         sut = Game(self.row_count)
-        self.assertEqual(self.row_count, sut._col_count)
+        self.assertEqual(self.row_count, sut.col_count)
 
     def test_init_creates_cell_instances(self):
         def visit(cell, *args, **kwargs):

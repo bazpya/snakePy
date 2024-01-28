@@ -20,8 +20,8 @@ class Drawer:
         self._cell_size = cell_size
 
     def bind(self, game: Game):
-        height = game._row_count * self._cell_size
-        width = game._col_count * self._cell_size
+        height = game.row_count * self._cell_size
+        width = game.col_count * self._cell_size
         game.events.stepped.subscribe(self.draw_diff)
         self._window = GraphWin("snakePy", width, height)
         self._draw(game.get_cells())
