@@ -14,9 +14,7 @@ class Game:
     _col_count: int
     events: EventHub
     _diff: GameDiff
-    _turns_taken: list[Turn]
     _steps_to_take: int
-    _foods_given: list[Cell]  # todo: remove
 
     def __init__(
         self,
@@ -28,8 +26,6 @@ class Game:
         self._row_count = row_count
         self._col_count = col_count if col_count else row_count
         self._cells = []
-        self._turns_taken = []
-        self._foods_given = []  # todo: remove
         self._steps_to_take = steps_to_take
         self.events = EventHub()
         self._diff = GameDiff()
@@ -112,7 +108,6 @@ class Game:
         for cell in cells:
             cell.be_food()
             self._diff.add_food(cells)
-            self._foods_given.append(cell)
         return cells
 
     def _get_centre(self) -> Cell:
@@ -157,8 +152,6 @@ class Game:
         res = GameResult(
             self._row_count,
             self._col_count,
-            self._foods_given,
-            self._turns_taken,
             snake_res,
         )
         self.events.died.emit(res)
@@ -173,5 +166,4 @@ class Game:
         self._snake.direction_enque(dir)
 
     def turn(self, turn: Turn):
-        self._turns_taken.append(turn)
         self._snake.turn(turn)

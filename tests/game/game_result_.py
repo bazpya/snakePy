@@ -33,23 +33,3 @@ class Game_result_(Game_):
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.cause_of_death, CauseOfDeath.snake)
-
-    # todo: use recorder object instead
-    def test_death_passes_turs_taken_to_died_event(self):
-        turns = [Turn.left, Turn.right, Turn.ahead, Turn.ahead, Turn.right]
-        for turn in turns:
-            self._sut.turn(turn)
-        self._sut.run_sync()
-        self.died_callback.assert_called_once()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.turns, turns)
-
-    # todo: use recorder object instead
-    def test_death_passes_correct_number_of_foods_taken_to_died_event(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
-        snake = Snake(origin)
-        self._sut._bind(snake)
-        snake.run_sync()
-        result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(len(result.foods), 3)

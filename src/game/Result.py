@@ -20,16 +20,12 @@ class GameResult:
         self,
         row_count: int,
         col_count: int,
-        foods: list[Cell],
-        turns: list[Turn],
         snake_res: SnakeResult,
     ) -> None:
         self.row_count = row_count
         self.col_count = col_count
         self.steps_taken = snake_res.steps_taken
         self.length = snake_res.length
-        self.foods = foods
-        self.turns = turns
         self.cause_of_death = snake_res.cause_of_death
 
 
