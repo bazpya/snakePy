@@ -107,7 +107,7 @@ class Game:
         cells = random.sample(blank_cells, count)
         for cell in cells:
             cell.be_food()
-            self._diff.add_food(cells)
+            self._diff.add_food(cell)
         return cells
 
     def _get_centre(self) -> Cell:
@@ -140,7 +140,7 @@ class Game:
 
     def _on_stepped(self, snake_diff: SnakeDiff):
         self._diff.add(snake_diff)
-        self.events.ready_to_draw.emit(self._diff.flatten())
+        self.events.ready_to_draw.emit(self._diff)
         self.events.stepped.emit(self._diff)
         self._purge_diff()
 

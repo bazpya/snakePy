@@ -1,3 +1,4 @@
+from src.game.Diff import GameDiff
 from src.game.cell import Cell
 from src.game.global_refs import CellType
 from src.game.graphics import GraphWin, Point, Rectangle
@@ -45,6 +46,9 @@ class Drawer:
             colour = self._colour_map[cellType]
             square.setFill(colour)
             square.draw(self._window)
+
+    def draw_diff(self, diff: GameDiff):
+        self.draw(diff.flatten())
 
     def getMouse(self):
         return self._window.getMouse()

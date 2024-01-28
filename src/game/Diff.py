@@ -27,4 +27,8 @@ class GameDiff:
         self.foods.append(cell)
 
     def flatten(self) -> list[Cell]:
-        return (self.blanks, self.snakes, self.foods)
+        res = []
+        res.extend(self.blanks)
+        res.extend(self.snakes)
+        res.extend(self.foods)
+        return res
