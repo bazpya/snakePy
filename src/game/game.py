@@ -140,7 +140,6 @@ class Game:
 
     def _on_stepped(self, snake_diff: SnakeDiff):
         self._diff.add(snake_diff)
-        self.events.ready_to_draw.emit(self._diff)
         self.events.stepped.emit(self._diff)
         self._purge_diff()
 

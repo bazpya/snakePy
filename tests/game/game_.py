@@ -29,10 +29,6 @@ class Game_(Test_):
         self.died_callback = MagicMock()
         self._events.died.subscribe(self.died_callback)
 
-        self._events.ready_to_draw = Event()
-        self.ready_to_draw_callback = MagicMock()
-        self._events.ready_to_draw.subscribe(self.ready_to_draw_callback)
-
     def setUp(self):
         self._sut = Game(self.row_count, self.col_count)
         self._sut.events = self._events
