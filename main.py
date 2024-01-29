@@ -1,5 +1,7 @@
 import sys
 import asyncio
+from threading import Thread
+import time
 from src.game.Result import GameResult
 from src.ml.player_fake import PlayerFake
 from src.config import Config
@@ -8,51 +10,70 @@ from src.game.game import Game
 
 args = sys.argv
 switch = args[1] if len(args) > 1 else None
-is_headless = switch in ["-h", "headless"]
+has_ui = switch in ["i", "-i", "ui", "-ui"]
 row_count = Config.get("game.row_count")
 col_count = Config.get("game.col_count")
 cell_size = Config.get("game.cell_size")
 food_count = Config.get("game.food_count")
 interval = Config.get("game.interval")
 
-player_count: int = 1
+player_count: int = 4
+
+result: list[GameResult] = []
 
 
-def print_res(res: GameResult):
-    print(res.serialise())
+def collect_res(res: GameResult):
+    result.append(res)
+
+
+def print_res():
+    for res in result:
+        print(res.serialise())
+
+
+coroutines = []
+drawers: list[Drawer] = []
+
+
+def make_coroutine(has_ui: bool):
+    game = Game(row_count, col_count, food_count)
+    player = PlayerFake(game)
+    game.events.died.subscribe(collect_res)
+
+    async def async_func():
+        drawer = Drawer(cell_size)
+        drawer.bind(game)
+        drawers.append(drawer)
+        await player.play_async(interval)
+        drawer.getMouse()
+
+    async def sync_func():
+        player.play_sync()
+
+    if has_ui:
+        return async_func()
+    else:
+        return sync_func()
 
 
 for i in range(0, player_count):
-    game = Game(row_count, col_count, food_count)
-    player = PlayerFake(game)
-    game.events.died.subscribe(print_res)
-
-    if is_headless:
-        player.play_sync()
+    if has_ui:
+        coroutine = make_coroutine(True)
     else:
-        drawer = Drawer(cell_size)
-        drawer.bind(game)
-        task = player.play_async(interval)
-        res = asyncio.get_event_loop().run_until_complete(task)
-        drawer.getMouse()
-
-# def func(*args, **kwargs):
-#     thread_number = i
-#     print(f"thread {thread_number} start")
-#     sleep(1)
-#     print(f"thread {thread_number} end")
+        coroutine = make_coroutine(False)
+    coroutines.append(coroutine)
 
 
-# if __name__ == "__main__":
-#     count = 20
-#     threads = []
-#     for i in range(count):
-#         thread = Thread(target=func, args=[])
-#         threads.append(thread)
-#         thread.start()
+async def func():
+    batch = asyncio.gather(*coroutines)
+    await batch
 
-#     for i in range(count):
-#         thread: Thread = threads[i]
-#         thread.join(4.0)
 
-#     print("finished")
+time_start = time.time()
+asyncio.run(func())
+time_end = time.time()
+
+time_diff = time_end - time_start
+
+print_res()
+print(f"Time taken: {time_diff} seconds")
