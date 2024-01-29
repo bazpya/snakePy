@@ -1,10 +1,10 @@
 from unittest.mock import MagicMock
 from src.game.looper_interval import LooperInterval
 from tests.game.helper.counter import Counter
-from tests.test_ import Test_async_
+from tests.test_ import Test_
 
 
-class LooperInterval_(Test_async_):
+class LooperInterval_(Test_):
     async def test_when_specified_loops_correct_number_of_times(self):
         counter = Counter()
         sut = LooperInterval(counter.increment, self.msec, self.few)

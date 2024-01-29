@@ -14,7 +14,7 @@ class Game_result_(Game_):
         self._sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.steps_taken, len(pattern) - 1)
+        self.assertEqual(result.snake.steps_taken, len(pattern) - 1)
 
     def test_emits_died_event_with_correct_length(self):
         pattern = "bbffbbs"
@@ -23,7 +23,7 @@ class Game_result_(Game_):
         self._sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.length, 3)
+        self.assertEqual(result.snake.length, 3)
 
     def test_emits_died_event_with_correct_cause_of_death(self):
         pattern = "bbffbbs"
@@ -32,4 +32,4 @@ class Game_result_(Game_):
         self._sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
-        self.assertEqual(result.cause_of_death, CauseOfDeath.snake)
+        self.assertEqual(result.snake.cause_of_death, CauseOfDeath.snake)

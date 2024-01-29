@@ -1,7 +1,7 @@
 import unittest
 
 
-class Test_base_(unittest.TestCase):
+class Test_(unittest.IsolatedAsyncioTestCase):
     few = 7
     some = 10
     many = 20
@@ -12,11 +12,3 @@ class Test_base_(unittest.TestCase):
 
     def assertListEmpty(self, list: list):
         self.assertListLength(list, 0)
-
-
-class Test_(Test_base_, unittest.TestCase):
-    pass
-
-
-class Test_async_(Test_base_, unittest.IsolatedAsyncioTestCase):
-    pass

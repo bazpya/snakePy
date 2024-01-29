@@ -23,6 +23,7 @@ class Player:
         self.events = EventHub()
         model_layers = []
         self._input_size = model_params.input_size
+        self.bind(game)
 
         # Add input layer
         input_layer = layers.Dense(
@@ -84,9 +85,6 @@ class Player:
 
     async def play_async(self, interval: float):
         await self._game.run_async(interval)
-
-    def decide(self, *args, **kwargs) -> Turn:
-        return Turn.ahead
 
     # #getNextDirection() {
     #     const brainOutputTensor = this.#think();

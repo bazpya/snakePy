@@ -1,17 +1,15 @@
-from tests.test_ import Test_
+from tests.ml.test_ml_ import Test_ml_
 import tensorflow as tf
 from src.ml.eye import Eye
 
-input_size = 8
 
-
-class Eye_(Test_):
+class Eye_(Test_ml_):
     def test_read_gets_tensor(self):
-        sut = Eye(input_size, None)
+        sut = Eye(self.few, None)
         actual = sut.see(None)
         self.assertIsInstance(actual, tf.Tensor)
 
     def test_read_gets_the_right_dimensions(self):
-        sut = Eye(input_size, None)
+        sut = Eye(self.few, None)
         actual = sut.see(None).shape
-        self.assertEqual(actual, [input_size])
+        self.assertEqual(actual, [self.few])
