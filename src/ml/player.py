@@ -1,16 +1,26 @@
 import keras
 from keras import layers
 import tensorflow as tf
+from src.ml.Result import PlayerResult
+from src.game.Result import GameResult
+from src.game.event_hub import EventHub
+from src.game.game import Game
 from src.anonym import Anonym
 from src.game.direction import Turn
 
 
 class Player:
+    _game: Game
+    _id: int
+    events: EventHub
     _output_layer_size: int = 3
     _model: None
     _input_size: int
 
-    def __init__(self, model_params: Anonym):
+    def __init__(self, game: Game, id: int, model_params: Anonym):
+        self._game = game
+        self._id = id
+        self.events = EventHub()
         model_layers = []
         self._input_size = model_params.input_size
 
@@ -48,11 +58,35 @@ class Player:
 
         self._model = keras.Sequential(model_layers)
 
+    def bind(self, game: Game):
+        game.events.stepped.subscribe(self._on_stepped)
+        game.events.died.subscribe(self._on_died)
+
     def decide(self, input: tf.Tensor) -> Turn:
         brain_output = self._model.predict(input)[0]
         index = tf.math.argmax(brain_output).numpy()
         shifted_index = index - 1
         return Turn(shifted_index)
+
+    def _on_stepped(self, *args, **kwargs):
+        self.send_game_input()
+
+    def _on_died(self, game_res: GameResult):
+        res = PlayerResult(self._id, game_res)
+        self.events.died.emit(res)
+
+    def send_game_input(self):
+        turn = self.decide(self._game)
+        self._game.turn(turn)
+
+    def play_sync(self):
+        self._game.run_sync()
+
+    async def play_async(self, interval: float):
+        await self._game.run_async(interval)
+
+    def decide(self, *args, **kwargs) -> Turn:
+        return Turn.ahead
 
     # #getNextDirection() {
     #     const brainOutputTensor = this.#think();

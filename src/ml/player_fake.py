@@ -28,9 +28,6 @@ class PlayerFake:
         res = PlayerResult(self._id, game_res)
         self.events.died.emit(res)
 
-    def decide(self, *args, **kwargs) -> Turn:
-        return random.choice(list(Turn))
-
     def send_game_input(self):
         turn = self.decide(self._game)
         self._game.turn(turn)
@@ -40,3 +37,6 @@ class PlayerFake:
 
     async def play_async(self, interval: float):
         await self._game.run_async(interval)
+
+    def decide(self, *args, **kwargs) -> Turn:
+        return random.choice(list(Turn))
