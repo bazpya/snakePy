@@ -21,7 +21,7 @@ class GameResult:
         row_count: int,
         col_count: int,
         snake_res: SnakeResult,
-    ) -> None:
+    ) -> None: # use inheritance
         self.row_count = row_count
         self.col_count = col_count
         self.steps_taken = snake_res.steps_taken
@@ -40,7 +40,3 @@ class GameResult:
             return x.name
         else:
             return x
-
-
-class PlayerResult:
-    pass

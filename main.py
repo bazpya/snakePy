@@ -1,8 +1,7 @@
 import sys
 import asyncio
-from threading import Thread
 import time
-from src.game.Result import GameResult
+from src.ml.Result import PlayerResult
 from src.ml.player_fake import PlayerFake
 from src.config import Config
 from src.game.drawer import Drawer
@@ -19,10 +18,10 @@ interval = Config.get("game.interval")
 
 player_count: int = 4
 
-result: list[GameResult] = []
+result: list[PlayerResult] = []
 
 
-def collect_res(res: GameResult):
+def collect_res(res: PlayerResult):
     result.append(res)
 
 
@@ -35,10 +34,10 @@ coroutines = []
 drawers: list[Drawer] = []
 
 
-def make_coroutine(has_ui: bool):
+def make_coroutine(has_ui: bool, id: int):
     game = Game(row_count, col_count, food_count)
-    player = PlayerFake(game)
-    game.events.died.subscribe(collect_res)
+    player = PlayerFake(game, i)
+    player.events.died.subscribe(collect_res)
 
     async def async_func():
         drawer = Drawer(cell_size)
@@ -58,9 +57,9 @@ def make_coroutine(has_ui: bool):
 
 for i in range(0, player_count):
     if has_ui:
-        coroutine = make_coroutine(True)
+        coroutine = make_coroutine(True, i)
     else:
-        coroutine = make_coroutine(False)
+        coroutine = make_coroutine(False, i)
     coroutines.append(coroutine)
 
 
