@@ -8,7 +8,7 @@ from src.game.event_hub import EventHub
 
 
 class Game_(Test_):
-    _sut: Game
+    sut: Game
 
     def __init__(self, *args, **kwargs):
         super(Game_, self).__init__(*args, **kwargs)
@@ -30,8 +30,8 @@ class Game_(Test_):
         self._events.died.subscribe(self.died_callback)
 
     def setUp(self):
-        self._sut = Game(self.row_count, self.col_count)
-        self._sut.events = self._events
+        self.sut = Game(self.row_count, self.col_count)
+        self.sut.events = self._events
 
     def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
         def counter_func(cell: Cell, ri, ci, acc):

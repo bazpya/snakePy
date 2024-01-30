@@ -11,7 +11,7 @@ class Game_etc_(Game_):
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        count = self._sut.iterate_cells(True, counter_func, 0)
+        count = self.sut.iterate_cells(True, counter_func, 0)
         self.assertEqual(all_cells_count, count)
 
     def test_iterate_cells_hits_interior_cells(self):
@@ -20,19 +20,19 @@ class Game_etc_(Game_):
         def counter_func(cell: Cell, ri, ci, acc):
             return acc + 1
 
-        count = self._sut.iterate_cells(False, counter_func, 0)
+        count = self.sut.iterate_cells(False, counter_func, 0)
         self.assertEqual(interior_cells_count, count)
 
     def test_get_blank_cells_gets_blanks(self):
-        actual = self._sut._get_blank_cells()
+        actual = self.sut._get_blank_cells()
         for cell in actual:
             self.assertTrue(cell.is_blank())
 
     def test_get_blank_cells_gets_correct_number_of_cells(self):
-        supposed_blanks = self._sut._get_blank_cells()
+        supposed_blanks = self.sut._get_blank_cells()
         actual = len(supposed_blanks)
         expected = (
-            (self.row_count - 2) * (self.col_count - 2) - self._sut._init_food_count - 1
+            (self.row_count - 2) * (self.col_count - 2) - self.sut._init_food_count - 1
         )
         self.assertEqual(actual, expected)
 
@@ -65,4 +65,4 @@ class Game_etc_(Game_):
         self.assertEqual(expected, actual)
 
     def test_add_snake_sets_one_cell(self):
-        self.assertCellCount(self._sut, CellType.snake, 1)
+        self.assertCellCount(self.sut, CellType.snake, 1)

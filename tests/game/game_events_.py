@@ -12,7 +12,7 @@ class Game_events_(Game_):
     def test_blank_emits_the_right_events(self):
         origin = CellFactory.make_chain("bb")
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
@@ -24,7 +24,7 @@ class Game_events_(Game_):
         origin = cells[0]
         next = cells[1]
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         diff: GameDiff = self.stepped_callback.call_args[0][0]
         self.assertListEqual(diff.blanks, [origin])
@@ -35,7 +35,7 @@ class Game_events_(Game_):
     def test_food_emits_the_right_events(self):
         origin = CellFactory.make_chain("bf")
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         self.stepped_callback.assert_called_once()
         self.ate_callback.assert_called_once()
@@ -47,7 +47,7 @@ class Game_events_(Game_):
         origin = cells[0]
         next = cells[1]
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         self.stepped_callback.assert_called_once()
         diff: GameDiff = self.stepped_callback.call_args[0][0]
@@ -59,7 +59,7 @@ class Game_events_(Game_):
     def test_death_emits_the_right_events(self):
         origin = CellFactory.make_chain("bs")
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
@@ -68,7 +68,7 @@ class Game_events_(Game_):
     def test_death_passes_no_cells_to_stepped_event(self):
         origin = CellFactory.make_chain("bw")
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.step()
         self.stepped_callback.assert_called_once()
         diff: GameDiff = self.stepped_callback.call_args[0][0]

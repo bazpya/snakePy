@@ -11,7 +11,7 @@ class Game_result_(Game_):
         pattern = "bbffbbs"
         origin = CellFactory.make_chain(pattern)
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.snake.steps_taken, len(pattern) - 1)
@@ -20,7 +20,7 @@ class Game_result_(Game_):
         pattern = "bbffbbs"
         origin = CellFactory.make_chain(pattern)
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.snake.length, 3)
@@ -29,7 +29,7 @@ class Game_result_(Game_):
         pattern = "bbffbbs"
         origin = CellFactory.make_chain(pattern)
         snake = Snake(origin)
-        self._sut._bind(snake)
+        self.sut._bind(snake)
         snake.run_sync()
         result: GameResult = self.died_callback.call_args[0][0]
         self.assertEqual(result.snake.cause_of_death, CauseOfDeath.snake)
