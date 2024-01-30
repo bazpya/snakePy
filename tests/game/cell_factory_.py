@@ -21,10 +21,10 @@ class Cell_factory_(Test_):
 
     def test_make_list_gets_right_type_of_cells(self):
         res = CellFactory.make_list("bfsw")
-        self.assertEqual(res[0].get_type(), CellType.blank)
-        self.assertEqual(res[1].get_type(), CellType.food)
-        self.assertEqual(res[2].get_type(), CellType.snake)
-        self.assertEqual(res[3].get_type(), CellType.wall)
+        self.assertEqual(res[0].type, CellType.blank)
+        self.assertEqual(res[1].type, CellType.food)
+        self.assertEqual(res[2].type, CellType.snake)
+        self.assertEqual(res[3].type, CellType.wall)
 
     # ======================  Link  ======================
 
@@ -40,7 +40,7 @@ class Cell_factory_(Test_):
     def test_make_chain_single_cells(self):
         for key, val in self._map.items():
             res = CellFactory.make_chain(key)
-            self.assertEqual(res.get_type(), val)
+            self.assertEqual(res.type, val)
 
     def test_make_chain_multi(self):
         pattern = "bfswbbfsw"
@@ -57,7 +57,7 @@ class Cell_factory_(Test_):
         ]
         runner = CellFactory.make_chain(pattern)
         for type in types:
-            self.assertEqual(runner.get_type(), type)
+            self.assertEqual(runner.type, type)
             runner = runner.get_neighbour(random.choice(list(Direction)))
 
     def test_make_chain_makes_correct_length(self):
@@ -74,12 +74,12 @@ class Cell_factory_(Test_):
     def test_make_infinite_chain_creates_blank_chain(self):
         runner = CellFactory.make_infinite_chain()
         for i in range(6):
-            self.assertEqual(runner.get_type(), CellType.blank)
+            self.assertEqual(runner.type, CellType.blank)
             runner = runner.get_neighbour(Direction.left)
 
     # def test_make_infinite_chain_makes_correct_cell_type(self):
     #     type = CellType.food
     #     runner = CellFactory.make_infinite_chain(cell_type=type)
     #     for i in range(6):
-    #         self.assertEqual(runner.get_type(), type)
+    #         self.assertEqual(runner.type, type)
     #         runner = runner.get_neighbour(Direction.left)

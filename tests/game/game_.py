@@ -35,7 +35,7 @@ class Game_(Test_):
 
     def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
         def counter_func(cell: Cell, ri, ci, acc):
-            return acc + 1 if cell._type == cell_type else acc
+            return acc + 1 if cell.type == cell_type else acc
 
         actual = game.iterate_cells(False, counter_func, 0)
         self.assertEqual(actual, expected)

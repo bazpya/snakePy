@@ -12,8 +12,8 @@ class Cell(CellConcept):
     ):
         self._row = row
         self._col = col
-        self._type = type
-        self._type: CellType
+        self.type = type
+        self.type: CellType
         self._neighbours = {
             Direction.up: None,
             Direction.right: None,
@@ -23,37 +23,31 @@ class Cell(CellConcept):
 
     # ====================  Type Setters  ====================
 
-    def set_type(self, type: CellType):
-        self._type = type
-
     def be_blank(self) -> None:
-        self._type = CellType.blank
+        self.type = CellType.blank
 
     def be_wall(self) -> None:
-        self._type = CellType.wall
+        self.type = CellType.wall
 
     def be_snake(self) -> None:
-        self._type = CellType.snake
+        self.type = CellType.snake
 
     def be_food(self) -> None:
-        self._type = CellType.food
+        self.type = CellType.food
 
     # ====================  Type Getters  ====================
 
-    def get_type(self) -> CellType:
-        return self._type
-
     def is_blank(self) -> bool:
-        return self._type == CellType.blank
+        return self.type == CellType.blank
 
     def is_wall(self) -> bool:
-        return self._type == CellType.wall
+        return self.type == CellType.wall
 
     def is_snake(self) -> bool:
-        return self._type == CellType.snake
+        return self.type == CellType.snake
 
     def is_food(self) -> bool:
-        return self._type == CellType.food
+        return self.type == CellType.food
 
     def is_deadly(self) -> bool:
         return self.is_wall() or self.is_snake()

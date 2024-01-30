@@ -8,7 +8,7 @@ class Turn(Enum):
 
 
 class Direction(Enum):
-    up = 0
+    up = 0  # todo: add diagonals
     right = 1
     down = 2
     left = 3

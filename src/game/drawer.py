@@ -44,7 +44,7 @@ class Drawer:
             point2 = Point(right, bottom)
 
             square = Rectangle(point1, point2)
-            cellType = cell.get_type()
+            cellType = cell.type
             colour = self._colour_map[cellType]
             square.setFill(colour)
             square.draw(self._window)
