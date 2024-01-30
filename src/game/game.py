@@ -51,19 +51,19 @@ class Game:
             has_left_neighbour = ci != 0
 
             if has_up_neighbour:
-                up_neighbour = self._cells[ri - 1][ci]
+                up_neighbour: Cell = self._cells[ri - 1][ci]
                 cell.set_neighbour(Direction.up, up_neighbour)
                 up_neighbour.set_neighbour(Direction.down, cell)
 
             if has_left_neighbour:
-                left_neighbour = self._cells[ri][ci - 1]
+                left_neighbour: Cell = self._cells[ri][ci - 1]
                 cell.set_neighbour(Direction.left, left_neighbour)
                 left_neighbour.set_neighbour(Direction.right, cell)
 
         self.iterate_cells(True, visit)
 
     def _lay_walls(self):
-        def visit(cell, ri, ci, acc):
+        def visit(cell: Cell, ri, ci, acc):
             should_be_wall = ri in [0, self.row_count - 1] or ci in [
                 0,
                 self.col_count - 1,
