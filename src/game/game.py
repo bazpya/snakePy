@@ -1,4 +1,4 @@
-from src.game.Diff import GameDiff, SnakeDiff
+from src.game.diff import GameDiff, SnakeDiff
 from src.game.Result import GameResult, SnakeResult
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub

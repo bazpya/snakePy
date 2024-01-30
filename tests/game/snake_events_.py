@@ -1,4 +1,4 @@
-from src.game.Diff import SnakeDiff
+from src.game.diff import SnakeDiff
 from src.game.snake import Snake
 from src.game.Result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory

@@ -1,5 +1,5 @@
 from collections import deque
-from src.game.Diff import SnakeDiff
+from src.game.diff import SnakeDiff
 from src.game.global_refs import CauseOfDeath
 from src.game.Result import SnakeResult
 from src.game.cell import Cell

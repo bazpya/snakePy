@@ -1,5 +1,5 @@
 from src.game.game import Game
-from src.game.Diff import GameDiff
+from src.game.diff import GameDiff
 from src.game.cell import Cell
 from src.game.global_refs import CellType
 from src.game.graphics import GraphWin, Point, Rectangle

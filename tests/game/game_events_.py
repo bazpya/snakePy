@@ -1,4 +1,4 @@
-from src.game.Diff import GameDiff
+from src.game.diff import GameDiff
 from src.game.snake import Snake
 from src.game.game import Game
 from tests.game.game_ import Game_
