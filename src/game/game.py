@@ -1,17 +1,15 @@
+from src.game.grid import Grid
 from src.game.diff import GameDiff, SnakeDiff
 from src.game.Result import GameResult, SnakeResult
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
 from src.game.cell import Cell
-import random
 from src.game.snake import Snake
 
 
 class Game:
     _snake: Snake
-    _cells: list[list[Cell]]
-    row_count: int
-    col_count: int
+    _grid: Grid
     events: EventHub
     _diff: GameDiff
     _steps_to_take: int
@@ -23,110 +21,25 @@ class Game:
         init_food_count: int = 0,
         steps_to_take: int = 0,
     ):
-        self.row_count = row_count
-        self.col_count = col_count if col_count else row_count
-        self._cells = []
+        self._grid = Grid(row_count, col_count)
         self._steps_to_take = steps_to_take
         self.events = EventHub()
         self._diff = GameDiff()
         self._init_food_count = init_food_count if init_food_count else 1
-        self._populate()
-        self._link_neighbours()
-        self._lay_walls()
         self._add_snake()
         self._give_food(self._init_food_count)
         self._bind()
-
-    def _populate(self):
-        for row_index in range(self.row_count):
-            row = []
-            for col_index in range(self.col_count):
-                cell = Cell(row_index, col_index)
-                row.append(cell)
-            self._cells.append(row)
-
-    def _link_neighbours(self):
-        def visit(cell: Cell, ri, ci, acc):
-            has_up_neighbour = ri != 0
-            has_left_neighbour = ci != 0
-
-            if has_up_neighbour:
-                up_neighbour: Cell = self._cells[ri - 1][ci]
-                cell.set_neighbour(Direction.up, up_neighbour)
-                up_neighbour.set_neighbour(Direction.down, cell)
-
-            if has_left_neighbour:
-                left_neighbour: Cell = self._cells[ri][ci - 1]
-                cell.set_neighbour(Direction.left, left_neighbour)
-                left_neighbour.set_neighbour(Direction.right, cell)
-
-        self.iterate_cells(True, visit)
-
-    def _lay_walls(self):
-        def visit(cell: Cell, ri, ci, acc):
-            should_be_wall = ri in [0, self.row_count - 1] or ci in [
-                0,
-                self.col_count - 1,
-            ]
-            if should_be_wall:
-                cell.be_wall()
-
-        self.iterate_cells(True, visit)
-
-    def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
-        row_index_lower_bound = 0 if include_boundaries else 1
-        row_index_upper_bound = (
-            self.row_count if include_boundaries else (self.row_count - 1)
-        )
-        col_index_lower_bound = 0 if include_boundaries else 1
-        col_index_upper_bound = (
-            self.col_count if include_boundaries else (self.col_count - 1)
-        )
-
-        accumulator = initial_value
-
-        for row_index in range(row_index_lower_bound, row_index_upper_bound):
-            for col_index in range(col_index_lower_bound, col_index_upper_bound):
-                this_cell = self._cells[row_index][col_index]
-                accumulator = visit_func(this_cell, row_index, col_index, accumulator)
-
-        return accumulator
-
-    def get_cells(self):
-        return [x for row in self._cells for x in row]
-
-    def _get_blank_cells(self) -> list[Cell]:
-        flat_list_of_cells = self.get_cells()
-        return [x for x in flat_list_of_cells if x.is_blank()]
 
     def _purge_diff(self):
         self._diff = GameDiff()
 
     def _give_food(self, count: int = 1) -> Cell:
-        blank_cells = self._get_blank_cells()
-        cells = random.sample(blank_cells, count)
-        for cell in cells:
+        for cell in self._grid.get_random_blanks(count):
             cell.be_food()
             self._diff.add_food(cell)
-        return cells
-
-    def _get_centre(self) -> Cell:
-        row = self.row_count // 2
-        col = self.col_count // 2
-        return self._cells[row][col]
-
-    def _get_origin(self, hor_dir: Direction = None, ver_dir: Direction = None) -> Cell:
-        runner = self._get_centre()
-        if hor_dir is not None:
-            while runner.get_neighbour(hor_dir).is_blank():
-                runner = runner.get_neighbour(hor_dir)
-        if ver_dir is not None:
-            while runner.get_neighbour(ver_dir).is_blank():
-                runner = runner.get_neighbour(ver_dir)
-        return runner
 
     def _add_snake(self) -> None:
-        centre = self._get_origin()
+        centre = self._grid._get_origin()
         if not centre.is_blank():
             raise ValueError("The centre cell is not blank!")
         self._snake = Snake(centre, self._steps_to_take)
@@ -148,7 +61,7 @@ class Game:
         self.events.ate.emit()
 
     def _on_died(self, snake_res: SnakeResult):
-        res = GameResult(self.row_count, self.col_count, snake_res)
+        res = GameResult(self._grid.row_count, self._grid.col_count, snake_res)
         self.events.died.emit(res)
 
     def run_sync(self):
