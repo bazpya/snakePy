@@ -2,13 +2,12 @@ from src.game.direction import Direction
 from src.game.global_refs import CellType
 
 
-class CellConcept:
-    pass
-
-
-class Cell(CellConcept):
+class Cell:
     def __init__(
-        self, row: int = None, col: int = None, type: CellType = CellType.blank
+        self,
+        row: int = None,
+        col: int = None,
+        type: CellType = CellType.blank,
     ):
         self._row = row
         self._col = col

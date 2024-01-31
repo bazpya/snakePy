@@ -29,21 +29,21 @@ class Cell_(Test_):
 
     def test_type_setters(self):
         sut = Cell()
-        sut.be_wall()
-        self.assertEqual(sut.type, CellType.wall)
-        sut.be_snake()
-        self.assertEqual(sut.type, CellType.snake)
-        sut.be_food()
-        self.assertEqual(sut.type, CellType.food)
-        sut.be_blank()
-        self.assertEqual(sut.type, CellType.blank)
+        for setter, type in (
+            (Cell.be_blank, CellType.blank),
+            (Cell.be_food, CellType.food),
+            (Cell.be_snake, CellType.snake),
+            (Cell.be_wall, CellType.wall),
+        ):
+            eval("sut." + setter.__name__ + "()")
+            self.assertEqual(sut.type, type)
 
     def test_type_getters(self):
-        sut = Cell(None, None, CellType.blank)
-        self.assertTrue(sut.is_blank())
-        sut = Cell(None, None, CellType.food)
-        self.assertTrue(sut.is_food())
-        sut = Cell(None, None, CellType.snake)
-        self.assertTrue(sut.is_snake())
-        sut = Cell(None, None, CellType.wall)
-        self.assertTrue(sut.is_wall())
+        for getter, type in (
+            (Cell.is_blank, CellType.blank),
+            (Cell.is_food, CellType.food),
+            (Cell.is_snake, CellType.snake),
+            (Cell.is_wall, CellType.wall),
+        ):
+            sut = Cell(None, None, type)
+            self.assertTrue(eval("sut." + getter.__name__ + "()"))
