@@ -1,13 +1,14 @@
 import tensorflow as tf
 from src.game.direction import Direction
-from src.ml.sight import Sight
+from src.ml.view import View
 from src.game.cell import Cell
 
 
 class Eye:
-    def __init__(self, sight: Sight) -> None:
-        self._sight = sight
-        self._recip = sight._reciprocate_distances
+    def __init__(self, view: View) -> None:
+        self._view = view
+        self._recip = view._reciprocate_distances
+        self.view_size: int = view.size
 
     def see(self, head: Cell, food: Cell) -> tf:
         signals = []
@@ -16,10 +17,10 @@ class Eye:
 
         (food_ver, food_hor, food_diag) = head.get_distance(self._recip, food)
 
-        if self._sight._food_squarewise:
+        if self._view._food_squarewise:
             signals.extend(food_ver, food_hor)
 
-        if self._sight._food_diagonal:
+        if self._view._food_diagonal:
             signals.append(food_diag)
 
         # Death squarewise
@@ -29,7 +30,7 @@ class Eye:
         (*etc, death_left) = head.death_distance(self._recip, Direction.left)
         (*etc, death_right) = head.death_distance(self._recip, Direction.right)
 
-        if self._sight._death_squarewise:
+        if self._view._death_squarewise:
             signals.extend(death_up, death_down, death_left, death_right)
 
         # Death diagonal
@@ -47,7 +48,7 @@ class Eye:
             self._recip, Direction.down, Direction.left
         )
 
-        if self._sight._death_diagonal:
+        if self._view._death_diagonal:
             signals.extend(
                 [death_up_left, death_up_right, death_down_left, death_down_right]
             )

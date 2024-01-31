@@ -1,6 +1,6 @@
 import asyncio
 import time
-from src.ml.sight import Sight
+from src.ml.view import View
 from src.ml.player import Player
 from src.ml.Result import PlayerResult
 from src.ml.player_fake import PlayerFake
@@ -18,12 +18,12 @@ interval = Config.get("game.interval")
 use_fake_player = Config.get("ml.use_fake_player")
 player_count = Config.get("ml.player_count")
 
-sight = Sight(
-    reciprocate_distances=Config.get("ml.sight.reciprocate_distances"),
-    food_squarewise=Config.get("ml.sight.food_squarewise"),
-    food_diagonal=Config.get("ml.sight.food_diagonal"),
-    death_squarewise=Config.get("ml.sight.death_squarewise"),
-    death_diagonal=Config.get("ml.sight.death_diagonal"),
+view = View(
+    reciprocate_distances=Config.get("ml.view.reciprocate_distances"),
+    food_squarewise=Config.get("ml.view.food_squarewise"),
+    food_diagonal=Config.get("ml.view.food_diagonal"),
+    death_squarewise=Config.get("ml.view.death_squarewise"),
+    death_diagonal=Config.get("ml.view.death_diagonal"),
 )
 
 result: list[PlayerResult] = []

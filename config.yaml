@@ -8,7 +8,7 @@ game:
 ml:
   use_fake_player: True
   player_count: 1
-  sight:
+  view:
     reciprocate_distances: False
     food_squarewise: True
     food_diagonal: False
