@@ -54,18 +54,11 @@ class Player:
             bias_initializer=model_params.bias_initialiser,
         )
         model_layers.append(output_layer)
-
         self._model = keras.Sequential(model_layers)
 
     def bind(self, game: Game):
         game.events.stepped.subscribe(self._on_stepped)
         game.events.died.subscribe(self._on_died)
-
-    def decide(self, input: tf.Tensor) -> Turn:
-        brain_output = self._model.predict(input)[0]
-        index = tf.math.argmax(brain_output).numpy()
-        shifted_index = index - 1
-        return Turn(shifted_index)
 
     def _on_stepped(self, *args, **kwargs):
         self.send_game_input()
@@ -77,6 +70,12 @@ class Player:
     def send_game_input(self):
         turn = self.decide(self._game)
         self._game.turn(turn)
+
+    def decide(self, input: tf.Tensor) -> Turn:
+        brain_output = self._model.predict(input)[0]
+        index = tf.math.argmax(brain_output).numpy()
+        shifted_index = index - 1
+        return Turn(shifted_index)
 
     def play_sync(self):
         self._game.run_sync()
