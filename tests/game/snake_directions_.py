@@ -30,7 +30,7 @@ class Snake_directions_(Snake_sync_):
             sut._direction = dir
             sut.direction_enque(dir)
             sut.direction_enque(dir.get_opposite())
-            self.assertEqual(len(sut._directions), 0)
+            self.assertZero(len(sut._directions))
 
     def test_deque_when_empty_queue_gets_current_direction(self):
         origin = CellFactory.make_infinite_chain()

@@ -1,4 +1,5 @@
 import unittest
+import tensorflow as tf
 
 
 class Test_(unittest.IsolatedAsyncioTestCase):
@@ -12,3 +13,12 @@ class Test_(unittest.IsolatedAsyncioTestCase):
 
     def assertListEmpty(self, list: list):
         self.assertListLength(list, 0)
+
+    def assertZero(self, value):
+        self.assertEqual(value, 0)
+
+    def assertTensorEqual(self, actual: tf.Tensor, expected: tf.Tensor):
+        self.assertTrue(tf.math.reduce_all(tf.equal(actual, expected)))
+
+    def assertTensorDifferent(self, actual: tf.Tensor, expected: tf.Tensor):
+        self.assertFalse(tf.math.reduce_all(tf.equal(actual, expected)))
