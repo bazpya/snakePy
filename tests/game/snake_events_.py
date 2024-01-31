@@ -26,8 +26,8 @@ class Snake_events_(Snake_sync_):
         sut._events = self._events
         sut.step()
         diff: SnakeDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEqual(diff.blanks, [origin])
-        self.assertListEqual(diff.snakes, [next])
+        self.assertEqual(diff.blank, origin)
+        self.assertEqual(diff.snake, next)
 
     # ======================  Food  ======================
 
@@ -50,7 +50,7 @@ class Snake_events_(Snake_sync_):
         sut.step()
         self.stepped_callback.assert_called_once()
         diff: SnakeDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEqual(diff.snakes, [next])
+        self.assertEqual(diff.snake, next)
 
     # ======================  Death  ======================
 
@@ -72,5 +72,5 @@ class Snake_events_(Snake_sync_):
         sut.step()
         self.stepped_callback.assert_called_once()
         diff: SnakeDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEmpty(diff.blanks)
-        self.assertListEmpty(diff.snakes)
+        self.assertIsNone(diff.blank)
+        self.assertIsNone(diff.snake)

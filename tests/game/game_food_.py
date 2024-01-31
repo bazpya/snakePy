@@ -10,7 +10,7 @@ class Game_etc_(Game_):
         self.assertCellCount(self.sut._grid, CellType.food, expected)
 
     def test_add_food_with_specific_number_adds_correct_amount(self):
-        self.sut._give_food(self.few)
+        self.sut._give_food(self.few, update_diff=False)
         expected = self.few + self.sut._init_food_count
         self.assertCellCount(self.sut._grid, CellType.food, expected)
 

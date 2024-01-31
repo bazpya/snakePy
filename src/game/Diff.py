@@ -3,32 +3,41 @@ from src.game.cell import Cell
 
 class SnakeDiff:
     def __init__(self) -> None:
-        self.blanks: list[Cell] = []
-        self.snakes: list[Cell] = []
+        self.blank: Cell = None
+        self.snake: Cell = None
 
-    def add_blank(self, cell: Cell):
-        self.blanks.append(cell)
+    def set_blank(self, cell: Cell):
+        if self.blank:
+            raise ValueError("Diff already has a Blank cell")
+        self.blank = cell
 
-    def add_snake(self, cell: Cell):
-        self.snakes.append(cell)
+    def set_snake(self, cell: Cell):
+        if self.snake:
+            raise ValueError("Diff already has a Snake cell")
+        self.snake = cell
 
 
-class GameDiff:
+class GameDiff(SnakeDiff):
     def __init__(self) -> None:
-        self.blanks: list[Cell] = []
-        self.snakes: list[Cell] = []
-        self.foods: list[Cell] = []
+        self.blank: Cell = None
+        self.snake: Cell = None
+        self.food: Cell = None
 
     def add(self, snake_diff: SnakeDiff):
-        self.blanks.extend(snake_diff.blanks)
-        self.snakes.extend(snake_diff.snakes)
+        self.set_blank(snake_diff.blank)
+        self.set_snake(snake_diff.snake)
 
-    def add_food(self, cell):
-        self.foods.append(cell)
+    def set_food(self, cell):
+        if self.food:
+            raise ValueError("Diff already has a Food cell")
+        self.food = cell
 
     def flatten(self) -> list[Cell]:
         res = []
-        res.extend(self.blanks)
-        res.extend(self.snakes)
-        res.extend(self.foods)
+        if self.blank:
+            res.append(self.blank)
+        if self.snake:
+            res.append(self.snake)
+        if self.food:
+            res.append(self.food)
         return res

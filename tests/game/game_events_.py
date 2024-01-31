@@ -27,8 +27,8 @@ class Game_events_(Game_):
         self.sut._bind(snake)
         snake.step()
         diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEqual(diff.blanks, [origin])
-        self.assertListEqual(diff.snakes, [next])
+        self.assertEqual(diff.blank, origin)
+        self.assertEqual(diff.snake, next)
 
     # # ======================  Food  ======================
 
@@ -51,8 +51,8 @@ class Game_events_(Game_):
         snake.step()
         self.stepped_callback.assert_called_once()
         diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEmpty(diff.blanks)
-        self.assertListEqual(diff.snakes, [next])
+        self.assertIsNone(diff.blank)
+        self.assertEqual(diff.snake, next)
 
     # # ======================  Death  ======================
 
@@ -72,9 +72,9 @@ class Game_events_(Game_):
         snake.step()
         self.stepped_callback.assert_called_once()
         diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertListEmpty(diff.blanks)
-        self.assertListEmpty(diff.snakes)
-        self.assertListLength(diff.foods, 1)
+        self.assertIsNone(diff.blank)
+        self.assertIsNone(diff.snake)
+        self.assertIsNone(diff.food)
 
     def test_run_sync_at_specified_number_of_steps_emits_died_event(self):
         counter = Counter()

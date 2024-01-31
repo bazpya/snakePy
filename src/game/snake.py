@@ -65,12 +65,12 @@ class Snake:
     def _move_head(self, cell: Cell):
         cell.be_snake()
         self._cells.append(cell)
-        self._diff.add_snake(cell)
+        self._diff.set_snake(cell)
 
     def _drag_tail(self):
         tail = self._cells.popleft()
         tail.be_blank()
-        self._diff.add_blank(tail)
+        self._diff.set_blank(tail)
 
     def _after_step(self):
         if self._events.stepped is not None:
