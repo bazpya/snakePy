@@ -76,3 +76,6 @@ class Game:
 
     def turn(self, turn: Turn):
         self._snake.turn(turn)
+
+    def get_head(self) -> Cell:
+        return self._snake.get_head()

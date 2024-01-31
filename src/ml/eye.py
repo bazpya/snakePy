@@ -1,59 +1,56 @@
 import tensorflow as tf
+from src.game.direction import Direction
 from src.ml.sight import Sight
-from src.game.game import Game
 from src.game.cell import Cell
 
 
 class Eye:
-    def __init__(self, game: Game, sight: Sight) -> None:
-        self._game = game
+    def __init__(self, sight: Sight) -> None:
         self._sight = sight
+        self._recip = sight._reciprocate_distances
 
-    def see(self):
-        # inputTensor = tf.Tensor(range(0, 8), [1, self._inputSize])
-        inputTensor = tf.constant(range(0, self._sight.size))
-        return inputTensor
+    def see(self, head: Cell, food: Cell) -> tf:
+        signals = []
 
-    # #getInput() {
-    #     let result = [];
-    #     const foodDiffHor = The.grid.food.col - this.#head.col;
-    #     const foodDiffVer = The.grid.food.row - this.#head.row;
-    #     const foodSignalHor = foodDiffHor === 0 ? 0 : 1 / foodDiffHor;
-    #     result.push(foodSignalHor);
-    #     const foodSignalVer = foodDiffVer === 0 ? 0 : 1 / foodDiffVer;
-    #     result.push(foodSignalVer);
+        # Food
 
-    #     let deathVector = this.#head.getDiff(c => c.isDeadly, Direction.up);
-    #     const deathSignalUp = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalUp);
+        (food_ver, food_hor, food_diag) = head.get_distance(self._recip, food)
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.up, Direction.right);
-    #     const deathSignalUpRight = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalUpRight);
+        if self._sight._food_squarewise:
+            signals.extend(food_ver, food_hor)
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.right);
-    #     const deathSignalRight = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalRight);
+        if self._sight._food_diagonal:
+            signals.append(food_diag)
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.right, Direction.down);
-    #     const deathSignalDownRight = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalDownRight);
+        # Death squarewise
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.down);
-    #     const deathSignalDown = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalDown);
+        (*etc, death_up) = head.death_distance(self._recip, Direction.up)
+        (*etc, death_down) = head.death_distance(self._recip, Direction.down)
+        (*etc, death_left) = head.death_distance(self._recip, Direction.left)
+        (*etc, death_right) = head.death_distance(self._recip, Direction.right)
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.down, Direction.left);
-    #     const deathSignalDownLeft = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalDownLeft);
+        if self._sight._death_squarewise:
+            signals.extend(death_up, death_down, death_left, death_right)
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.left);
-    #     const deathSignalLeft = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalLeft);
+        # Death diagonal
 
-    #     deathVector = this.#head.getDiff(c => c.isDeadly, Direction.left, Direction.up);
-    #     const deathSignalUpLeft = - 1 / BazMath.amplitude(deathVector);
-    #     result.push(deathSignalUpLeft);
+        (*etc, death_up_right) = head.death_distance(
+            self._recip, Direction.up, Direction.right
+        )
+        (*etc, death_up_left) = head.death_distance(
+            self._recip, Direction.up, Direction.left
+        )
+        (*etc, death_down_right) = head.death_distance(
+            self._recip, Direction.down, Direction.right
+        )
+        (*etc, death_down_left) = head.death_distance(
+            self._recip, Direction.down, Direction.left
+        )
 
-    #     return result;
-    # }
+        if self._sight._death_diagonal:
+            signals.extend(
+                [death_up_left, death_up_right, death_down_left, death_down_right]
+            )
+
+        res = tf.convert_to_tensor(signals)
+        return res

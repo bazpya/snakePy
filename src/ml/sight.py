@@ -14,6 +14,6 @@ class Sight:
         self._death_diagonal = death_diagonal
         self.size = 0
         self.size += 2 if food_squarewise else 0
-        self.size += 2 if food_diagonal else 0
-        self.size += 2 if death_squarewise else 0
-        self.size += 2 if death_diagonal else 0
+        self.size += 1 if food_diagonal else 0
+        self.size += 4 if death_squarewise else 0
+        self.size += 4 if death_diagonal else 0
