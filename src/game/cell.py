@@ -1,4 +1,5 @@
 import math
+from typing import Tuple
 from src.game.direction import Direction
 from src.game.global_refs import CellType
 
@@ -62,14 +63,23 @@ class Cell:
 
     # ====================  Distances  ====================
 
-    def get_distance(self, target: "Cell", reciprocate: bool = False):
+    def get_distance(self, reciprocal: bool, target: "Cell"):
         diff_row = target._row - self._row
         diff_col = target._col - self._col
         dist = math.sqrt(diff_row**2 + diff_col**2)
-        if reciprocate:
+        if reciprocal:
             diff_row_recip = 1 / diff_row if diff_row else 0
             diff_col_recip = 1 / diff_col if diff_col else 0
             dist_recip = 1 / dist if dist else 0
             return (diff_row_recip, diff_col_recip, dist_recip)
         else:
             return (diff_row, diff_col, dist)
+
+    def death_distance(self, reciprocal: bool, *dirs):
+        if not dirs:
+            raise ValueError(self.death_distance.__name__ + " needs some directions")
+        runner = self
+        while not runner.is_deadly():
+            for dir in dirs:
+                runner = runner.get_neighbour(dir)
+        return self.get_distance(reciprocal, runner)
