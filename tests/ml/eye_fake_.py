@@ -1,11 +1,11 @@
 import tensorflow as tf
+from src.ml.view import View
 from src.game.cell import Cell
 from src.ml.eye_fake import EyeFake
-from src.ml.view import View
-from tests.ml.eye_ import Eye_
+from tests.ml.test_ml_ import Test_ml_
 
 
-class Eye_fake_see_(Eye_):
+class Eye_fake_see_(Test_ml_):
     def test_see_gets_tensor(self):
         view = View()
         sut = EyeFake(view)
