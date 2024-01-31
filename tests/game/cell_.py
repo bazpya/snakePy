@@ -1,3 +1,4 @@
+import math
 from tests.test_ import Test_
 from src.game.cell import CellType, Cell
 from src.game.direction import Direction
@@ -47,3 +48,57 @@ class Cell_(Test_):
         ):
             sut = Cell(None, None, type)
             self.assertTrue(eval("sut." + getter.__name__ + "()"))
+
+    # ====================  Distances  ====================
+
+    def test_get_distance_vertical(self):
+        sut = Cell(self.few, self.many)
+        target = Cell(self.some, self.many)
+        res = sut.get_distance(target)
+        expected = self.some - self.few
+        self.assertEqual(res, (expected, 0, expected))
+
+    def test_get_distance_horizontal(self):
+        sut = Cell(self.many, self.few)
+        target = Cell(self.many, self.some)
+        res = sut.get_distance(target)
+        expected = self.some - self.few
+        self.assertEqual(res, (0, expected, expected))
+
+    def test_get_distance_diagonal(self):
+        sut = Cell(self.many, self.few)
+        target = Cell(self.some, self.many)
+        res = sut.get_distance(target)
+        expected = (
+            self.some - self.many,
+            self.many - self.few,
+            math.sqrt((self.some - self.many) ** 2 + (self.many - self.few) ** 2),
+        )
+        self.assertEqual(res, expected)
+
+    # ====================  Reciprocal Distances  ====================
+
+    def test_get_distance_vertical_reciprocal(self):
+        sut = Cell(self.few, self.many)
+        target = Cell(self.some, self.many)
+        res = sut.get_distance(target, True)
+        expected = 1 / (self.some - self.few)
+        self.assertEqual(res, (expected, 0, abs(expected)))
+
+    def test_get_distance_horizontal_reciprocal(self):
+        sut = Cell(self.many, self.few)
+        target = Cell(self.many, self.some)
+        res = sut.get_distance(target, True)
+        expected = 1 / (self.some - self.few)
+        self.assertEqual(res, (0, expected, abs(expected)))
+
+    def test_get_distance_diagonal_reciprocal(self):
+        sut = Cell(self.many, self.few)
+        target = Cell(self.some, self.many)
+        res = sut.get_distance(target, True)
+        expected = (
+            1 / (self.some - self.many),
+            1 / (self.many - self.few),
+            1 / math.sqrt((self.some - self.many) ** 2 + (self.many - self.few) ** 2),
+        )
+        self.assertEqual(res, expected)
