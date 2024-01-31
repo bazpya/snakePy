@@ -28,18 +28,21 @@ class Game:
         self._diff = GameDiff()
         self._init_food_count = init_food_count if init_food_count else 1
         self._add_snake()
-        self._give_food(self._init_food_count, is_init=True)
+        self._give_food(self._init_food_count)
         self._bind()
 
     def _purge_diff(self):
         self._diff = GameDiff()
 
-    def _give_food(self, count: int = 1, is_init: bool = False) -> Cell:
-        for cell in self._grid.get_random_blanks(count):
-            cell.be_food()
-            if not is_init:
-                self._diff.set_food(cell)
-                self._last_food = cell
+    def _give_food(self, count: int = 1) -> Cell:
+        cells = self._grid.get_random_blanks(count)
+        for initial_food in cells[:-1]:
+            initial_food.be_food()
+        current_food = cells[-1]
+        current_food.be_food()
+        self._last_food = current_food
+        if count == 1:
+            self._diff.set_food(current_food)
 
     def _add_snake(self) -> None:
         centre = self._grid._get_origin()

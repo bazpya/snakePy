@@ -76,7 +76,7 @@ class Grid:
         flat_list_of_cells = self.get_flat()
         return [x for x in flat_list_of_cells if x.is_blank()]
 
-    def get_random_blanks(self, count: int):
+    def get_random_blanks(self, count: int) -> list[Cell]:
         blanks = self._get_blanks()
         return random.sample(blanks, count)
 

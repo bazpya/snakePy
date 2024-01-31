@@ -31,6 +31,7 @@ class Game_(Test_):
 
     def setUp(self):
         self.sut = Game(self.row_count, self.col_count)
+        self.sut._purge_diff()
         self.sut.events = self._events
 
     def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
