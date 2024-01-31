@@ -1,6 +1,7 @@
 import keras
 from keras import layers
 import tensorflow as tf
+from src.ml.eye import Eye
 from src.ml.Result import PlayerResult
 from src.game.Result import GameResult
 from src.game.event_hub import EventHub
@@ -17,7 +18,7 @@ class Player:
     _model: None
     _input_size: int
 
-    def __init__(self, game: Game, id: int, model_params: Anonym):
+    def __init__(self, id: int, model_params: Anonym, game: Game, eye: Eye):
         self._game = game
         self._id = id
         self.events = EventHub()
@@ -25,8 +26,7 @@ class Player:
         self._input_size = model_params.input_size
         self.bind(game)
 
-        # Add input layer
-        input_layer = layers.Dense(
+        input_layer = layers.Dense(  # Add input layer
             units=model_params.layer_sizes[0],
             activation=model_params.activation,
             use_bias=model_params.use_bias,
@@ -36,8 +36,7 @@ class Player:
         )
         model_layers.append(input_layer)
 
-        # Add middle layers
-        for size in model_params.layer_sizes[1:]:
+        for size in model_params.layer_sizes[1:]:  # Add middle layers
             layer = layers.Dense(
                 units=size,
                 activation=model_params.activation,
@@ -47,8 +46,7 @@ class Player:
             )
             model_layers.append(layer)
 
-        # Add output layer
-        output_layer = layers.Dense(
+        output_layer = layers.Dense(  # Add output layer
             units=self._output_layer_size,
             activation=model_params.activation,
             use_bias=model_params.use_bias,

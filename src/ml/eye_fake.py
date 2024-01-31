@@ -1,12 +1,14 @@
 import tensorflow as tf
+from src.ml.eye import Eye
 from src.ml.view import View
 from src.game.cell import Cell
 
 
-class EyeFake:
+class EyeFake(Eye):
     def __init__(self, view: View) -> None:
-        self._view = view
-        self.view_size: int = view.size
+        super(EyeFake, self).__init__(view)
+        # self._view = view
+        # self.view_size: int = view.size
         self._output: tf.Tensor = None
 
     def see(self, head: Cell, food: Cell) -> tf:
