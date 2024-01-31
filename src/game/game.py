@@ -13,7 +13,7 @@ class Game:
     events: EventHub
     _diff: GameDiff
     _steps_to_take: int
-    _last_food: Cell
+    _last_food: Cell = None
 
     def __init__(
         self,
@@ -82,5 +82,5 @@ class Game:
     def get_head(self) -> Cell:
         return self._snake.get_head()
 
-    def get_food(self) -> Cell:
+    def get_current_food(self) -> Cell:
         return self._last_food

@@ -11,23 +11,27 @@ class Player_decide_(Player_):
 
     def test_decide_returns_a_turn(self):
         sut = self.make_sut()
-        input = tf.zeros([1, sut._input_size])
-        self.assertIsInstance(sut.decide(input), Turn)
+        brain_input = tf.zeros([1, sut._input_size])
+        sut._eye.set_output(brain_input)
+        self.assertIsInstance(sut.decide(), Turn)
 
     def test_decide_takes_left(self):
         sut = self.make_sut()
         sut._model.predict = self._make_func([0.3, 0.2, 0.1])
-        input = tf.zeros([1, sut._input_size])
-        self.assertEqual(sut.decide(input), Turn.left)
+        brain_input = tf.zeros([1, sut._input_size])
+        sut._eye.set_output(brain_input)
+        self.assertEqual(sut.decide(), Turn.left)
 
     def test_decide_goes_ahead(self):
         sut = self.make_sut()
         sut._model.predict = self._make_func([0.1, 0.3, 0.1])
-        input = tf.zeros([1, sut._input_size])
-        self.assertEqual(sut.decide(input), Turn.ahead)
+        brain_input = tf.zeros([1, sut._input_size])
+        sut._eye.set_output(brain_input)
+        self.assertEqual(sut.decide(), Turn.ahead)
 
     def test_decide_takes_right(self):
         sut = self.make_sut()
         sut._model.predict = self._make_func([0.1, 0.2, 0.3])
-        input = tf.zeros([1, sut._input_size])
-        self.assertEqual(sut.decide(input), Turn.right)
+        brain_input = tf.zeros([1, sut._input_size])
+        sut._eye.set_output(brain_input)
+        self.assertEqual(sut.decide(), Turn.right)

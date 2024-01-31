@@ -16,6 +16,7 @@ class Player:
     events: EventHub
     _output_layer_size: int = 3
     _model: None
+    _eye: Eye = None
     _input_size: int
 
     def __init__(self, id: int, model_params: Anonym, game: Game, eye: Eye):
@@ -24,6 +25,7 @@ class Player:
         self.events = EventHub()
         model_layers = []
         self._input_size = model_params.input_size
+        self._eye = eye
         self.bind(game)
 
         input_layer = layers.Dense(  # Add input layer
@@ -68,11 +70,14 @@ class Player:
         self.events.died.emit(res)
 
     def send_game_input(self):
-        turn = self.decide(self._game)
+        turn = self.decide()
         self._game.turn(turn)
 
-    def decide(self, input: tf.Tensor) -> Turn:
-        brain_output = self._model.predict(input)[0]
+    def decide(self) -> Turn:
+        head = self._game.get_head()
+        food = self._game.get_current_food()
+        brain_input = self._eye.see(head, food)
+        brain_output = self._model.predict(brain_input)[0]
         index = tf.math.argmax(brain_output).numpy()
         shifted_index = index - 1
         return Turn(shifted_index)

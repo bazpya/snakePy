@@ -7,8 +7,6 @@ from src.game.cell import Cell
 class EyeFake(Eye):
     def __init__(self, view: View) -> None:
         super(EyeFake, self).__init__(view)
-        # self._view = view
-        # self.view_size: int = view.size
         self._output: tf.Tensor = None
 
     def see(self, head: Cell, food: Cell) -> tf:
