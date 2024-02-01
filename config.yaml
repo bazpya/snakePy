@@ -8,7 +8,7 @@ game:
 ml:
   player:
     fake: False
-    count: 1
+    count: 4
     max_steps: 50
   grid_view:
     reciprocate_distances: False
@@ -17,4 +17,4 @@ ml:
     death_squarewise: True
     death_diagonal: False
   brain:
-    layer_sizes: 5, 4
+    layer_sizes: "4, 4" # CSV string
