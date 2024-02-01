@@ -13,6 +13,7 @@ class BrainFactory:
         bias_initialiser=tf.keras.initializers.RandomNormal,
     )
 
+    # todo: look into compiling models for performance
     @staticmethod
     def make(input_size: int, output_size: int) -> keras.Sequential:
         model_params = BrainFactory.model_params
@@ -56,3 +57,8 @@ class BrainFactory:
                 kernel_initializer=params.kernel_initialiser,
                 bias_initializer=params.bias_initialiser,
             )
+
+    # todo: unit test
+    @staticmethod
+    def clone(model: keras.Sequential) -> keras.Sequential:
+        return keras.models.clone_model(model)

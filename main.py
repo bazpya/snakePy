@@ -58,7 +58,7 @@ def make_coroutine(has_ui: bool, id: int):
         drawer.bind(game)
         drawers.append(drawer)
         await player.play_async(interval)
-        drawer.getMouse()
+        # drawer.getMouse()
 
     async def sync_func():
         player.play_sync()

@@ -56,5 +56,9 @@ class Player:
     async def play_async(self, interval: float) -> None:
         await self._game.run_async(interval)
 
-    # def clone(self):
-    #     pass
+    # todo: unit test
+    def clone(self, id: int, game: Game, eye: Eye) -> "Player":
+        player = Player(id, game, eye)
+        brain = BrainFactory.clone(self._brain)
+        player._brain = brain
+        return player

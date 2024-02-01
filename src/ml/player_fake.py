@@ -1,4 +1,5 @@
 import random
+from src.ml.eye import Eye
 from src.ml.Result import PlayerResult
 from src.game.Result import GameResult
 from src.game.event_hub import EventHub
@@ -10,10 +11,12 @@ class PlayerFake:
     _game: Game
     _id: int
     events: EventHub
+    _eye: Eye = None
 
-    def __init__(self, game: Game, id: int) -> None:
+    def __init__(self, id: int, game: Game, eye: Eye) -> None:
         self._game = game
         self._id = id
+        self._eye = eye
         self.events = EventHub()
         self.bind(game)
 
@@ -41,5 +44,5 @@ class PlayerFake:
     def decide(self, *args, **kwargs) -> Turn:
         return random.choice(list(Turn))
 
-    # def clone(game: Game, id: int) -> "PlayerFake":
-    #     return PlayerFake(game, id)
+    def clone(self, id: int, game: Game, eye: Eye) -> "PlayerFake":
+        return PlayerFake(id, game, eye)
