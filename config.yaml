@@ -8,6 +8,7 @@ game:
 ml:
   fake_player: False
   player_count: 1
+  max_steps: 50
   view:
     reciprocate_distances: False
     food_squarewise: True

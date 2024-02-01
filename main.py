@@ -18,6 +18,7 @@ interval = Config.get("game.interval")
 
 fake_player = Config.get("ml.fake_player")
 player_count = Config.get("ml.player_count")
+max_steps = Config.get("ml.max_steps")
 
 view = View(
     reciprocate_distances=Config.get("ml.view.reciprocate_distances"),
@@ -44,7 +45,7 @@ drawers: list[Drawer] = []
 
 
 def make_coroutine(has_ui: bool, id: int):
-    game = Game(row_count, col_count, food_count)
+    game = Game(row_count, col_count, food_count, max_steps)
     if fake_player:
         player = PlayerFake(game, i)
     else:
