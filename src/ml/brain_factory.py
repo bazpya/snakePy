@@ -7,7 +7,7 @@ from src.anonym import Anonym
 
 class BrainFactory:
     model_params = Anonym(
-        layer_sizes= Config.get_ints("ml.layer_sizes"),
+        layer_sizes= Config.get_ints("ml.brain.layer_sizes"),
         activation=tf.keras.activations.linear,
         kernel_initialiser=tf.keras.initializers.LecunNormal,
         use_bias=False,

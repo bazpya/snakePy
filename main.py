@@ -20,17 +20,19 @@ interval = Config.get("game.interval")
 
 # ====================  ML Config  ====================
 
-fake_player = Config.get("ml.fake_player")
-player_count = Config.get("ml.player_count")
-max_steps = Config.get("ml.max_steps")
+fake_player = Config.get("ml.player.fake")
+player_count = Config.get("ml.player.count")
+max_steps = Config.get("ml.player.max_steps")
 
 view = View(
-    reciprocate_distances=Config.get("ml.view.reciprocate_distances"),
-    food_squarewise=Config.get("ml.view.food_squarewise"),
-    food_diagonal=Config.get("ml.view.food_diagonal"),
-    death_squarewise=Config.get("ml.view.death_squarewise"),
-    death_diagonal=Config.get("ml.view.death_diagonal"),
+    reciprocate_distances=Config.get("ml.grid_view.reciprocate_distances"),
+    food_squarewise=Config.get("ml.grid_view.food_squarewise"),
+    food_diagonal=Config.get("ml.grid_view.food_diagonal"),
+    death_squarewise=Config.get("ml.grid_view.death_squarewise"),
+    death_diagonal=Config.get("ml.grid_view.death_diagonal"),
 )
+
+# ====================  Race  ====================
 
 result: list[PlayerResult] = []
 

@@ -6,13 +6,15 @@ game:
   food_count: 80
   interval: 0.03
 ml:
-  fake_player: False
-  player_count: 1
-  max_steps: 50
-  view:
+  player:
+    fake: False
+    count: 1
+    max_steps: 50
+  grid_view:
     reciprocate_distances: False
     food_squarewise: True
     food_diagonal: False
     death_squarewise: True
     death_diagonal: False
-  layer_sizes: 5, 4
+  brain:
+    layer_sizes: 5, 4
