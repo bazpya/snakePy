@@ -14,7 +14,7 @@ class BrainFactory:
     )
 
     @staticmethod
-    def make(input_size: int, output_size: int):
+    def make(input_size: int, output_size: int) -> keras.Sequential:
         model_params = BrainFactory.model_params
         model_layers = []
 
@@ -36,7 +36,9 @@ class BrainFactory:
         return keras.Sequential(model_layers)
 
     @staticmethod
-    def make_layer(params: Anonym, size: int, input_size: int = None):
+    def make_layer(
+        params: Anonym, size: int, input_size: int = None
+    ) -> keras.layers.Dense:
         if input_size:
             return layers.Dense(
                 units=size,

@@ -16,7 +16,7 @@ class Player:
     _brain: None
     _eye: Eye = None
 
-    def __init__(self, id: int, game: Game, eye: Eye):
+    def __init__(self, id: int, game: Game, eye: Eye) -> None:
         self._game = game
         self._id = id
         self.events = EventHub()
@@ -26,18 +26,18 @@ class Player:
         self._output_layer_size = len(Turn)
         self._brain = BrainFactory.make(input_size, self._output_layer_size)
 
-    def bind(self, game: Game):
+    def bind(self, game: Game) -> None:
         game.events.stepped.subscribe(self._on_stepped)
         game.events.died.subscribe(self._on_died)
 
-    def _on_stepped(self, *args, **kwargs):
+    def _on_stepped(self, *args, **kwargs) -> None:
         self.send_game_input()
 
-    def _on_died(self, game_res: GameResult):
+    def _on_died(self, game_res: GameResult) -> None:
         res = PlayerResult(self._id, game_res)
         self.events.died.emit(res)
 
-    def send_game_input(self):
+    def send_game_input(self) -> None:
         turn = self.decide()
         self._game.turn(turn)
 
@@ -50,8 +50,11 @@ class Player:
         shifted_index = index - 1
         return Turn(shifted_index)
 
-    def play_sync(self):
+    def play_sync(self) -> None:
         self._game.run_sync()
 
-    async def play_async(self, interval: float):
+    async def play_async(self, interval: float) -> None:
         await self._game.run_async(interval)
+
+    # def clone(self):
+    #     pass

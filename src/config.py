@@ -2,16 +2,16 @@ import yaml
 
 
 class Config:
-    _instance = None
+    _file_content = None
 
     @staticmethod
-    def _get():
-        if Config._instance is None:
-            Config._instance = yaml.safe_load(open("config.yaml"))
-        return Config._instance
+    def _get() -> any:
+        if Config._file_content is None:
+            Config._file_content = yaml.safe_load(open("config.yaml"))
+        return Config._file_content
 
     @staticmethod
-    def get(path: str):
+    def get(path: str) -> any:
         obj = Config._get()
         segments = path.split(".")
         for seg in segments:

@@ -6,12 +6,12 @@ class SnakeDiff:
         self.blank: Cell = None
         self.snake: Cell = None
 
-    def set_blank(self, cell: Cell):
+    def set_blank(self, cell: Cell) -> None:
         if self.blank:
             raise ValueError("Diff already has a Blank cell")
         self.blank = cell
 
-    def set_snake(self, cell: Cell):
+    def set_snake(self, cell: Cell) -> None:
         if self.snake:
             raise ValueError("Diff already has a Snake cell")
         self.snake = cell
@@ -23,11 +23,11 @@ class GameDiff(SnakeDiff):
         self.snake: Cell = None
         self.food: Cell = None
 
-    def add(self, snake_diff: SnakeDiff):
+    def add(self, snake_diff: SnakeDiff) -> None:
         self.set_blank(snake_diff.blank)
         self.set_snake(snake_diff.snake)
 
-    def set_food(self, cell):
+    def set_food(self, cell) -> None:
         if self.food:
             raise ValueError("Diff already has a Food cell")
         self.food = cell

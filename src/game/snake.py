@@ -33,16 +33,16 @@ class Snake:
         self._diff = SnakeDiff()
         self._is_dead = False
 
-    def get_head(self):
+    def get_head(self) -> Cell:
         return self._cells[-1]
 
-    def get_tail(self):
+    def get_tail(self) -> Cell:
         return self._cells[0]
 
     def get_length(self):
         return len(self._cells)
 
-    def step(self):
+    def step(self) -> None:
         self._steps_taken += 1
         next = self._get_next_cell()
         if next.is_deadly():
@@ -62,22 +62,22 @@ class Snake:
         self._direction = self._direction_deque()
         return head.get_neighbour(self._direction)
 
-    def _move_head(self, cell: Cell):
+    def _move_head(self, cell: Cell) -> None:
         cell.be_snake()
         self._cells.append(cell)
         self._diff.set_snake(cell)
 
-    def _drag_tail(self):
+    def _drag_tail(self) -> None:
         tail = self._cells.popleft()
         tail.be_blank()
         self._diff.set_blank(tail)
 
-    def _after_step(self):
+    def _after_step(self) -> None:
         if self._events.stepped is not None:
             self._events.stepped.emit(self._diff)
         self._purge_diff()
 
-    def _die(self, cause: CauseOfDeath = CauseOfDeath.steps_taken):
+    def _die(self, cause: CauseOfDeath = CauseOfDeath.steps_taken) -> None:
         if self._is_dead:
             return
         if self._looper:
@@ -91,27 +91,27 @@ class Snake:
             )
             self._events.died.emit(result)
 
-    def _purge_diff(self):
+    def _purge_diff(self) -> None:
         self._diff = SnakeDiff()
 
-    def _get_latest_input(self):
+    def _get_latest_input(self) -> Direction:
         return self._directions[-1] if self._directions else self._direction
 
-    def direction_enque(self, dir: Direction):
+    def _direction_deque(self) -> Direction:
+        return self._directions.popleft() if self._directions else self._direction
+
+    def direction_enque(self, dir: Direction) -> None:
         last = self._get_latest_input()
         if dir.is_aligned(last):
             return
         self._directions.append(dir)
 
-    def _direction_deque(self):
-        return self._directions.popleft() if self._directions else self._direction
-
-    def turn(self, turn: Turn):
+    def turn(self, turn: Turn) -> None:
         latest_input = self._get_latest_input()
         next_dir = latest_input.turn(turn)
         self.direction_enque(next_dir)
 
-    async def run_async(self, interval: float = ms):
+    async def run_async(self, interval: float = ms) -> None:
         self._looper = LooperInterval(
             func=self.step,
             interval=interval,
@@ -120,7 +120,7 @@ class Snake:
         )
         await self._looper.start()
 
-    def run_sync(self):
+    def run_sync(self) -> None:
         self._looper = LooperSync(
             func=self.step,
             iterations=self._steps_to_take,

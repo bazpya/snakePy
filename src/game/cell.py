@@ -10,7 +10,7 @@ class Cell:
         row: int = None,
         col: int = None,
         type: CellType = CellType.blank,
-    ):
+    ) -> None:
         self._row = row
         self._col = col
         self.type = type
@@ -63,7 +63,9 @@ class Cell:
 
     # ====================  Distances  ====================
 
-    def get_distance(self, reciprocal: bool, target: "Cell"):
+    def get_distance(
+        self, reciprocal: bool, target: "Cell"
+    ) -> Tuple[float, float, float]:
         diff_row = target._row - self._row
         diff_col = target._col - self._col
         dist = math.sqrt(diff_row**2 + diff_col**2)
@@ -71,11 +73,11 @@ class Cell:
             diff_row_recip = 1 / diff_row if diff_row else 0
             diff_col_recip = 1 / diff_col if diff_col else 0
             dist_recip = 1 / dist if dist else 0
-            return (diff_row_recip, diff_col_recip, dist_recip)
+            return diff_row_recip, diff_col_recip, dist_recip
         else:
-            return (diff_row, diff_col, dist)
+            return diff_row, diff_col, dist
 
-    def death_distance(self, reciprocal: bool, *dirs):
+    def death_distance(self, reciprocal: bool, *dirs) -> Tuple[float, float, float]:
         if not dirs:
             raise ValueError(self.death_distance.__name__ + " needs some directions")
         runner = self

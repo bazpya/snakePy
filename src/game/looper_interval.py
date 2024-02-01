@@ -17,7 +17,7 @@ class LooperInterval:
         iterations: int = 0,
         end_callback: object = lambda: None,
         args: tuple = (),
-    ):
+    ) -> None:
         self.counter = 0
         self._interval = interval
         self._func = func
@@ -25,7 +25,7 @@ class LooperInterval:
         self._args = args
         self._end_callback = end_callback
 
-    async def start(self):
+    async def start(self) -> int:
         self._should_continue = True
         if self._iterations:
             while self._should_continue and self._iterations > 0:
@@ -37,11 +37,11 @@ class LooperInterval:
         self._end_callback()
         return self.counter
 
-    def stop(self):
+    def stop(self) -> int:
         self._should_continue = False
         return self.counter
 
-    async def _cycle(self):
+    async def _cycle(self) -> None:
         await asyncio.sleep(self._interval)
         self._func(*self._args)
         self.counter += 1

@@ -12,7 +12,7 @@ class Grid:
         self,
         row_count: int,
         col_count: int = 0,
-    ):
+    ) -> None:
         self.row_count = row_count
         self.col_count = col_count if col_count else row_count
         self._cells = []
@@ -20,7 +20,7 @@ class Grid:
         self._link_neighbours()
         self._lay_walls()
 
-    def _populate(self):
+    def _populate(self) -> None:
         for row_index in range(self.row_count):
             row = []
             for col_index in range(self.col_count):
@@ -28,7 +28,7 @@ class Grid:
                 row.append(cell)
             self._cells.append(row)
 
-    def _link_neighbours(self):
+    def _link_neighbours(self) -> None:
         def visit(cell: Cell, ri, ci, acc):
             has_up_neighbour = ri != 0
             has_left_neighbour = ci != 0
@@ -45,7 +45,7 @@ class Grid:
 
         self.iterate_cells(True, visit)
 
-    def _lay_walls(self):
+    def _lay_walls(self) -> None:
         def visit(cell: Cell, ri, ci, acc):
             should_be_wall = ri in [0, self.row_count - 1] or ci in [
                 0,
@@ -56,7 +56,9 @@ class Grid:
 
         self.iterate_cells(True, visit)
 
-    def iterate_cells(self, include_boundaries: bool, visit_func, initial_value=None):
+    def iterate_cells(
+        self, include_boundaries: bool, visit_func, initial_value=None
+    ) -> None:
         row_ind_min = 0 if include_boundaries else 1
         row_ind_max = self.row_count if include_boundaries else self.row_count - 1
         col_ind_min = 0 if include_boundaries else 1
@@ -69,7 +71,7 @@ class Grid:
                 acc = visit_func(cell, ri, ci, acc)
         return acc
 
-    def get_flat(self):
+    def get_flat(self) -> list[Cell]:
         return [x for row in self._cells for x in row]
 
     def _get_blanks(self) -> list[Cell]:

@@ -12,14 +12,14 @@ class LooperSync:
         iterations: int = 0,
         end_callback: object = lambda: None,
         args: tuple = (),
-    ):
+    ) -> None:
         self.counter = 0
         self._func = func
         self._iterations = iterations
         self._args = args
         self._end_callback = end_callback
 
-    def start(self):
+    def start(self) -> int:
         self._should_continue = True
         if self._iterations:
             while self._should_continue and self._iterations > 0:
@@ -31,10 +31,10 @@ class LooperSync:
         self._end_callback()
         return self.counter
 
-    def stop(self):
+    def stop(self) -> int:
         self._should_continue = False
         return self.counter
 
-    def _cycle(self):
+    def _cycle(self) -> None:
         self._func(*self._args)
         self.counter += 1

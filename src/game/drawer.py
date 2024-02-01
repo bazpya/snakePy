@@ -16,10 +16,10 @@ class Drawer:
         CellType.food: "yellow",
     }
 
-    def __init__(self, cell_size: int):
+    def __init__(self, cell_size: int) -> None:
         self._cell_size = cell_size
 
-    def bind(self, game: Game):
+    def bind(self, game: Game) -> None:
         height = game._grid.row_count * self._cell_size
         width = game._grid.col_count * self._cell_size
         game.events.stepped.subscribe(self.draw_diff)
@@ -49,8 +49,8 @@ class Drawer:
             square.setFill(colour)
             square.draw(self._window)
 
-    def draw_diff(self, diff: GameDiff):
+    def draw_diff(self, diff: GameDiff) -> None:
         self._draw(diff.flatten())
 
-    def getMouse(self):
+    def getMouse(self) -> None:
         return self._window.getMouse()

@@ -9,7 +9,7 @@ class EyeFake(Eye):
         super(EyeFake, self).__init__(view)
         self._output: tf.Tensor = None
 
-    def see(self, head: Cell, food: Cell) -> tf:
+    def see(self, head: Cell, food: Cell) -> tf.Tensor:
         if self._output is None:
             return tf.random.normal([self.view_size])
         else:

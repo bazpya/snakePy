@@ -4,14 +4,14 @@ from src.game.global_refs import CauseOfDeath
 
 
 class Result:
-    def serialise(self):
+    def serialise(self) -> str:
         return json.dumps(
             self.__dict__,
             default=self.serialiser_func,
             indent=2,
         )
 
-    def serialiser_func(self, x):
+    def serialiser_func(self, x) -> object:
         if isinstance(x, Enum):
             return x.name
         elif isinstance(x, Result):

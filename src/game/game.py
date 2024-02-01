@@ -21,7 +21,7 @@ class Game:
         col_count: int = 0,
         init_food_count: int = 0,
         steps_to_take: int = 0,
-    ):
+    ) -> None:
         self._grid = Grid(row_count, col_count)
         self._steps_to_take = steps_to_take
         self.events = EventHub()
@@ -31,7 +31,7 @@ class Game:
         self._give_food(self._init_food_count)
         self._bind()
 
-    def _purge_diff(self):
+    def _purge_diff(self) -> None:
         self._diff = GameDiff()
 
     def _give_food(self, count: int = 1) -> Cell:
@@ -57,29 +57,29 @@ class Game:
         s._events.ate.subscribe(self._on_ate)
         s._events.died.subscribe(self._on_died)
 
-    def _on_stepped(self, snake_diff: SnakeDiff):
+    def _on_stepped(self, snake_diff: SnakeDiff) -> None:
         self._diff.add(snake_diff)
         self.events.stepped.emit(self._diff)
         self._purge_diff()
 
-    def _on_ate(self):
+    def _on_ate(self) -> None:
         self._give_food()
         self.events.ate.emit()
 
-    def _on_died(self, snake_res: SnakeResult):
+    def _on_died(self, snake_res: SnakeResult) -> None:
         res = GameResult(self._grid.row_count, self._grid.col_count, snake_res)
         self.events.died.emit(res)
 
-    def run_sync(self):
+    def run_sync(self) -> None:
         self._snake.run_sync()
 
-    async def run_async(self, interval: float = 0.5):
+    async def run_async(self, interval: float = 0.5) -> None:
         await self._snake.run_async(interval)
 
-    def steering_enque(self, dir: Direction):
+    def steering_enque(self, dir: Direction) -> None:
         self._snake.direction_enque(dir)
 
-    def turn(self, turn: Turn):
+    def turn(self, turn: Turn) -> None:
         self._snake.turn(turn)
 
     def get_head(self) -> Cell:

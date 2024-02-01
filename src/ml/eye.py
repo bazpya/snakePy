@@ -10,7 +10,7 @@ class Eye:
         self._recip = view._reciprocate_distances
         self.view_size: int = view.size
 
-    def see(self, head: Cell, food: Cell) -> tf:
+    def see(self, head: Cell, food: Cell) -> tf.Tensor:
         signals = []
         recip = self._recip
 
