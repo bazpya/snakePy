@@ -60,5 +60,7 @@ class BrainFactory:
 
     # todo: unit test
     @staticmethod
-    def clone(model: keras.Sequential) -> keras.Sequential:
-        return keras.models.clone_model(model)
+    def clone(original: keras.Sequential) -> keras.Sequential:
+        clone = keras.models.clone_model(original)
+        clone.set_weights(original.get_weights())
+        return clone
