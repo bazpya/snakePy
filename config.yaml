@@ -6,7 +6,7 @@ game:
   food_count: 80
   interval: 0.03
 ml:
-  use_fake_player: False
+  fake_player: False
   player_count: 1
   view:
     reciprocate_distances: False

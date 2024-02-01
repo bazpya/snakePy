@@ -16,7 +16,7 @@ cell_size = Config.get("game.cell_size")
 food_count = Config.get("game.food_count")
 interval = Config.get("game.interval")
 
-use_fake_player = Config.get("ml.use_fake_player")
+fake_player = Config.get("ml.fake_player")
 player_count = Config.get("ml.player_count")
 
 view = View(
@@ -45,7 +45,7 @@ drawers: list[Drawer] = []
 
 def make_coroutine(has_ui: bool, id: int):
     game = Game(row_count, col_count, food_count)
-    if use_fake_player:
+    if fake_player:
         player = PlayerFake(game, i)
     else:
         eye = Eye(view)
