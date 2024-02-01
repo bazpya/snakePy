@@ -13,7 +13,7 @@ class Player_(Test_ml_):
         activation=tf.keras.activations.linear,
         kernel_initialiser=tf.keras.initializers.LecunNormal,
         use_bias=False,
-        bias_initialiser=tf.keras.initializers.zeros,
+        bias_initialiser=tf.keras.initializers.RandomNormal,
     )
 
     def make_sut(self):
