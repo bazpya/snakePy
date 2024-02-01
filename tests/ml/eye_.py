@@ -21,4 +21,4 @@ class Eye_(Test_ml_):
         head = game.get_head()
         food = game._grid.get_random_blanks(1)[0]
         actual = sut.see(head, food).shape
-        self.assertEqual(actual, [view.size])
+        self.assertEqual(actual, [2, view.size])
