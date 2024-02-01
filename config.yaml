@@ -15,3 +15,4 @@ ml:
     food_diagonal: False
     death_squarewise: True
     death_diagonal: False
+  layer_sizes: 5, 4

@@ -1,12 +1,13 @@
 import keras
 from keras import layers
 import tensorflow as tf
+from src.config import Config
 from src.anonym import Anonym
 
 
 class BrainFactory:
     model_params = Anonym(
-        layer_sizes=[2, 3, 4, 5],
+        layer_sizes= Config.get_ints("ml.layer_sizes"),
         activation=tf.keras.activations.linear,
         kernel_initialiser=tf.keras.initializers.LecunNormal,
         use_bias=False,

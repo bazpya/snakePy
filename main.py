@@ -9,12 +9,16 @@ from src.config import Config
 from src.game.drawer import Drawer
 from src.game.game import Game
 
+# ====================  Game Config  ====================
+
 use_ui = Config.get("game.use_ui")
 row_count = Config.get("game.row_count")
 col_count = Config.get("game.col_count")
 cell_size = Config.get("game.cell_size")
 food_count = Config.get("game.food_count")
 interval = Config.get("game.interval")
+
+# ====================  ML Config  ====================
 
 fake_player = Config.get("ml.fake_player")
 player_count = Config.get("ml.player_count")

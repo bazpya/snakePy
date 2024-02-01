@@ -17,3 +17,11 @@ class Config:
         for seg in segments:
             obj = obj[seg]
         return obj
+
+    @staticmethod
+    def get_ints(path: str) -> any:
+        string: str = Config.get(path)
+        splitted = string.split(",")
+        trimmed = [s.strip() for s in splitted]
+        ints = [int(x) for x in trimmed]
+        return ints
