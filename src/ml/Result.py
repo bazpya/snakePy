@@ -5,9 +5,11 @@ class PlayerResult(GameResult):
     def __init__(
         self,
         id: int,
+        score: float,
         game_res: GameResult,
     ) -> None:
         self.id = id
+        self.score = score
         self.game = game_res
 
 

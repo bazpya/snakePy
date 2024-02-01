@@ -34,7 +34,7 @@ class Player:
         self.send_game_input()
 
     def _on_died(self, game_res: GameResult) -> None:
-        res = PlayerResult(self._id, game_res)
+        res = PlayerResult(self._id, self.score(game_res), game_res)
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:
@@ -62,3 +62,6 @@ class Player:
         brain = BrainFactory.clone(self._brain)
         player._brain = brain
         return player
+
+    def score(self, game_res: GameResult) -> float:
+        return game_res.snake.length + game_res.snake.steps_taken / 50
