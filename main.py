@@ -1,5 +1,6 @@
 import asyncio
 import time
+from src.ml.eye_fake import EyeFake
 from src.ml.eye import Eye
 from src.ml.view import View
 from src.ml.player import Player
@@ -53,7 +54,8 @@ drawers: list[Drawer] = []
 def make_coroutine(has_ui: bool, id: int):
     game = Game(row_count, col_count, food_count, max_steps)
     if fake_player:
-        player = PlayerFake(game, i)
+        fake_eye = EyeFake(view)
+        player = PlayerFake(i, game, fake_eye)
     else:
         eye = Eye(view)
         player = Player(i, game, eye)

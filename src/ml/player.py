@@ -64,4 +64,9 @@ class Player:
         return player
 
     def score(self, game_res: GameResult) -> float:
-        return game_res.snake.length + game_res.snake.steps_taken / 50
+        # fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
+        return (
+            game_res.snake.length
+            + game_res.snake.steps_taken / 50
+            + game_res.snake.cells_visited / (game_res.row_count * game_res.col_count)
+        )

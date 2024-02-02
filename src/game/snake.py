@@ -11,6 +11,7 @@ from src.game.looper_sync import LooperSync
 
 class Snake:
     _cells: deque[Cell]
+    _cells_visited: set[Cell]
     _direction: Direction
     _events: EventHub
     _steps_taken: int
@@ -32,6 +33,7 @@ class Snake:
         self._directions = deque()
         self._diff = SnakeDiff()
         self._is_dead = False
+        self._cells_visited = set([only_cell])
 
     def get_head(self) -> Cell:
         return self._cells[-1]
@@ -63,6 +65,7 @@ class Snake:
         return head.get_neighbour(self._direction)
 
     def _move_head(self, cell: Cell) -> None:
+        self._cells_visited.add(cell)
         cell.be_snake()
         self._cells.append(cell)
         self._diff.set_snake(cell)
@@ -88,6 +91,7 @@ class Snake:
                 self._steps_taken,
                 self.get_length(),
                 cause,
+                len(self._cells_visited),
             )
             self._events.died.emit(result)
 

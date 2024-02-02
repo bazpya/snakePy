@@ -26,10 +26,12 @@ class SnakeResult(Result):
         steps_taken: int,
         length: int,
         cause_of_death: CauseOfDeath,
+        cells_visited: int,
     ) -> None:
         self.steps_taken = steps_taken
         self.length = length
         self.cause_of_death = cause_of_death
+        self.cells_visited = cells_visited
 
 
 class GameResult(SnakeResult):

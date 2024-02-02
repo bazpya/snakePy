@@ -97,3 +97,13 @@ class Snake_step_(Snake_sync_):
             sut.step()
         except Exception:
             self.fail("Snake death event threw an error")
+
+    # ===============================  step-any  ===============================
+
+    def test_step_adds_to_visited_cells(self):
+        cells = CellFactory.make_list("bbbw")
+        CellFactory.link(cells)
+        origin = cells[0]
+        sut = Snake(origin)
+        sut.run_sync()
+        self.assertSetEqual(sut._cells_visited, set(cells[:-1]))
