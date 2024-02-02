@@ -63,7 +63,7 @@ class Player:
         player._brain = brain
         return player
 
-    def score(self, game_res: GameResult) -> float:
+    def get_fitness(self, game_res: GameResult) -> float:
         # fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
         return (
             game_res.snake.length

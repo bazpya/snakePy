@@ -28,7 +28,7 @@ class PlayerFake:
         self.send_game_input()
 
     def _on_died(self, game_res: GameResult) -> None:
-        res = PlayerResult(self._id, self.score(game_res), game_res)
+        res = PlayerResult(self._id, self.get_fitness(game_res), game_res)
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:
@@ -47,7 +47,7 @@ class PlayerFake:
     def clone(self, id: int, game: Game, eye: Eye) -> "PlayerFake":
         return PlayerFake(id, game, eye)
 
-    def score(self, game_res: GameResult) -> float:
+    def get_fitness(self, game_res: GameResult) -> float:
         return (
             game_res.snake.length
             + game_res.snake.steps_taken / 50
