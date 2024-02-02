@@ -8,7 +8,6 @@ game:
 ml:
   player:
     fake: False
-    count: 4
     max_steps: 50
   grid_view:
     reciprocate_distances: False
@@ -18,3 +17,7 @@ ml:
     death_diagonal: False
   brain:
     layer_sizes: "4, 4" # CSV string
+  generation:
+    population: 4
+  evolution:
+    selection_ratio: 0.4

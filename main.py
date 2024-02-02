@@ -22,7 +22,6 @@ interval = Config.get("game.interval")
 # ====================  ML Config  ====================
 
 fake_player = Config.get("ml.player.fake")
-player_count = Config.get("ml.player.count")
 max_steps = Config.get("ml.player.max_steps")
 
 view = View(
@@ -33,7 +32,12 @@ view = View(
     death_diagonal=Config.get("ml.grid_view.death_diagonal"),
 )
 
-# ====================  Race  ====================
+# ====================  Generation config  ====================
+
+population = Config.get("ml.generation.population")
+
+# ====================  Evolution config  ====================
+selection_ratio = Config.get("ml.evolution.selection_ratio")
 
 result: list[PlayerResult] = []
 
@@ -77,7 +81,7 @@ def make_coroutine(has_ui: bool, id: int):
         return sync_func()
 
 
-for i in range(0, player_count):
+for i in range(0, population):
     if use_ui:
         coroutine = make_coroutine(True, i)
     else:
