@@ -1,14 +1,8 @@
 import asyncio
 import time
-from src.ml.eye_fake import EyeFake
-from src.ml.eye import Eye
+from src.ml.generation import Generation, GenerationParam
 from src.ml.view import View
-from src.ml.player import Player
-from src.ml.Result import PlayerResult
-from src.ml.player_fake import PlayerFake
 from src.config import Config
-from src.game.drawer import Drawer
-from src.game.game import Game
 
 # ====================  Game Config  ====================
 
@@ -39,59 +33,26 @@ population = Config.get("ml.generation.population")
 # ====================  Evolution config  ====================
 selection_ratio = Config.get("ml.evolution.selection_ratio")
 
-result: list[PlayerResult] = []
 
+gen_params = GenerationParam(
+    population,
+    row_count,
+    col_count,
+    max_steps,
+    fake_player,
+    view,
+    use_ui,
+    cell_size,
+    interval,
+)
 
-def collect_res(res: PlayerResult):
-    result.append(res)
-
-
-def print_res():
-    for res in result:
-        print(res.serialise())
-
-
-coroutines = []
-drawers: list[Drawer] = []
-
-
-def make_coroutine(has_ui: bool, id: int):
-    game = Game(row_count, col_count, food_count, max_steps)
-    if fake_player:
-        fake_eye = EyeFake(view)
-        player = PlayerFake(i, game, fake_eye)
-    else:
-        eye = Eye(view)
-        player = Player(i, game, eye)
-    player.events.died.subscribe(collect_res)
-
-    async def async_func():
-        drawer = Drawer(cell_size)
-        drawer.bind(game)
-        drawers.append(drawer)
-        await player.play_async(interval)
-        # drawer.getMouse()
-
-    async def sync_func():
-        player.play_sync()
-
-    if has_ui:
-        return async_func()
-    else:
-        return sync_func()
-
-
-for i in range(0, population):
-    if use_ui:
-        coroutine = make_coroutine(True, i)
-    else:
-        coroutine = make_coroutine(False, i)
-    coroutines.append(coroutine)
+generation = Generation(gen_params)
 
 
 async def func():
-    batch = asyncio.gather(*coroutines)
-    await batch
+    res = await generation.run()
+    for r in res:
+        print(r.serialise())
 
 
 time_start = time.time()
@@ -100,5 +61,4 @@ time_end = time.time()
 
 time_diff = time_end - time_start
 
-print_res()
 print(f"Time taken: {time_diff} seconds")

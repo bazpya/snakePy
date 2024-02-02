@@ -34,7 +34,7 @@ class Player:
         self.send_game_input()
 
     def _on_died(self, game_res: GameResult) -> None:
-        res = PlayerResult(self._id, self.score(game_res), game_res)
+        res = PlayerResult(self._id, self.get_fitness(game_res), game_res)
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:

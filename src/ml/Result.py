@@ -1,3 +1,4 @@
+from src.game import Result
 from src.game.Result import GameResult
 
 
@@ -13,9 +14,17 @@ class PlayerResult(GameResult):
         self.game = game_res
 
 
-class GenerationResult:
-    pass
+# class GenerationResult(Result):
+#     max_fitness: float = 0
+#     min_fitness: float = 0
+#     top_players: list = []
+
+#     def __init__(
+#         self,
+#         id: int,
+#     ) -> None:
+#         self.id = id
 
 
-class EvolutionResult:
-    pass
+# class EvolutionResult(Result):
+#     pass
