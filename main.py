@@ -46,13 +46,12 @@ gen_params = GenerationParam(
     interval,
 )
 
-generation = Generation(gen_params)
+generation = Generation(1, gen_params)
 
 
 async def func():
     res = await generation.run()
-    for r in res:
-        print(r.serialise())
+    print(res.serialise())
 
 
 time_start = time.time()

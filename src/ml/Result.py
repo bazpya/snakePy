@@ -1,5 +1,4 @@
-from src.game import Result
-from src.game.Result import GameResult
+from src.game.Result import Result, GameResult
 
 
 class PlayerResult(GameResult):
@@ -14,16 +13,18 @@ class PlayerResult(GameResult):
         self.game = game_res
 
 
-# class GenerationResult(Result):
-#     max_fitness: float = 0
-#     min_fitness: float = 0
-#     top_players: list = []
-
-#     def __init__(
-#         self,
-#         id: int,
-#     ) -> None:
-#         self.id = id
+class GenerationResult(Result):
+    def __init__(
+        self,
+        id: int,
+        results: list[PlayerResult],
+    ) -> None:
+        self.id = id
+        sorted_res = sorted(results, key=lambda x: x.fitness, reverse=True)
+        self.top_results = sorted_res
+        self.top_ids = [r.id for r in sorted_res]
+        self.max_fitness = sorted_res[0].fitness
+        self.min_fitness = sorted_res[-1].fitness
 
 
 # class EvolutionResult(Result):

@@ -6,7 +6,7 @@ from src.ml.player import Player
 from src.ml.player_fake import PlayerFake
 from src.game.drawer import Drawer
 from src.game.game import Game
-from src.ml.Result import PlayerResult
+from src.ml.Result import PlayerResult, GenerationResult
 
 
 class GenerationParam:
@@ -35,15 +35,16 @@ class GenerationParam:
 
 class Generation:
 
-    def __init__(self, param: GenerationParam) -> None:
+    def __init__(self, id: int, param: GenerationParam) -> None:
+        self._id = id
         self._params = param
-        self._player_res: list[PlayerResult] = []
         self._coroutines = []
         self._drawers: list[Drawer] = []
         for i in range(self._params.population):
             coroutine = self.make_coroutine(i)
             self._coroutines.append(coroutine)
-        hasan = 5
+        self._player_results: list[PlayerResult] = []
+        
 
     def make_coroutine(self, id: int):
         game = Game(
@@ -75,8 +76,8 @@ class Generation:
             return sync_func()
 
     def add_res(self, res: PlayerResult):
-        self._player_res.append(res)
+        self._player_results.append(res)
 
     async def run(self):
         await asyncio.gather(*self._coroutines)
-        return self._player_res
+        return GenerationResult(self._id, self._player_results)
