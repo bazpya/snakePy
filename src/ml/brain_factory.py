@@ -7,14 +7,13 @@ from src.anonym import Anonym
 
 class BrainFactory:
     model_params = Anonym(
-        layer_sizes= Config.get_ints("ml.brain.layer_sizes"),
+        layer_sizes=Config.get_ints("ml.brain.layer_sizes"),
         activation=tf.keras.activations.linear,
         kernel_initialiser=tf.keras.initializers.LecunNormal,
         use_bias=False,
         bias_initialiser=tf.keras.initializers.RandomNormal,
     )
 
-    # todo: look into compiling models for performance
     @staticmethod
     def make(input_size: int, output_size: int) -> keras.Sequential:
         model_params = BrainFactory.model_params
@@ -59,7 +58,6 @@ class BrainFactory:
                 bias_initializer=params.bias_initialiser,
             )
 
-    # todo: unit test
     @staticmethod
     def clone(original: keras.Sequential) -> keras.Sequential:
         clone = keras.models.clone_model(original)

@@ -19,8 +19,8 @@ class Game:
         self,
         row_count: int,
         col_count: int = 0,
-        init_food_count: int = 0,  # todo: Swap with steps_to_take
         steps_to_take: int = 0,
+        init_food_count: int = 0,
     ) -> None:
         self._grid = Grid(row_count, col_count)
         self._steps_to_take = steps_to_take

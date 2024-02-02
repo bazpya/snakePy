@@ -44,7 +44,8 @@ class Player:
     def decide(self) -> Turn:
         head = self._game.get_head()
         food = self._game.get_current_food()
-        brain_input = self._eye.see(head, food)
+        eye_output = self._eye.see(head, food)
+        brain_input = tf.stack([eye_output, eye_output])  # just add an extra dimension
         brain_output = self._brain.predict(brain_input)[0]
         index = tf.math.argmax(brain_output).numpy()
         shifted_index = index - 1
@@ -56,7 +57,6 @@ class Player:
     async def play_async(self, interval: float) -> None:
         await self._game.run_async(interval)
 
-    # todo: unit test
     def clone(self, id: int, game: Game, eye: Eye) -> "Player":
         player = Player(id, game, eye)
         brain = BrainFactory.clone(self._brain)

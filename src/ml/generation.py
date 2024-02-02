@@ -49,7 +49,6 @@ class Generation:
         game = Game(
             self._params.row_count,
             self._params.col_count,
-            0,
             self._params.max_steps,
         )
         if self._params.fake_player:

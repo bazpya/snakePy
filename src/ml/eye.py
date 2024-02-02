@@ -63,5 +63,4 @@ class Eye:
                 ]
             )
 
-        res = tf.convert_to_tensor(signals)
-        return tf.stack([res, res])  # just add an extra dimension
+        return tf.convert_to_tensor(signals)
