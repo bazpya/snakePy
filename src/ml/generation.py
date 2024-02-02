@@ -13,6 +13,7 @@ class GenerationParam:
     def __init__(
         self,
         population: int,
+        selection_count: int,
         row_count: int,
         col_count: int,
         max_steps: int,
@@ -23,6 +24,7 @@ class GenerationParam:
         interval: float,
     ) -> None:
         self.population = population
+        self.selection_count = selection_count
         self.row_count = row_count
         self.col_count = col_count
         self.max_steps = max_steps
@@ -44,7 +46,6 @@ class Generation:
             coroutine = self.make_coroutine(i)
             self._coroutines.append(coroutine)
         self._player_results: list[PlayerResult] = []
-        
 
     def make_coroutine(self, id: int):
         game = Game(
@@ -80,4 +81,8 @@ class Generation:
 
     async def run(self):
         await asyncio.gather(*self._coroutines)
-        return GenerationResult(self._id, self._player_results)
+        return GenerationResult(
+            self._id,
+            self._params.selection_count,
+            self._player_results,
+        )

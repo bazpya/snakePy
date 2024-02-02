@@ -1,4 +1,5 @@
 import asyncio
+import math
 import time
 from src.ml.generation import Generation, GenerationParam
 from src.ml.view import View
@@ -31,11 +32,17 @@ view = View(
 population = Config.get("ml.generation.population")
 
 # ====================  Evolution config  ====================
+
 selection_ratio = Config.get("ml.evolution.selection_ratio")
+selection_count = math.floor(population * selection_ratio)
+
+if selection_count < 1:
+    raise ValueError("No player survives the harsh selection ratio")
 
 
 gen_params = GenerationParam(
     population,
+    selection_count,
     row_count,
     col_count,
     max_steps,

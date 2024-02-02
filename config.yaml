@@ -18,6 +18,6 @@ ml:
   brain:
     layer_sizes: "4, 4" # CSV string
   generation:
-    population: 4
+    population: 6
   evolution:
     selection_ratio: 0.4
