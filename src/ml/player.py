@@ -1,3 +1,4 @@
+import asyncio
 import tensorflow as tf
 from src.ml.brain_factory import BrainFactory
 from src.ml.eye import Eye
@@ -53,6 +54,10 @@ class Player:
 
     def play_sync(self) -> None:
         self._game.run_sync()
+
+    async def play_awaitable_sync(self) -> None:
+        loop = asyncio.get_event_loop()
+        await loop.run_in_executor(None, self.play_sync)
 
     async def play_async(self, interval: float) -> None:
         await self._game.run_async(interval)

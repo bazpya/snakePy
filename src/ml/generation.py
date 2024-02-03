@@ -61,10 +61,6 @@ class Generation:
             player = Player(id, game, eye)
         player.events.died.subscribe(self.add_res)
 
-        async def sync_to_async():
-            loop = asyncio.get_event_loop()
-            await loop.run_in_executor(None, player.play_sync)
-
         async def async_func():
             drawer = Drawer(self._params.cell_size)
             drawer.bind(game)
@@ -75,7 +71,7 @@ class Generation:
         if self._params.use_ui:
             return async_func()
         else:
-            return sync_to_async()
+            return player.play_awaitable_sync()
 
     def add_res(self, res: PlayerResult):
         self._player_results.append(res)
