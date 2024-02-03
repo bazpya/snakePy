@@ -45,7 +45,7 @@ class Player:
         head = self._game.get_head()
         food = self._game.get_current_food()
         eye_output = self._eye.see(head, food)
-        brain_input = tf.stack([eye_output, eye_output])  # just add an extra dimension
+        brain_input = eye_output[None, ...]  # just add an extra dimension
         brain_output = self._brain.predict(brain_input)[0]
         index = tf.math.argmax(brain_output).numpy()
         shifted_index = index - 1
