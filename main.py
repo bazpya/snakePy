@@ -5,35 +5,37 @@ from src.ml.generation import Generation, GenerationSpecs
 from src.ml.view import View
 from src.config import Config
 
+config = Config.get()
+
 # ====================  Game Config  ====================
 
-use_ui = Config.get("game.use_ui")
-row_count = Config.get("game.row_count")
-col_count = Config.get("game.col_count")
-cell_size = Config.get("game.cell_size")
-food_count = Config.get("game.food_count")
-interval = Config.get("game.interval")
+use_ui = config.game.use_ui
+row_count = config.game.row_count
+col_count = config.game.col_count
+cell_size = config.game.cell_size
+food_count = config.game.food_count
+interval = config.game.interval
 
 # ====================  ML Config  ====================
 
-fake_player = Config.get("ml.player.fake")
-max_steps = Config.get("ml.player.max_steps")
+fake_player = config.ml.player.fake
+max_steps = config.ml.player.max_steps
 
 view = View(
-    reciprocate_distances=Config.get("ml.grid_view.reciprocate_distances"),
-    food_squarewise=Config.get("ml.grid_view.food_squarewise"),
-    food_diagonal=Config.get("ml.grid_view.food_diagonal"),
-    death_squarewise=Config.get("ml.grid_view.death_squarewise"),
-    death_diagonal=Config.get("ml.grid_view.death_diagonal"),
+    reciprocate_distances=config.ml.grid_view.reciprocate_distances,
+    food_squarewise=config.ml.grid_view.food_squarewise,
+    food_diagonal=config.ml.grid_view.food_diagonal,
+    death_squarewise=config.ml.grid_view.death_squarewise,
+    death_diagonal=config.ml.grid_view.death_diagonal,
 )
 
 # ====================  Generation config  ====================
 
-population = Config.get("ml.generation.population")
+population = config.ml.generation.population
 
 # ====================  Evolution config  ====================
 
-selection_ratio = Config.get("ml.evolution.selection_ratio")
+selection_ratio = config.ml.evolution.selection_ratio
 selection_count = math.floor(population * selection_ratio)
 
 if selection_count < 1:

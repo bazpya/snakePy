@@ -1,27 +1,21 @@
 import yaml
+from src.tree import Tree
 
 
 class Config:
-    _file_content = None
+    _dict = None
 
     @staticmethod
     def _get() -> any:
-        if Config._file_content is None:
-            Config._file_content = yaml.safe_load(open("config.yaml"))
-        return Config._file_content
+        if Config._dict is None:
+            Config._dict = yaml.safe_load(open("config.yaml"))
+        return Config._dict
 
     @staticmethod
-    def get(path: str) -> any:
+    def get() -> any:
         obj = Config._get()
-        segments = path.split(".")
-        for seg in segments:
-            obj = obj[seg]
-        return obj
+        return Tree(obj)
 
     @staticmethod
-    def get_ints(path: str) -> any:
-        string: str = Config.get(path)
-        splitted = string.split(",")
-        trimmed = [s.strip() for s in splitted]
-        ints = [int(x) for x in trimmed]
-        return ints
+    def parse_ints(string: str) -> any:
+        return [int(x) for x in string.split(",")]
