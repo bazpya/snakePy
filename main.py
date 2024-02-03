@@ -1,7 +1,7 @@
 import asyncio
 import math
 import time
-from src.ml.generation import Generation, GenerationParam
+from src.ml.generation import Generation, GenerationSpecs
 from src.ml.view import View
 from src.config import Config
 
@@ -40,7 +40,7 @@ if selection_count < 1:
     raise ValueError("No player survives the harsh selection ratio")
 
 
-gen_params = GenerationParam(
+generation_specs = GenerationSpecs(
     population,
     selection_count,
     row_count,
@@ -53,7 +53,7 @@ gen_params = GenerationParam(
     interval,
 )
 
-generation = Generation(1, gen_params)
+generation = Generation(1, generation_specs)
 
 
 async def func():

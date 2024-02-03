@@ -9,7 +9,7 @@ from src.game.game import Game
 from src.ml.Result import PlayerResult, GenerationResult
 
 
-class GenerationParam:
+class GenerationSpecs:
     def __init__(
         self,
         population: int,
@@ -37,38 +37,38 @@ class GenerationParam:
 
 class Generation:
 
-    def __init__(self, id: int, param: GenerationParam) -> None:
+    def __init__(self, id: int, specs: GenerationSpecs) -> None:
         self._id = id
-        self._params = param
+        self._specs = specs
         self._coroutines = []
         self._drawers: list[Drawer] = []
-        for i in range(self._params.population):
+        for i in range(self._specs.population):
             coroutine = self.make_coroutine(i)
             self._coroutines.append(coroutine)
         self._player_results: list[PlayerResult] = []
 
     def make_coroutine(self, id: int):
         game = Game(
-            self._params.row_count,
-            self._params.col_count,
-            self._params.max_steps,
+            self._specs.row_count,
+            self._specs.col_count,
+            self._specs.max_steps,
         )
-        if self._params.fake_player:
-            fake_eye = EyeFake(self._params.view)
+        if self._specs.fake_player:
+            fake_eye = EyeFake(self._specs.view)
             player = PlayerFake(id, game, fake_eye)
         else:
-            eye = Eye(self._params.view)
+            eye = Eye(self._specs.view)
             player = Player(id, game, eye)
         player.events.died.subscribe(self.add_res)
 
         async def async_func():
-            drawer = Drawer(self._params.cell_size)
+            drawer = Drawer(self._specs.cell_size)
             drawer.bind(game)
             self._drawers.append(drawer)
-            await player.play_async(self._params.interval)
+            await player.play_async(self._specs.interval)
             # drawer.getMouse()
 
-        if self._params.use_ui:
+        if self._specs.use_ui:
             return async_func()
         else:
             return player.play_awaitable_sync()
@@ -80,6 +80,6 @@ class Generation:
         await asyncio.gather(*self._coroutines)
         return GenerationResult(
             self._id,
-            self._params.selection_count,
+            self._specs.selection_count,
             self._player_results,
         )
