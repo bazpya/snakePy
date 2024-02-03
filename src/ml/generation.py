@@ -62,7 +62,7 @@ class Generation:
         player.events.died.subscribe(self.add_res)
 
         async def sync_func():
-            player.play_sync()
+            player.play_sync()  # todo: this may invoke immediately!!!
 
         async def async_func():
             drawer = Drawer(self._params.cell_size)
