@@ -6,17 +6,18 @@ game:
   food_count: 80
   interval: 0.03
 ml:
+  evolution:
+    selection_ratio: 0.4
+    generations: 2
+  generation:
+    population: 6
   player:
     max_steps: 50
+  brain:
+    layer_sizes: "4" # CSV string
   grid_view:
     reciprocate_distances: False
     food_squarewise: True
     food_diagonal: False
     death_squarewise: True
     death_diagonal: False
-  brain:
-    layer_sizes: "4" # CSV string
-  generation:
-    population: 6
-  evolution:
-    selection_ratio: 0.4
