@@ -2,9 +2,7 @@ import asyncio
 from src.game.result import Result
 from src.ml.generation_spec import GenerationSpec
 from src.ml.eye import Eye
-from src.ml.eye_fake import EyeFake
 from src.ml.player import Player, PlayerResult
-from src.ml.player_fake import PlayerFake
 from src.game.drawer import Drawer
 from src.game.game import Game
 
@@ -43,12 +41,8 @@ class Generation:
             self._specs.col_count,
             self._specs.max_steps,
         )
-        if self._specs.fake_player:
-            fake_eye = EyeFake(self._specs.view)
-            player = PlayerFake(id, game, fake_eye)
-        else:
-            eye = Eye(self._specs.view)
-            player = Player(id, game, eye)
+        eye = Eye(self._specs.view)
+        player = Player(id, game, eye)
         player.events.died.subscribe(self.add_res)
 
         async def async_func():

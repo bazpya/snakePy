@@ -7,7 +7,6 @@ game:
   interval: 0.03
 ml:
   player:
-    fake: False
     max_steps: 50
   grid_view:
     reciprocate_distances: False
@@ -16,7 +15,7 @@ ml:
     death_squarewise: True
     death_diagonal: False
   brain:
-    layer_sizes: "4, 4" # CSV string
+    layer_sizes: "4" # CSV string
   generation:
     population: 6
   evolution:
