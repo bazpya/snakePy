@@ -4,17 +4,15 @@ from src.tree import Tree
 
 class Config:
     _dict = None
+    _tree = None
 
     @staticmethod
-    def _get() -> any:
-        if Config._dict is None:
-            Config._dict = yaml.safe_load(open("config.yaml"))
-        return Config._dict
-
-    @staticmethod
-    def get() -> any:
-        obj = Config._get()
-        return Tree(obj)
+    def get() -> Tree:
+        if Config._tree is None:
+            _dict = yaml.safe_load(open("config.yaml"))
+            tree = Tree(_dict)
+            Config._tree = tree
+        return Config._tree
 
     @staticmethod
     def parse_ints(string: str) -> any:
