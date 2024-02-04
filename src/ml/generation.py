@@ -1,5 +1,5 @@
 import asyncio
-from src.ml.view import View
+from src.ml.generation_spec import GenerationSpec
 from src.ml.eye import Eye
 from src.ml.eye_fake import EyeFake
 from src.ml.player import Player
@@ -9,35 +9,8 @@ from src.game.game import Game
 from src.ml.Result import PlayerResult, GenerationResult
 
 
-class GenerationSpecs:
-    def __init__(
-        self,
-        population: int,
-        selection_count: int,
-        row_count: int,
-        col_count: int,
-        max_steps: int,
-        fake_player: bool,
-        view: View,
-        use_ui: bool,
-        cell_size: int,
-        interval: float,
-    ) -> None:
-        self.population = population
-        self.selection_count = selection_count
-        self.row_count = row_count
-        self.col_count = col_count
-        self.max_steps = max_steps
-        self.fake_player = fake_player
-        self.view = view
-        self.use_ui = use_ui
-        self.cell_size = cell_size
-        self.interval = interval
-
-
 class Generation:
-
-    def __init__(self, id: int, specs: GenerationSpecs) -> None:
+    def __init__(self, id: int, specs: GenerationSpec) -> None:
         self._id = id
         self._specs = specs
         self._coroutines = []
