@@ -2,8 +2,7 @@ import asyncio
 import tensorflow as tf
 from src.ml.brain_factory import BrainFactory
 from src.ml.eye import Eye
-from src.ml.Result import PlayerResult
-from src.game.Result import GameResult
+from src.game.result import GameResult
 from src.game.event_hub import EventHub
 from src.game.game import Game
 from src.game.direction import Turn
@@ -75,3 +74,14 @@ class Player:
             + game_res.snake.steps_taken / 50
             + game_res.snake.cells_visited / (game_res.row_count * game_res.col_count)
         )
+
+class PlayerResult(GameResult):
+    def __init__(
+        self,
+        id: int,
+        fitness: float,
+        game_res: GameResult,
+    ) -> None:
+        self.id = id
+        self.fitness = fitness
+        self.game = game_res

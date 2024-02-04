@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 from src.game.cell import Cell
 from src.game.direction import Direction
 from src.game.snake import Snake
-from src.game.Result import SnakeResult
+from src.game.result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory
 from tests.game.snake_ import Snake_sync_
 

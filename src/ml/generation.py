@@ -1,12 +1,12 @@
 import asyncio
+from src.game.result import Result
 from src.ml.generation_spec import GenerationSpec
 from src.ml.eye import Eye
 from src.ml.eye_fake import EyeFake
-from src.ml.player import Player
+from src.ml.player import Player, PlayerResult
 from src.ml.player_fake import PlayerFake
 from src.game.drawer import Drawer
 from src.game.game import Game
-from src.ml.Result import PlayerResult, GenerationResult
 
 
 class Generation:
@@ -56,3 +56,18 @@ class Generation:
             self._specs.selection_count,
             self._player_results,
         )
+
+
+class GenerationResult(Result):
+    def __init__(
+        self,
+        id: int,
+        selection_count: int,
+        results: list[PlayerResult],
+    ) -> None:
+        self.id = id
+        sorted_res = sorted(results, key=lambda x: x.fitness, reverse=True)
+        self.top_results = sorted_res[:selection_count]
+        # self.top_ids = [r.id for r in sorted_res]
+        self.max_fitness = sorted_res[0].fitness
+        self.min_fitness = sorted_res[-1].fitness

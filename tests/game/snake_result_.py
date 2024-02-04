@@ -1,6 +1,6 @@
 from src.game.global_refs import CauseOfDeath
 from src.game.snake import Snake
-from src.game.Result import SnakeResult
+from src.game.result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory
 from tests.game.snake_ import Snake_sync_
 

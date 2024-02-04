@@ -1,6 +1,6 @@
 from src.game.grid import Grid
 from src.game.diff import GameDiff, SnakeDiff
-from src.game.Result import GameResult, SnakeResult
+from src.game.result import GameResult, SnakeResult
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub
 from src.game.cell import Cell

@@ -1,7 +1,7 @@
 from collections import deque
 from src.game.diff import SnakeDiff
 from src.game.global_refs import CauseOfDeath
-from src.game.Result import SnakeResult
+from src.game.result import SnakeResult
 from src.game.cell import Cell
 from src.game.direction import Direction, Turn
 from src.game.event_hub import EventHub

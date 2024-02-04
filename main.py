@@ -1,6 +1,7 @@
 import asyncio
 import time
-from src.ml.generation import Generation, GenerationSpec
+from src.ml.generation import Generation
+from src.ml.generation_spec import GenerationSpec
 
 spec = GenerationSpec.get()
 

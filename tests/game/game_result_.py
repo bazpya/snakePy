@@ -1,6 +1,6 @@
 from src.game.global_refs import CauseOfDeath
 from src.game.direction import Turn
-from src.game.Result import GameResult
+from src.game.result import GameResult
 from src.game.snake import Snake
 from tests.game.game_ import Game_
 from tests.game.helper.cell_factory import CellFactory

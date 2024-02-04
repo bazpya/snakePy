@@ -1,7 +1,7 @@
 import random
 from src.ml.eye import Eye
-from src.ml.Result import PlayerResult
-from src.game.Result import GameResult
+from src.ml.player import PlayerResult
+from src.game.result import GameResult
 from src.game.event_hub import EventHub
 from src.game.game import Game
 from src.game.direction import Turn
