@@ -10,15 +10,32 @@ from src.game.game import Game
 
 
 class Generation:
-    def __init__(self, id: int, specs: GenerationSpec) -> None:
+    def __init__(
+        self, id: int, specs: GenerationSpec, parents: list[Player] = []
+    ) -> None:
         self._id = id
         self._specs = specs
-        self._coroutines = []
+        self._players: list[Player] = []
         self._drawers: list[Drawer] = []
+        self._coroutines = []
+        self._player_results: list[PlayerResult] = []
+
+        self._populate()
+        self._bind()
+        self._make_coroutines()
+
         for i in range(self._specs.population):
             coroutine = self.make_coroutine(i)
             self._coroutines.append(coroutine)
-        self._player_results: list[PlayerResult] = []
+
+    def _populate(self):
+        pass
+
+    def _bind(self):
+        pass
+
+    def _make_coroutines(self):
+        pass
 
     def make_coroutine(self, id: int):
         game = Game(
