@@ -9,16 +9,23 @@ from src.game.game import Game
 
 class Generation:
     def __init__(
-        self, id: int, specs: GenerationSpec, parents: list[Player] = []
+        self,
+        id: int,
+        specs: GenerationSpec,
+        previous_res: "GenerationResult" = None,
     ) -> None:
         self._id = id
         self._specs = specs
+        parents = []  # todo
+        if previous_res:
+            parents = [x.player for x in previous_res.fittest]
+
         self._players: list[Player] = []
         self._drawers: list[Drawer] = []
         self._coroutines = []
         self._player_results: list[PlayerResult] = []
 
-        self._populate()
+        self._populate()  # todo
         self._bind()
         self._make_coroutines()
 
