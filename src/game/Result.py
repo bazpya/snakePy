@@ -5,17 +5,15 @@ from src.game.global_refs import CauseOfDeath
 
 class Result:
     def serialise(self) -> str:
-        return json.dumps(
-            self.__dict__,
-            default=self.serialiser_func,
-            indent=2,
-        )
+        return json.dumps(self.__dict__, default=self.serialiser_func, indent=2)
 
     def serialiser_func(self, x) -> object:
         if isinstance(x, Enum):
             return x.name
         elif isinstance(x, Result):
             return x.__dict__
+        elif getattr(x, "serialise", None):
+            return x.serialise()
         else:
             return x
 

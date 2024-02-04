@@ -34,7 +34,7 @@ class Player:
         self.send_game_input()
 
     def _on_died(self, game_res: GameResult) -> None:
-        res = PlayerResult(self._id, self.get_fitness(game_res), game_res)
+        res = PlayerResult(self, self.get_fitness(game_res), game_res)
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:
@@ -75,13 +75,17 @@ class Player:
             + game_res.snake.cells_visited / (game_res.row_count * game_res.col_count)
         )
 
+    def serialise(self):
+        return f"Player-{self._id}"
+
+
 class PlayerResult(GameResult):
     def __init__(
         self,
-        id: int,
+        player: Player,
         fitness: float,
         game_res: GameResult,
     ) -> None:
-        self.id = id
+        self.player = player
         self.fitness = fitness
         self.game = game_res
