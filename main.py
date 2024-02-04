@@ -21,13 +21,7 @@ interval = config.game.interval
 fake_player = config.ml.player.fake
 max_steps = config.ml.player.max_steps
 
-view = View(
-    reciprocate_distances=config.ml.grid_view.reciprocate_distances,
-    food_squarewise=config.ml.grid_view.food_squarewise,
-    food_diagonal=config.ml.grid_view.food_diagonal,
-    death_squarewise=config.ml.grid_view.death_squarewise,
-    death_diagonal=config.ml.grid_view.death_diagonal,
-)
+view = View.get()
 
 # ====================  Generation config  ====================
 
