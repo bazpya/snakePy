@@ -14,55 +14,59 @@ class Generation:
         specs: GenerationSpec,
         previous_res: "GenerationResult" = None,
     ) -> None:
+        if specs.selection_count < 1:
+            raise ValueError("No player survives the harsh selection ratio")
+
         self._id = id
         self._specs = specs
-        parents = []  # todo
-        if previous_res:
-            parents = [x.player for x in previous_res.fittest]
+        self._previous_res = previous_res
 
         self._players: list[Player] = []
         self._drawers: list[Drawer] = []
         self._coroutines = []
         self._player_results: list[PlayerResult] = []
 
-        self._populate()  # todo
+        self._populate()
         self._bind()
         self._make_coroutines()
 
-        for i in range(self._specs.population):
-            coroutine = self.make_coroutine(i)
-            self._coroutines.append(coroutine)
-
     def _populate(self):
-        pass
+        parents = []
+        if self._previous_res:
+            parents = [x.player for x in self._previous_res.fittest]
+        for i, parent in enumerate(parents):
+            game = Game(
+                self._specs.row_count, self._specs.col_count, self._specs.max_steps
+            )
+            eye = Eye(self._specs.view)
+            clone = parent.clone(i, game, eye)
+            self._players.append(clone)
+        for i in range(len(parents), self._specs.population):
+            game = Game(
+                self._specs.row_count, self._specs.col_count, self._specs.max_steps
+            )
+            eye = Eye(self._specs.view)
+            player = Player(i, game, eye)
+            self._players.append(player)
 
     def _bind(self):
-        pass
+        for player in self._players:
+            player.events.died.subscribe(self.add_res)
 
     def _make_coroutines(self):
-        pass
+        for player in self._players:
 
-    def make_coroutine(self, id: int):
-        game = Game(
-            self._specs.row_count,
-            self._specs.col_count,
-            self._specs.max_steps,
-        )
-        eye = Eye(self._specs.view)
-        player = Player(id, game, eye)
-        player.events.died.subscribe(self.add_res)
+            async def async_func():
+                drawer = Drawer(self._specs.cell_size)
+                drawer.bind(player._game)
+                self._drawers.append(drawer)
+                await player.play_async(self._specs.interval)
+                # drawer.getMouse()
 
-        async def async_func():
-            drawer = Drawer(self._specs.cell_size)
-            drawer.bind(game)
-            self._drawers.append(drawer)
-            await player.play_async(self._specs.interval)
-            # drawer.getMouse()
-
-        if self._specs.use_ui:
-            return async_func()
-        else:
-            return player.play_awaitable_sync()
+            if self._specs.use_ui:
+                self._coroutines.append(async_func())
+            else:
+                self._coroutines.append(player.play_awaitable_sync())
 
     def add_res(self, res: PlayerResult):
         self._player_results.append(res)

@@ -7,9 +7,6 @@ from src.ml.generation_spec import GenerationSpec
 config = Config.get()
 spec = GenerationSpec.get()
 
-if spec.selection_count < 1:
-    raise ValueError("No player survives the harsh selection ratio")
-
 gens = config.ml.evolution.generations
 
 
