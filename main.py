@@ -1,25 +1,17 @@
 import asyncio
 import time
+from src.ml.evolution import Evolution
 from src.config import Config
-from src.ml.generation import Generation
 from src.ml.generation_spec import GenerationSpec
 
 config = Config.get()
 spec = GenerationSpec.get()
-
 gens = config.ml.evolution.generations
 
-
-async def go():
-    res = None
-    for i in range(gens):
-        gen = Generation(i, spec, res)
-        res = await gen.run()
-    return res
-
+evolution = Evolution(spec, gens)
 
 time_start = time.time()
-res = asyncio.run(go())
+res = asyncio.run(evolution.run())
 time_end = time.time()
 
 time_diff = time_end - time_start
