@@ -1,4 +1,5 @@
 from collections import deque
+from src.config import Config
 from src.game.diff import SnakeDiff
 from src.game.global_refs import CauseOfDeath
 from src.game.result import SnakeResult
@@ -14,26 +15,32 @@ class Snake:
     _cells_visited: set[Cell]
     _direction: Direction
     _events: EventHub
-    _steps_taken: int
+    _steps_taken: int  # todo: rename to max_steps
     _steps_to_take: int
     _directions: deque[Direction]
     _diff: SnakeDiff
     _is_dead: bool
     ms = 0.001
 
-    def __init__(self, only_cell: Cell, steps_to_take: int = 0) -> None:
+    def __init__(self, origin: Cell, steps_to_take: int = 0) -> None:
+        if not origin.is_blank():
+            raise ValueError("The origin cell of snake is not blank!")
+        config = Config.get()
+        if steps_to_take:
+            self._steps_to_take = steps_to_take
+        else:
+            self._steps_to_take = config.game.snake.max_steps
         self._cells = deque()
-        self._cells.append(only_cell)
-        only_cell.be_snake()
+        self._cells.append(origin)
+        origin.be_snake()
         self._direction = Direction.left
         self._events = EventHub()
         self._looper = None
         self._steps_taken = 0
-        self._steps_to_take = steps_to_take
         self._directions = deque()
         self._diff = SnakeDiff()
         self._is_dead = False
-        self._cells_visited = set([only_cell])
+        self._cells_visited = set([origin])
 
     def get_head(self) -> Cell:
         return self._cells[-1]

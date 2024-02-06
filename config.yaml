@@ -5,6 +5,8 @@ game:
   cell_size: 20
   food_count: 80
   interval: 0.03
+  snake:
+    max_steps: 50
 ml:
   evolution:
     selection_ratio: 0.4

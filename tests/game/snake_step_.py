@@ -76,7 +76,7 @@ class Snake_step_(Snake_sync_):
         self.assertEqual(initial_length + 1, sut.get_length())
 
     def test_step_into_food_when_reached_step_count_dies(self):
-        origin, *etc = CellFactory.make("f" * (self.many))
+        origin, *etc = CellFactory.make("b" + "f" * (self.many))
         sut = Snake(origin, self.some)
         sut._events = self._events
         sut.run_sync()

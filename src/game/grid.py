@@ -1,3 +1,4 @@
+from src.config import Config
 from src.game.direction import Direction
 from src.game.cell import Cell
 import random
@@ -8,13 +9,14 @@ class Grid:
     row_count: int
     col_count: int
 
-    def __init__(
-        self,
-        row_count: int,
-        col_count: int = 0,
-    ) -> None:
-        self.row_count = row_count
-        self.col_count = col_count if col_count else row_count
+    def __init__(self, row_count: int = 0, col_count: int = 0) -> None:
+        config = Config.get()
+        if row_count:
+            self.row_count = row_count
+            self.col_count = col_count if col_count else row_count
+        else:
+            self.row_count = config.game.row_count
+            self.col_count = config.game.col_count
         self._cells = []
         self._populate()
         self._link_neighbours()
