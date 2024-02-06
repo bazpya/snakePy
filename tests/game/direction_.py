@@ -53,3 +53,7 @@ class Direction_(Test_):
             self.assertEqual(sut.turn(Turn.right), other)
             self.assertEqual(other.turn(Turn.left), sut)
             self.assertEqual(sut.turn(Turn.ahead), sut)
+
+    def test_any_returns_correct_type(self):
+        sut = Direction.any()
+        self.assertIsInstance(sut, Direction)

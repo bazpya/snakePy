@@ -33,7 +33,7 @@ class Cell_factory_(Test_):
         origin = CellFactory._link(cells)
         for i, cell in enumerate(cells[:-1]):
             next = cells[i + 1]
-            self.assertEqual(cell.get_neighbour(Direction.left), next)
+            self.assertEqual(cell.get_neighbour(Direction.any()), next)
 
     # ======================  Make Chain  ======================
 
@@ -75,7 +75,7 @@ class Cell_factory_(Test_):
         runner = CellFactory.make_infinite_chain()
         for i in range(6):
             self.assertEqual(runner.type, CellType.blank)
-            runner = runner.get_neighbour(Direction.left)
+            runner = runner.get_neighbour(Direction.any())
 
     # todo:
     # def test_make_infinite_chain_makes_correct_cell_type(self):
@@ -83,4 +83,4 @@ class Cell_factory_(Test_):
     #     runner = CellFactory.make_infinite_chain(cell_type=type)
     #     for i in range(6):
     #         self.assertEqual(runner.type, type)
-    #         runner = runner.get_neighbour(Direction.left)
+    #         runner = runner.get_neighbour(Direction.any())

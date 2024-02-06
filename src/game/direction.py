@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 
 class Turn(Enum):
@@ -12,6 +13,9 @@ class Direction(Enum):
     right = 1
     down = 2
     left = 3
+
+    def any():
+        return random.choice(list(Direction))
 
     def is_aligned(self, dir: "Direction") -> bool:
         return self.value % 2 == dir.value % 2
