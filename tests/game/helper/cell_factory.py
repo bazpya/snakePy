@@ -11,14 +11,11 @@ class CellFactory:
     }
 
     @staticmethod
-    def _create_func(cell: Cell):
-        def func(*args, **kwargs):
-            return cell
-
-        return func
+    def _make_getter(cell: Cell):
+        return lambda *args, **kwargs: cell
 
     @staticmethod
-    def make_list(pattern: str) -> list[Cell]:
+    def _make_list(pattern: str) -> list[Cell]:
         res: list[Cell] = []
         for i, char in enumerate(pattern):
             type = CellFactory._map[char]
@@ -27,17 +24,17 @@ class CellFactory:
         return res
 
     @staticmethod
-    def link(cells: list[Cell]) -> Cell:
+    def _link(cells: list[Cell]) -> Cell:
         for i, cell in enumerate(cells[:-1]):
             next = cells[i + 1]
-            cell.get_neighbour = CellFactory._create_func(next)
+            cell.get_neighbour = CellFactory._make_getter(next)
         return cells[0]
 
     @staticmethod
-    def make_chain(pattern: str) -> Cell:
-        cells = CellFactory.make_list(pattern)
-        CellFactory.link(cells)
-        return cells[0]
+    def make(pattern: str) -> (Cell, list[Cell]):
+        cells = CellFactory._make_list(pattern)
+        CellFactory._link(cells)
+        return cells[0], cells
 
     @staticmethod
     def make_infinite_chain(*a) -> Cell:

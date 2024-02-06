@@ -9,7 +9,7 @@ class Snake_result_(Snake_sync_):
     # ======================  Steps Taken  ======================
 
     def test_emits_died_event_with_correct_number_of_steps_single(self):
-        origin = CellFactory.make_chain("bw")
+        origin, *etc = CellFactory.make("bw")
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()
@@ -18,7 +18,7 @@ class Snake_result_(Snake_sync_):
 
     def test_emits_died_event_with_correct_number_of_steps_multi(self):
         pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
+        origin, *etc = CellFactory.make(pattern)
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()
@@ -28,7 +28,7 @@ class Snake_result_(Snake_sync_):
     # ======================  Length  ======================
 
     def test_emits_died_event_with_correct_length_single(self):
-        origin = CellFactory.make_chain("bw")
+        origin, *etc = CellFactory.make("bw")
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()
@@ -36,8 +36,7 @@ class Snake_result_(Snake_sync_):
         self.assertEqual(result.length, 1)
 
     def test_emits_died_event_with_correct_length_multi(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
+        origin, *etc = CellFactory.make("bbffbbs")
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()
@@ -47,7 +46,7 @@ class Snake_result_(Snake_sync_):
     # ======================  Cause of Death  ======================
 
     def test_emits_died_event_with_cause_of_death_wall(self):
-        origin = CellFactory.make_chain("bbbfbbw")
+        origin, *etc = CellFactory.make("bbbfbbw")
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()
@@ -55,7 +54,7 @@ class Snake_result_(Snake_sync_):
         self.assertEqual(result.cause_of_death, CauseOfDeath.wall)
 
     def test_emits_died_event_with_cause_of_death_snake(self):
-        origin = CellFactory.make_chain("bbbfbbs")
+        origin, *etc = CellFactory.make("bbbfbbs")
         sut = Snake(origin)
         sut._events = self._events
         sut.run_sync()

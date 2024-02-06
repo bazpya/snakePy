@@ -1,5 +1,4 @@
 from src.game.global_refs import CauseOfDeath
-from src.game.direction import Turn
 from src.game.result import GameResult
 from src.game.snake import Snake
 from tests.game.game_ import Game_
@@ -9,7 +8,7 @@ from tests.game.helper.cell_factory import CellFactory
 class Game_result_(Game_):
     def test_emits_died_event_with_correct_number_of_steps(self):
         pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
+        origin, *etc = CellFactory.make(pattern)
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.run_sync()
@@ -17,8 +16,7 @@ class Game_result_(Game_):
         self.assertEqual(result.snake.steps_taken, len(pattern) - 1)
 
     def test_emits_died_event_with_correct_length(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
+        origin, *etc = CellFactory.make("bbffbbs")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.run_sync()
@@ -26,8 +24,7 @@ class Game_result_(Game_):
         self.assertEqual(result.snake.length, 3)
 
     def test_emits_died_event_with_correct_cause_of_death(self):
-        pattern = "bbffbbs"
-        origin = CellFactory.make_chain(pattern)
+        origin, *etc = CellFactory.make("bbffbbs")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.run_sync()

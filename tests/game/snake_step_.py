@@ -11,9 +11,7 @@ class Snake_step_(Snake_sync_):
     # ===============================  step-blank  ===============================
 
     def test_step_into_blank_moves_head(self):
-        cells = CellFactory.make_list("bb")
-        CellFactory.link(cells)
-        origin = cells[0]
+        origin, cells = CellFactory.make("bb")
         destination = cells[1]
         sut = Snake(origin)
         sut._events = self._events
@@ -21,9 +19,7 @@ class Snake_step_(Snake_sync_):
         self.assertEqual(destination, sut.get_head())
 
     def test_step_into_blank_makes_new_cell_snake(self):
-        cells = CellFactory.make_list("bbbf")
-        CellFactory.link(cells)
-        origin = cells[0]
+        origin, cells = CellFactory.make("bbbf")
         destination = cells[1]
         sut = Snake(origin)
         sut._events = self._events
@@ -31,14 +27,14 @@ class Snake_step_(Snake_sync_):
         self.assertTrue(destination.is_snake())
 
     def test_step_into_blank_makes_tail_cell_blank(self):
-        origin = CellFactory.make_chain("bbbf")
+        origin, *etc = CellFactory.make("bbbf")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_blank())
 
     def test_step_into_blank_keeps_length_same(self):
-        origin = CellFactory.make_chain("bbbf")
+        origin, *etc = CellFactory.make("bbbf")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
@@ -65,14 +61,14 @@ class Snake_step_(Snake_sync_):
     # ===============================  step-food  ===============================
 
     def test_step_into_food_leaves_tail_cell_snake(self):
-        origin = CellFactory.make_chain("bffff")
+        origin, *etc = CellFactory.make("bffff")
         sut = Snake(origin)
         sut._events = self._events
         sut.step()
         self.assertTrue(origin.is_snake())
 
     def test_step_into_food_increments_length(self):
-        origin = CellFactory.make_chain("bffff")
+        origin, *etc = CellFactory.make("bffff")
         sut = Snake(origin)
         sut._events = self._events
         initial_length = sut.get_length()
@@ -80,7 +76,7 @@ class Snake_step_(Snake_sync_):
         self.assertEqual(initial_length + 1, sut.get_length())
 
     def test_step_into_food_when_reached_step_count_dies(self):
-        origin = CellFactory.make_chain("f" * (self.many))
+        origin, *etc = CellFactory.make("f" * (self.many))
         sut = Snake(origin, self.some)
         sut._events = self._events
         sut.run_sync()
@@ -90,7 +86,7 @@ class Snake_step_(Snake_sync_):
     # ===============================  step-death  ===============================
 
     def test_step_into_wall_without_death_event_does_nothing(self):
-        origin = CellFactory.make_chain("bf")
+        origin, *etc = CellFactory.make("bf")
         sut = Snake(origin)
         sut._events = self._events
         try:
@@ -101,9 +97,7 @@ class Snake_step_(Snake_sync_):
     # ===============================  step-any  ===============================
 
     def test_step_adds_to_visited_cells(self):
-        cells = CellFactory.make_list("bbbw")
-        CellFactory.link(cells)
-        origin = cells[0]
+        origin, cells = CellFactory.make("bbbw")
         sut = Snake(origin)
         sut.run_sync()
         self.assertSetEqual(sut._cells_visited, set(cells[:-1]))

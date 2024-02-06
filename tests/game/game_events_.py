@@ -10,7 +10,7 @@ class Game_events_(Game_):
     # ======================  Blank  ======================
 
     def test_blank_emits_the_right_events(self):
-        origin = CellFactory.make_chain("bb")
+        origin, *etc = CellFactory.make("bb")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.step()
@@ -19,9 +19,7 @@ class Game_events_(Game_):
         self.died_callback.assert_not_called()
 
     def test_blank_passes_diff_to_stepped_event(self):
-        cells = CellFactory.make_list("bb")
-        CellFactory.link(cells)
-        origin = cells[0]
+        origin, cells = CellFactory.make("bb")
         next = cells[1]
         snake = Snake(origin)
         self.sut._bind(snake)
@@ -33,7 +31,7 @@ class Game_events_(Game_):
     # # ======================  Food  ======================
 
     def test_food_emits_the_right_events(self):
-        origin = CellFactory.make_chain("bf")
+        origin, *etc = CellFactory.make("bf")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.step()
@@ -42,9 +40,7 @@ class Game_events_(Game_):
         self.died_callback.assert_not_called()
 
     def test_food_passes_diff_to_stepped_event(self):
-        cells = CellFactory.make_list("bf")
-        CellFactory.link(cells)
-        origin = cells[0]
+        origin, cells = CellFactory.make("bf")
         next = cells[1]
         snake = Snake(origin)
         self.sut._bind(snake)
@@ -57,7 +53,7 @@ class Game_events_(Game_):
     # # ======================  Death  ======================
 
     def test_death_emits_the_right_events(self):
-        origin = CellFactory.make_chain("bs")
+        origin, *etc = CellFactory.make("bs")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.step()
@@ -66,7 +62,7 @@ class Game_events_(Game_):
         self.died_callback.assert_called_once()
 
     def test_death_passes_no_cells_to_stepped_event(self):
-        origin = CellFactory.make_chain("bw")
+        origin, *etc = CellFactory.make("bw")
         snake = Snake(origin)
         self.sut._bind(snake)
         snake.step()

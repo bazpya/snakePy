@@ -16,11 +16,11 @@ class Cell_factory_(Test_):
     # ======================  Make List  ======================
 
     def test_make_list_gets_right_number_of_cells(self):
-        res = CellFactory.make_list("bfsw")
+        res = CellFactory._make_list("bfsw")
         self.assertEqual(len(res), 4)
 
     def test_make_list_gets_right_type_of_cells(self):
-        res = CellFactory.make_list("bfsw")
+        res = CellFactory._make_list("bfsw")
         self.assertEqual(res[0].type, CellType.blank)
         self.assertEqual(res[1].type, CellType.food)
         self.assertEqual(res[2].type, CellType.snake)
@@ -29,8 +29,8 @@ class Cell_factory_(Test_):
     # ======================  Link  ======================
 
     def test_link_works(self):
-        cells = CellFactory.make_list("bfswbfswbfsw")
-        chain = CellFactory.link(cells)
+        cells = CellFactory._make_list("bfswbfswbfsw")
+        origin = CellFactory._link(cells)
         for i, cell in enumerate(cells[:-1]):
             next = cells[i + 1]
             self.assertEqual(cell.get_neighbour(Direction.left), next)
@@ -39,8 +39,8 @@ class Cell_factory_(Test_):
 
     def test_make_chain_single_cells(self):
         for key, val in self._map.items():
-            res = CellFactory.make_chain(key)
-            self.assertEqual(res.type, val)
+            origin, *etc = CellFactory.make(key)
+            self.assertEqual(origin.type, val)
 
     def test_make_chain_multi(self):
         pattern = "bfswbbfsw"
@@ -55,14 +55,14 @@ class Cell_factory_(Test_):
             CellType.snake,
             CellType.wall,
         ]
-        runner = CellFactory.make_chain(pattern)
+        runner, *etc = CellFactory.make(pattern)
         for type in types:
             self.assertEqual(runner.type, type)
             runner = runner.get_neighbour(random.choice(list(Direction)))
 
     def test_make_chain_makes_correct_length(self):
         pattern = "bfswbbfsw"
-        runner = CellFactory.make_chain(pattern)
+        runner, *etc = CellFactory.make(pattern)
         length = 1
         while runner.get_neighbour(random.choice(list(Direction))) is not None:
             length += 1
@@ -77,6 +77,7 @@ class Cell_factory_(Test_):
             self.assertEqual(runner.type, CellType.blank)
             runner = runner.get_neighbour(Direction.left)
 
+    # todo:
     # def test_make_infinite_chain_makes_correct_cell_type(self):
     #     type = CellType.food
     #     runner = CellFactory.make_infinite_chain(cell_type=type)

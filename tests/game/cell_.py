@@ -104,7 +104,7 @@ class Cell_(Test_):
     def test_death_distance_to_neighbour(self):
         sut = Cell(self.some, self.few)
         other = Cell(sut._row + 1, sut._col - 1, CellType.snake)
-        sut.get_neighbour = CellFactory._create_func(other)
+        sut.get_neighbour = CellFactory._make_getter(other)
         actual = sut.death_distance(False, Direction.up)
         expected = (1, -1, math.sqrt(2))
         self.assertEqual(actual, expected)
