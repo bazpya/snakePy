@@ -26,3 +26,10 @@ class Player_decide_(Player_):
         sut._eye.set_output(eye_output)
         sut._brain.predict = self._make_func([0.1, 0.3, 0.1])
         self.assertEqual(sut.decide(), Turn.ahead)
+
+    def test_decide_takes_right(self):
+        sut = self.make_sut()
+        eye_output = tf.random.normal([sut._eye.view_size])
+        sut._eye.set_output(eye_output)
+        sut._brain.predict = self._make_func([0.1, 0.2, 0.3])
+        self.assertEqual(sut.decide(), Turn.right)
