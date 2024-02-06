@@ -6,7 +6,6 @@ class Config:
     _dict = None
     _tree = None
 
-    # todo: import an instance in client code
     @staticmethod
     def get() -> Tree:
         if Config._tree is None:
@@ -18,3 +17,6 @@ class Config:
     @staticmethod
     def parse_ints(string: str) -> any:
         return [int(x) for x in string.split(",")]
+
+
+config = Config.get()

@@ -1,10 +1,9 @@
 import asyncio
 import time
 from src.ml.evolution import Evolution
-from src.config import Config
+from src.config import config
 from src.ml.generation_spec import GenerationSpec
 
-config = Config.get()
 spec = GenerationSpec.get()
 gens = config.ml.evolution.generations
 

@@ -15,10 +15,7 @@ class Game:
     _last_food: Cell = None
 
     def __init__(self, grid: Grid = None, snake: Snake = None) -> None:
-        if grid:
-            self._grid = grid
-        else:
-            self._grid = Grid()
+        self._grid = grid if grid else Grid()
         self.events = EventHub()
         self._diff = GameDiff()
         if snake:

@@ -1,5 +1,5 @@
 import math
-from src.config import Config
+from src.config import config
 from src.ml.view import View
 
 
@@ -29,7 +29,6 @@ class GenerationSpec:
         self.interval = interval
 
     def get():
-        config = Config.get()
         population = config.ml.generation.population
         selection_ratio = config.ml.evolution.selection_ratio
 

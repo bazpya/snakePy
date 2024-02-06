@@ -1,21 +1,20 @@
 import tensorflow as tf
 from src.game.direction import Direction
-from src.ml.view import View
+from src.ml.view import View, the_view
 from src.game.cell import Cell
 
 
 class Eye:
-    def __init__(self, view: View) -> None:
-        self._view = view
-        self._recip = view._reciprocate_distances
-        self.view_size: int = view.size
+    def __init__(self, view: View = None) -> None:
+        self._view = view if view else the_view
+        self.view_size: int = self._view.size
 
     def see(self, head: Cell, food: Cell) -> tf.Tensor:
         signals = []
-        recip = self._recip
+        recip = self._view._reciprocate_distances
 
         # Food
-        (food_ver, food_hor, food_diag) = head.get_distance(self._recip, food)
+        (food_ver, food_hor, food_diag) = head.get_distance(recip, food)
 
         if self._view._food_squarewise:
             signals.extend([food_ver, food_hor])

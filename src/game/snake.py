@@ -1,5 +1,5 @@
 from collections import deque
-from src.config import Config
+from src.config import config
 from src.game.diff import SnakeDiff
 from src.game.global_refs import CauseOfDeath
 from src.game.result import SnakeResult
@@ -25,7 +25,6 @@ class Snake:
     def __init__(self, origin: Cell, max_steps: int = 0) -> None:
         if not origin.is_blank():
             raise ValueError("The origin cell of snake is not blank!")
-        config = Config.get()
         if max_steps:
             self._max_steps = max_steps
         else:

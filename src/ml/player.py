@@ -16,8 +16,8 @@ class Player:
     _brain: None
     _eye: Eye = None
 
-    def __init__(self, id: int, game: Game, eye: Eye) -> None:
-        self._game = game
+    def __init__(self, id: int, game: Game = None, eye: Eye = None) -> None:
+        self._game = game if game else Game()
         self._id = id
         self.events = EventHub()
         self._eye = eye
