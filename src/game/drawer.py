@@ -28,7 +28,7 @@ class Drawer:
         self._game = game
 
     def _draw(self, cells: list[Cell]) -> None:
-        for cell in cells:
+        for cell in cells:  # todo: see if you can keep a reference to those rectangles
             ri = cell._row
             ci = cell._col
 
