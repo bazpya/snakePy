@@ -16,15 +16,18 @@ class Player:
     _brain: None
     _eye: Eye = None
 
-    def __init__(self, id: int, game: Game = None, eye: Eye = None) -> None:
+    def __init__(self, id: int, game: Game = None, eye: Eye = None, brain=None) -> None:
         self._game = game if game else Game()
         self._id = id
         self.events = EventHub()
-        self._eye = eye
-        self.bind(game)
-        input_size = eye.view_size
+        self._eye = eye if eye else Eye()
+        self.bind(self._game)
+        input_size = self._eye.view_size
         self._output_layer_size = len(Turn)
-        self._brain = BrainFactory.make(input_size, self._output_layer_size)
+        if brain is None:
+            self._brain = BrainFactory.make(input_size, self._output_layer_size)
+        else:
+            self._brain = brain
 
     def bind(self, game: Game) -> None:
         game.events.stepped.subscribe(self._on_stepped)
@@ -61,10 +64,9 @@ class Player:
     async def play_async(self, interval: float) -> None:
         await self._game.run_async(interval)
 
-    def clone(self, id: int, game: Game, eye: Eye) -> "Player":
-        player = Player(id, game, eye)
+    def clone(self, id: int, game: Game = None, eye: Eye = None) -> "Player":
         brain = BrainFactory.clone(self._brain)
-        player._brain = brain
+        player = Player(id, game=game, eye=eye, brain=brain)
         return player
 
     def get_fitness(self, game_res: GameResult) -> float:
