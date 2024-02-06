@@ -45,7 +45,7 @@ class Snake_step_(Snake_sync_):
         origin = Cell()
         sut = Snake(origin)
         origin.get_neighbour = MagicMock()
-        dir = Direction.any()
+        dir = Direction.up  # Must be perpendicular to the initial left
         sut.direction_enque(dir)
         sut.step()
         origin.get_neighbour.assert_called_once_with(dir)
