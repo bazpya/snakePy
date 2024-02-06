@@ -15,21 +15,21 @@ class Snake:
     _cells_visited: set[Cell]
     _direction: Direction
     _events: EventHub
-    _steps_taken: int  # todo: rename to max_steps
-    _steps_to_take: int
+    _steps_taken: int
+    _max_steps: int
     _directions: deque[Direction]
     _diff: SnakeDiff
     _is_dead: bool
     ms = 0.001
 
-    def __init__(self, origin: Cell, steps_to_take: int = 0) -> None:
+    def __init__(self, origin: Cell, max_steps: int = 0) -> None:
         if not origin.is_blank():
             raise ValueError("The origin cell of snake is not blank!")
         config = Config.get()
-        if steps_to_take:
-            self._steps_to_take = steps_to_take
+        if max_steps:
+            self._max_steps = max_steps
         else:
-            self._steps_to_take = config.game.snake.max_steps
+            self._max_steps = config.game.snake.max_steps
         self._cells = deque()
         self._cells.append(origin)
         origin.be_snake()
@@ -126,7 +126,7 @@ class Snake:
         self._looper = LooperInterval(
             func=self.step,
             interval=interval,
-            iterations=self._steps_to_take,
+            iterations=self._max_steps,
             end_callback=self._die,
         )
         await self._looper.start()
@@ -134,7 +134,7 @@ class Snake:
     def run_sync(self) -> None:
         self._looper = LooperSync(
             func=self.step,
-            iterations=self._steps_to_take,
+            iterations=self._max_steps,
             end_callback=self._die,
         )
         self._looper.start()
