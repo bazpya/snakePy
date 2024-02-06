@@ -6,6 +6,7 @@ class Config:
     _dict = None
     _tree = None
 
+    # todo: import an instance in client code
     @staticmethod
     def get() -> Tree:
         if Config._tree is None:

@@ -1,6 +1,5 @@
 from src.game.diff import SnakeDiff
 from src.game.snake import Snake
-from src.game.result import SnakeResult
 from tests.game.helper.cell_factory import CellFactory
 from tests.game.snake_ import Snake_sync_
 
@@ -48,7 +47,7 @@ class Snake_events_(Snake_sync_):
         diff: SnakeDiff = self.stepped_callback.call_args[0][0]
         self.assertEqual(diff.snake, next)
 
-    # # ======================  Death  ======================
+    # ======================  Death  ======================
 
     def test_death_emits_the_right_events(self):
         origin, *etc = CellFactory.make("bs")

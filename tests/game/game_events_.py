@@ -1,82 +1,57 @@
-from src.game.diff import GameDiff
-from src.game.snake import Snake
-from src.game.game import Game
+from src.game.global_refs import CauseOfDeath
+from src.game.result import SnakeResult
+from src.game.global_refs import CellType
+from src.game.cell import Cell
+from src.game.diff import GameDiff, SnakeDiff
+from src.game.result import GameResult, SnakeResult
 from tests.game.game_ import Game_
-from tests.game.helper.counter import Counter
-from tests.game.helper.cell_factory import CellFactory
 
 
 class Game_events_(Game_):
     # ======================  Blank  ======================
 
-    def test_blank_emits_the_right_events(self):
-        origin, *etc = CellFactory.make("bb")
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
+    def test_stepped_emits_the_right_events(self):
+        self.sut._snake._events.stepped.emit(SnakeDiff())
         self.stepped_callback.assert_called_once()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_not_called()
 
-    def test_blank_passes_diff_to_stepped_event(self):
-        origin, cells = CellFactory.make("bb")
-        next = cells[1]
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
+    def test_passes_snake_diff_to_stepped_event(self):
+        b_cell, s_cell = Cell(CellType.blank), Cell(CellType.snake)
+        snake_diff = SnakeDiff()
+        snake_diff.set_blank(b_cell)
+        snake_diff.set_snake(s_cell)
+        self.sut._snake._events.stepped.emit(snake_diff)
         diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertEqual(diff.blank, origin)
-        self.assertEqual(diff.snake, next)
+        self.assertEqual(diff.blank, b_cell)
+        self.assertEqual(diff.snake, s_cell)
 
-    # # ======================  Food  ======================
+    # ======================  Food  ======================
 
-    def test_food_emits_the_right_events(self):
-        origin, *etc = CellFactory.make("bf")
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
-        self.stepped_callback.assert_called_once()
+    def test_ate_emits_the_right_events(self):
+        self.sut._snake._events.ate.emit()
+        self.stepped_callback.assert_not_called()
         self.ate_callback.assert_called_once()
         self.died_callback.assert_not_called()
 
-    def test_food_passes_diff_to_stepped_event(self):
-        origin, cells = CellFactory.make("bf")
-        next = cells[1]
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
-        self.stepped_callback.assert_called_once()
+    def test_give_food_causes_diff_to_stepped_event(self):
+        f_cell = Cell()
+        self.sut._grid.get_random_blanks = self.make_getter([f_cell])
+        self.sut._give_food()
+        self.sut._snake._events.stepped.emit(SnakeDiff())
         diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertIsNone(diff.blank)
-        self.assertEqual(diff.snake, next)
+        self.assertEqual(diff.food, f_cell)
 
-    # # ======================  Death  ======================
+    # ======================  Death  ======================
 
     def test_death_emits_the_right_events(self):
-        origin, *etc = CellFactory.make("bs")
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
-        self.stepped_callback.assert_called_once()
+        self.sut._snake._events.died.emit(SnakeResult(1, 2, None, 3))
+        self.stepped_callback.assert_not_called()
         self.ate_callback.assert_not_called()
         self.died_callback.assert_called_once()
 
-    def test_death_passes_no_cells_to_stepped_event(self):
-        origin, *etc = CellFactory.make("bw")
-        snake = Snake(origin)
-        self.sut._bind(snake)
-        snake.step()
-        self.stepped_callback.assert_called_once()
-        diff: GameDiff = self.stepped_callback.call_args[0][0]
-        self.assertIsNone(diff.blank)
-        self.assertIsNone(diff.snake)
-        self.assertIsNone(diff.food)
-
-    def test_run_sync_at_specified_number_of_steps_emits_died_event(self):
-        counter = Counter()
-        sut = Game(self.row_count, self.col_count, steps_to_take=self.few)
-        sut.events = self._events
-        sut.events.stepped.subscribe(counter.increment)
-        sut.run_sync()
-        self.died_callback.assert_called_once()
-        self.assertEqual(counter.read(), self.few)
+    def test_emits_died_event_with_wrapped_snake_result(self):
+        snake_res = SnakeResult(self.many, self.some, CauseOfDeath.wall, self.few)
+        self.sut._snake._events.died.emit(snake_res)
+        result: GameResult = self.died_callback.call_args[0][0]
+        self.assertEqual(result.snake, snake_res)

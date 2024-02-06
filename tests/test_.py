@@ -8,6 +8,9 @@ class Test_(unittest.IsolatedAsyncioTestCase):
     many = 20
     msec = 0.001
 
+    def make_getter(self, x):
+        return lambda *args, **kwargs: x
+
     def assertListLength(self, list: list, length: int):
         self.assertEqual(len(list), length)
 

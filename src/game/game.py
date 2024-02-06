@@ -12,43 +12,33 @@ class Game:
     _grid: Grid
     events: EventHub
     _diff: GameDiff
-    _steps_to_take: int
     _last_food: Cell = None
 
-    def __init__(
-        self,
-        row_count: int,
-        col_count: int = 0,
-        steps_to_take: int = 0,
-        init_food_count: int = 0,
-    ) -> None:
-        self._grid = Grid(row_count, col_count)
-        self._steps_to_take = steps_to_take
+    def __init__(self, grid: Grid = None, snake: Snake = None) -> None:
+        if grid:
+            self._grid = grid
+        else:
+            self._grid = Grid()
         self.events = EventHub()
         self._diff = GameDiff()
-        self._init_food_count = init_food_count if init_food_count else 1
-        self._add_snake()
-        self._give_food(self._init_food_count)
+        if snake:
+            self._snake = snake
+        else:
+            origin = self._grid._get_origin()
+            self._snake = Snake(origin)
+
+        self._give_food(is_init=True)
         self._bind()
 
     def _purge_diff(self) -> None:
         self._diff = GameDiff()
 
-    def _give_food(self, count: int = 1) -> Cell:
-        cells = self._grid.get_random_blanks(count)
-        for initial_food in cells[:-1]:
-            initial_food.be_food()
-        current_food = cells[-1]
-        current_food.be_food()
-        self._last_food = current_food
-        if count == 1:
-            self._diff.set_food(current_food)
-
-    def _add_snake(self) -> None:
-        centre = self._grid._get_origin()
-        if not centre.is_blank():
-            raise ValueError("The centre cell is not blank!")
-        self._snake = Snake(centre, self._steps_to_take)
+    def _give_food(self, is_init: bool = False) -> Cell:
+        cell = self._grid.get_random_blanks(1)[0]
+        cell.be_food()
+        self._last_food = cell
+        if not is_init:
+            self._diff.set_food(cell)
 
     def _bind(self, snake: Snake = None) -> None:
         s = snake if snake else self._snake

@@ -7,15 +7,8 @@ from src.game.game import Game
 
 
 class Grid_(Test_):
-    sut: Grid
-
-    def __init__(self, *args, **kwargs):
-        super(Grid_, self).__init__(*args, **kwargs)
-        self.row_count = self.few
-        self.col_count = self.some
-
     def setUp(self):
-        self.sut = Grid(self.row_count, self.col_count)
+        self.sut = Grid(self.few, self.some)
 
     def assertCellCount(self, game: Game, cell_type: CellType, expected: int):
         def counter_func(cell: Cell, ri, ci, acc):
@@ -27,13 +20,13 @@ class Grid_(Test_):
     # ===========================  Init  ===========================
 
     def test_init_creates_correct_dimensions(self):
-        self.assertEqual(self.row_count, len(self.sut._cells))
+        self.assertEqual(self.few, len(self.sut._cells))
         for row in self.sut._cells:
-            self.assertEqual(self.col_count, len(row))
+            self.assertEqual(self.some, len(row))
 
     def test_init_with_one_dimension_creates_square(self):
-        sut = Grid(self.row_count)
-        self.assertEqual(self.row_count, sut.col_count)
+        sut = Grid(self.few)
+        self.assertEqual(self.few, sut.col_count)
 
     def test_init_creates_cell_instances(self):
         self.sut.iterate_cells(True, lambda *args: self.assertIsInstance(args[0], Cell))
@@ -47,7 +40,7 @@ class Grid_(Test_):
             self.assertTrue(cell.is_wall())
 
     def test_vertical_walls(self):
-        for r in range(self.row_count):
+        for r in range(self.few):
             first = self.sut._cells[r][0]
             last = self.sut._cells[r][-1]
             self.assertTrue(last.is_wall())
@@ -75,13 +68,13 @@ class Grid_(Test_):
             self.assertIsNone(cell.get_neighbour(Direction.down))
 
     def test_first_col_neighbours(self):
-        for r in range(self.row_count):
+        for r in range(self.few):
             cell = self.sut._cells[r][0]
             self.assertIsNone(cell.get_neighbour(Direction.left))
             self.assertIsInstance(cell.get_neighbour(Direction.right), Cell)
 
     def test_last_col_neighbours(self):
-        for r in range(self.row_count):
+        for r in range(self.few):
             cell = self.sut._cells[r][-1]
             self.assertIsInstance(cell.get_neighbour(Direction.left), Cell)
             self.assertIsNone(cell.get_neighbour(Direction.right))
@@ -89,12 +82,12 @@ class Grid_(Test_):
     # ===========================  Iterate  ===========================
 
     def test_iterate_cells_hits_all_cells(self):
-        expected = self.row_count * self.col_count
+        expected = self.few * self.some
         actual = self.sut.iterate_cells(True, lambda *args: args[-1] + 1, 0)
         self.assertEqual(actual, expected)
 
     def test_iterate_cells_hits_interior_cells(self):
-        expected = (self.row_count - 2) * (self.col_count - 2)
+        expected = (self.few - 2) * (self.some - 2)
         actual = self.sut.iterate_cells(False, lambda *args: args[-1] + 1, 0)
         self.assertEqual(expected, actual)
 
@@ -125,12 +118,12 @@ class Grid_(Test_):
             self.assertTrue(cell.is_blank())
 
     def test_get_blank_cells_gets_correct_number_of_cells(self):
-        expected = (self.row_count - 2) * (self.col_count - 2)
+        expected = (self.few - 2) * (self.some - 2)
         res = self.sut._get_blanks()
         actual = len(res)
         self.assertEqual(actual, expected)
 
     def test_get_flat_gets_correct_number_of_cells(self):
-        expected = self.row_count * self.col_count
+        expected = self.few * self.some
         actual = len(self.sut.get_flat())
         self.assertEqual(actual, expected)
