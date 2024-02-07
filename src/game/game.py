@@ -74,3 +74,6 @@ class Game:
 
     def get_current_food(self) -> Cell:
         return self._last_food
+
+    def get_playable_area(self) -> int:
+        return self._grid.row_count * self._grid.col_count

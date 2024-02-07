@@ -74,9 +74,9 @@ class Player:
     def get_fitness(self, game_res: GameResult) -> float:
         # fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
         return (
-            game_res.snake.length
-            + game_res.snake.steps_taken / 50
-            + game_res.snake.cells_visited / (game_res.row_count * game_res.col_count)
+            game_res.snake.steps_taken / config.game.snake.max_steps
+            + game_res.snake.cells_visited / self._game.get_playable_area()
+            + game_res.snake.length
         )
 
     def serialise(self):
