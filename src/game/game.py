@@ -54,7 +54,7 @@ class Game:
         self.events.ate.emit()
 
     def _on_died(self, snake_res: SnakeResult) -> None:
-        res = GameResult(self._grid.row_count, self._grid.col_count, snake_res)
+        res = GameResult(snake_res)
         self.events.died.emit(res)
 
     def run_sync(self) -> None:
