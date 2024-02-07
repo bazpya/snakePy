@@ -1,3 +1,4 @@
+from src.config import config
 from src.game.game import Game
 from src.game.diff import GameDiff
 from src.game.cell import Cell
@@ -16,8 +17,8 @@ class Drawer:
         CellType.food: "yellow",
     }
 
-    def __init__(self, cell_size: int) -> None:
-        self._cell_size = cell_size
+    def __init__(self, cell_size: int = 0) -> None:
+        self._cell_size = cell_size if cell_size else config.game.cell_size
 
     def bind(self, game: Game) -> None:
         height = game._grid.row_count * self._cell_size

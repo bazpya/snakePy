@@ -1,16 +1,14 @@
 from src.ml.generation import Generation
-from src.ml.generation_spec import GenerationSpec
 
 
 class Evolution:
 
-    def __init__(self, specs: GenerationSpec, generations: int = 1) -> None:
-        self._specs = specs
+    def __init__(self, generations: int = 1) -> None:
         self._genererations = generations
 
     async def run(self) -> None:
         res = None
         for i in range(self._genererations):
-            gen = Generation(i, self._specs, res)
+            gen = Generation(i, res)
             res = await gen.run()
         return res

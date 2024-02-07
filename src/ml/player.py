@@ -1,5 +1,6 @@
 import asyncio
 import tensorflow as tf
+from src.config import config
 from src.ml.brain_factory import BrainFactory
 from src.ml.eye import Eye
 from src.game.result import GameResult
@@ -61,8 +62,9 @@ class Player:
         loop = asyncio.get_event_loop()
         await loop.run_in_executor(None, self.play_sync)
 
-    async def play_async(self, interval: float) -> None:
-        await self._game.run_async(interval)
+    async def play_async(self, interval: float = 0) -> None:
+        inter = interval if interval else config.game.interval
+        await self._game.run_async(inter)
 
     def clone(self, id: int, game: Game = None, eye: Eye = None) -> "Player":
         brain = BrainFactory.clone(self._brain)
