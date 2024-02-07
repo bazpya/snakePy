@@ -1,22 +1,21 @@
 game:
   use_ui: False
-  row_count: 16
-  col_count: 16
+  row_count: 8
+  col_count: 8
   cell_size: 20
-  food_count: 80
   interval: 0.03
   snake:
-    max_steps: 50
+    max_steps: 200
 ml:
   evolution:
-    selection_ratio: 0.4
+    selection_ratio: 0.2
     generations: 2
   generation:
-    population: 6
+    population: 8
   player:
-    max_steps: 50
+    tbc: "tbc"
   brain:
-    layer_sizes: "4" # CSV string
+    layer_sizes: "4, 4" # CSV string
   grid_view:
     reciprocate_distances: False
     food_squarewise: True

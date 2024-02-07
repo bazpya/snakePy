@@ -82,7 +82,5 @@ class GenerationResult(Result):
         sorted_res = sorted(results, key=lambda x: x.fitness, reverse=True)
         self.fittest = sorted_res[:selection_count]
         self.id = id
-        self.row_count = results[0].player._game._grid.row_count
-        self.col_count = results[0].player._game._grid.col_count
         self.max_fitness = sorted_res[0].fitness
         self.min_fitness = sorted_res[-1].fitness
