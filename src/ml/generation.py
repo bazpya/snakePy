@@ -50,8 +50,7 @@ class Generation:
         for player in self._players:
 
             async def async_func():
-                drawer = Drawer()
-                drawer.bind(player._game)
+                drawer = Drawer(player._game)
                 self._drawers.append(drawer)
                 await player.play_async()
                 # drawer.getMouse()

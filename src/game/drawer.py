@@ -17,19 +17,22 @@ class Drawer:
         CellType.food: "yellow",
     }
 
-    def __init__(self, cell_size: int = 0) -> None:
+    def __init__(self, game: Game, cell_size: int = 0) -> None:
         self._cell_size = cell_size if cell_size else config.game.cell_size
+        self._shapes = dict()
+        if game:
+            self._bind(game)
 
-    def bind(self, game: Game) -> None:
+    def _bind(self, game: Game) -> None:
         height = game._grid.row_count * self._cell_size
         width = game._grid.col_count * self._cell_size
         game.events.stepped.subscribe(self.draw_diff)
         self._window = GraphWin("snakePy", width, height)
-        self._draw(game._grid.get_flat())
+        self._draw_init(game._grid.get_flat())
         self._game = game
 
-    def _draw(self, cells: list[Cell]) -> None:
-        for cell in cells:  # todo: see if you can keep a reference to those rectangles
+    def _draw_init(self, cells: list[Cell]) -> None:
+        for cell in cells:
             ri = cell._row
             ci = cell._col
 
@@ -45,13 +48,19 @@ class Drawer:
             point2 = Point(right, bottom)
 
             square = Rectangle(point1, point2)
-            cellType = cell.type
-            colour = self._colour_map[cellType]
+            self._shapes[(ri, ci)] = square
+            colour = self._colour_map[cell.type]
             square.setFill(colour)
             square.draw(self._window)
 
+    def _update(self, cells: list[Cell]) -> None:
+        for cell in cells:
+            square = self._shapes[(cell._row, cell._col)]
+            colour = self._colour_map[cell.type]
+            square.setFill(colour)
+
     def draw_diff(self, diff: GameDiff) -> None:
-        self._draw(diff.flatten())
+        self._update(diff.flatten())
 
     def getMouse(self) -> None:
         return self._window.getMouse()
