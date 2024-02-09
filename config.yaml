@@ -16,6 +16,7 @@ ml:
     tbc: "tbc"
   brain:
     layer_sizes: "4, 4" # CSV string
+    save_dir: "./models/"
   grid_view:
     reciprocate_distances: False
     food_squarewise: True

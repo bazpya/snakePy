@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 import tensorflow as tf
 from src.config import config
 from src.ml.brain_factory import BrainFactory
@@ -81,6 +82,11 @@ class Player:
 
     def serialise(self):
         return f"Player-{self._id}"
+
+    def save(self):
+        timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M")
+        filename = config.ml.brain.save_dir + timestamp + f"-brain-{self._id}.keras"
+        self._brain.save(filename)
 
 
 class PlayerResult(GameResult):
