@@ -1,5 +1,5 @@
 class Tree(dict):
-    def __init__(self, dictionary: dict):
+    def __init__(self, dictionary: dict = dict()):
         super(Tree, self).__init__(dictionary)
         for i, (key, val) in enumerate(dictionary.items()):
             if isinstance(val, dict):

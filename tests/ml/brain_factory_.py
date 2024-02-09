@@ -11,13 +11,13 @@ class Brain_factory_(Test_):
 
     def test_makes_correct_number_of_layers(self):
         res = BrainFactory.make(self.some, self.few)
-        expected = len(BrainFactory.model_params.layer_sizes) + 1
+        expected = len(BrainFactory.spec.layer_sizes) + 1
         actual = len(res.layers)
         self.assertEqual(actual, expected)
 
     def test_makes_correct_layer_sizes(self):
         res = BrainFactory.make(self.some, self.few)
-        for i, size in enumerate(BrainFactory.model_params.layer_sizes):
+        for i, size in enumerate(BrainFactory.spec.layer_sizes):
             layer = res.layers[i]
             self.assertEqual(layer.units, size)
 
@@ -45,7 +45,7 @@ class Brain_factory_(Test_):
     def test_clone_makes_correct_layer_sizes(self):
         original = BrainFactory.make(self.some, self.few)
         clone = BrainFactory.clone(original)
-        for i, size in enumerate(BrainFactory.model_params.layer_sizes):
+        for i, size in enumerate(BrainFactory.spec.layer_sizes):
             layer = clone.layers[i]
             self.assertEqual(layer.units, size)
 
@@ -60,7 +60,7 @@ class Brain_factory_(Test_):
     def test_clone_makes_correct_weights(self):
         original = BrainFactory.make(self.some, self.few)
         clone = BrainFactory.clone(original)
-        for ind, size in enumerate(BrainFactory.model_params.layer_sizes):
+        for ind, size in enumerate(BrainFactory.spec.layer_sizes):
             original_weights = original.layers[ind].get_weights()
             clone_weights = clone.layers[ind].get_weights()
             self.assertTensorEqual(original_weights, clone_weights)
