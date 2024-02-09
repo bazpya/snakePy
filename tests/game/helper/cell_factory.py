@@ -37,7 +37,7 @@ class CellFactory:
         return cells[0], cells
 
     @staticmethod
-    def make_infinite_chain(*a) -> Cell:
-        cell = Cell()
-        cell.get_neighbour = CellFactory.make_infinite_chain
+    def make_infinite_chain(type: CellType = CellType.blank) -> Cell:
+        cell = Cell(type=type)
+        cell.get_neighbour = lambda *args: CellFactory.make_infinite_chain(type)
         return cell

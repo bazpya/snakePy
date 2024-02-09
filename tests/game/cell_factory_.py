@@ -73,14 +73,13 @@ class Cell_factory_(Test_):
 
     def test_make_infinite_chain_creates_blank_chain(self):
         runner = CellFactory.make_infinite_chain()
-        for i in range(6):
+        for i in range(self.many):
             self.assertEqual(runner.type, CellType.blank)
             runner = runner.get_neighbour(Direction.any())
 
-    # todo:
-    # def test_make_infinite_chain_makes_correct_cell_type(self):
-    #     type = CellType.food
-    #     runner = CellFactory.make_infinite_chain(cell_type=type)
-    #     for i in range(6):
-    #         self.assertEqual(runner.type, type)
-    #         runner = runner.get_neighbour(Direction.any())
+    def test_make_infinite_chain_makes_correct_cell_type(self):
+        type = CellType.food
+        runner = CellFactory.make_infinite_chain(type=type)
+        for i in range(self.many):
+            self.assertEqual(runner.type, type)
+            runner = runner.get_neighbour(Direction.any())
