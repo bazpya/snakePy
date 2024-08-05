@@ -1,6 +1,37 @@
 {
     "version": "0.2.0",
     "configurations": [
+        //  ====================  Launch  ====================
+        {
+            "name": "App-and-UI",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "presentation": {
+                "hidden": false,
+                "group": "0",
+                "order": 0,
+            },
+        },
+        {
+            "name": "App-Headless",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/main.py",
+            "console": "integratedTerminal",
+            "justMyCode": true,
+            "args": [
+                "headless"
+            ],
+            "presentation": {
+                "hidden": false,
+                "group": "0",
+                "order": 1,
+            },
+        },
+        //  ====================  Test  ====================
         {
             "name": "Test-All",
             "type": "python",
@@ -16,11 +47,16 @@
             ],
             "env": {
                 "TF_ENABLE_ONEDNN_OPTS": "0"
-            }
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "1",
+                "order": 0,
+            },
         },
         {
             "name": "Test-Game",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "unittest",
             "justMyCode": true,
@@ -33,11 +69,16 @@
             ],
             "env": {
                 "TF_ENABLE_ONEDNN_OPTS": "0"
-            }
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "1",
+                "order": 1,
+            },
         },
         {
             "name": "Test-ML",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "unittest",
             "justMyCode": true,
@@ -50,26 +91,12 @@
             ],
             "env": {
                 "TF_ENABLE_ONEDNN_OPTS": "0"
-            }
+            },
+            "presentation": {
+                "hidden": false,
+                "group": "1",
+                "order": 2,
+            },
         },
-        {
-            "name": "With-UI",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/main.py",
-            "console": "integratedTerminal",
-            "justMyCode": true
-        },
-        {
-            "name": "Headless",
-            "type": "python",
-            "request": "launch",
-            "program": "${workspaceFolder}/main.py",
-            "console": "integratedTerminal",
-            "justMyCode": true,
-            "args": [
-                "headless"
-            ]
-        }
     ]
 }
