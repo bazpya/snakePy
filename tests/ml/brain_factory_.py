@@ -1,3 +1,4 @@
+import keras
 import tensorflow as tf
 from src.ml.brain_factory import BrainFactory
 from tests.ml import test_ml_

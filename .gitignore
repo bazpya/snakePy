@@ -1,2 +1,4 @@
 __pycache__
 venv
+models/**/*.*
+!models/keep_dir.txt

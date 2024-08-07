@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import tensorflow as tf
+import keras
 from src.config import config
 from src.ml.brain_factory import BrainFactory
 from src.ml.eye import Eye
@@ -15,7 +16,7 @@ class Player:
     _id: int
     events: EventHub
     _output_layer_size: int
-    _brain: None
+    _brain: keras.Sequential
     _eye: Eye = None
 
     def __init__(self, id: int, game: Game = None, eye: Eye = None, brain=None) -> None:
@@ -84,8 +85,9 @@ class Player:
         return f"Player-{self._id}"
 
     def save(self):
+        dir = config.ml.brain.save_dir
         timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M")
-        filename = config.ml.brain.save_dir + timestamp + f"-brain-{self._id}.keras"
+        filename = f"{dir}{timestamp}-brain-{self._id}.keras"
         self._brain.save(filename)
 
 
