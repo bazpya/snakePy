@@ -1,2 +1,3 @@
 tensorflow==2.15.0
 pyyaml==6.0.1
+bazpy==0.0.5
