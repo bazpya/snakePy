@@ -1,5 +1,4 @@
 game:
-  use_ui: False # todo: Use headless arg instead
   row_count: 6
   col_count: 6
   cell_size: 20

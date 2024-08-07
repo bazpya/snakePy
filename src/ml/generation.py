@@ -1,5 +1,6 @@
 import asyncio
 import math
+from src.args import Args
 from src.config import config
 from src.game.result import Result
 from src.ml.player import Player, PlayerResult
@@ -12,7 +13,7 @@ class Generation:
         id: int,
         previous_res: "GenerationResult" = None,
     ) -> None:
-        self.use_ui = config.game.use_ui
+        self.use_ui = Args.use_ui
         self.population = config.ml.generation.population
         selection_ratio = config.ml.evolution.selection_ratio
         self.selection_count = math.floor(self.population * selection_ratio)

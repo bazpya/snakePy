@@ -9,6 +9,9 @@
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
+            "args": [
+                "ui"
+            ],
             "presentation": {
                 "hidden": false,
                 "group": "0",
@@ -22,9 +25,6 @@
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": [
-                "headless"
-            ],
             "presentation": {
                 "hidden": false,
                 "group": "0",

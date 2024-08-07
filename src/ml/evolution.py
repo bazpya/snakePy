@@ -7,11 +7,8 @@ import time
 
 class Evolution:
 
-    def __init__(self, generation_count: int = 0) -> None:
-        if generation_count:
-            self._gen_count = generation_count
-        else:
-            self._gen_count = config.ml.evolution.generations
+    def __init__(self, generation_count: int = None) -> None:
+        self._gen_count = generation_count or config.ml.evolution.generations
         self._fitness_trend = dict()
         self._last_gen_res = None
 
