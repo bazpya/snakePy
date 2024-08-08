@@ -1,4 +1,4 @@
-from tests.ml.test_ml_ import Test_ml_
+from tests.test_ import Test_
 
 
-class Player_(Test_ml_): ...
+class Player_(Test_): ...

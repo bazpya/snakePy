@@ -1,7 +1,6 @@
 import asyncio
 import datetime
-import tensorflow as tf
-import keras
+from src.ml.ml import ML
 from src.config import config
 from src.ml.brain_factory import BrainFactory
 from src.ml.eye import Eye
@@ -16,10 +15,12 @@ class Player:
     _id: int
     events: EventHub
     _output_layer_size: int
-    _brain: keras.Sequential
+    _brain: ML.keras.Sequential
     _eye: Eye = None
 
-    def __init__(self, id: int, game: Game = None, eye: Eye = None, brain=None) -> None:
+    def __init__(
+        self, id: int, game: Game = None, eye: Eye = None, brain: ML.keras.Sequential = None
+    ) -> None:
         self._game = game if game else Game()
         self._id = id
         self.events = EventHub()
@@ -27,10 +28,8 @@ class Player:
         self.bind(self._game)
         input_size = self._eye.view_size
         self._output_layer_size = len(Turn)
-        if brain is None:
-            self._brain = BrainFactory.make(input_size, self._output_layer_size)
-        else:
-            self._brain = brain
+        self._brain = brain or BrainFactory.make(input_size, self._output_layer_size)
+        self._dir = config.ml.brain.save_dir
 
     def bind(self, game: Game) -> None:
         game.events.stepped.subscribe(self._on_stepped)
@@ -52,8 +51,8 @@ class Player:
         food = self._game.get_current_food()
         eye_output = self._eye.see(head, food)
         brain_input = eye_output[None, ...]  # just add an extra dimension
-        brain_output = self._brain.predict(brain_input)[0]
-        index = tf.math.argmax(brain_output).numpy()
+        brain_output = self._brain.predict(x=brain_input, verbose=0)[0]
+        index = ML.math.argmax(brain_output).numpy()
         shifted_index = index - 1
         return Turn(shifted_index)
 
@@ -85,9 +84,9 @@ class Player:
         return f"Player-{self._id}"
 
     def save(self):
-        dir = config.ml.brain.save_dir
+        # baztodo: Use UTC from bazpy
         timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M")
-        filename = f"{dir}{timestamp}-brain-{self._id}.keras"
+        filename = f"{self._dir}{timestamp}-brain-{self._id}.keras"
         self._brain.save(filename)
 
 

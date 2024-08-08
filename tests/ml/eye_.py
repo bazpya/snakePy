@@ -1,18 +1,18 @@
-import tensorflow as tf
+from src.ml.ml import ML
+from tests.test_ import Test_
 from src.game.game import Game
 from src.ml.eye import Eye
 from src.ml.view import View
-from tests.ml.test_ml_ import Test_ml_
 
 
-class Eye_(Test_ml_):
+class Eye_(Test_):
     def test_see_gets_tensor(self):
         sut = Eye()
         game = Game()
         head = game.get_head()
         food = game._last_food
         actual = sut.see(head, food)
-        self.assertIsInstance(actual, tf.Tensor)
+        self.assertIsInstance(actual, ML.Tensor)
 
     def test_see_gets_the_right_shape(self):
         view = View(True, False, True, False, True)

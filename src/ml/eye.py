@@ -1,4 +1,4 @@
-import tensorflow as tf
+from src.ml.ml import ML
 from src.game.direction import Direction
 from src.ml.view import View, the_view
 from src.game.cell import Cell
@@ -9,7 +9,7 @@ class Eye:
         self._view = view if view else the_view
         self.view_size: int = self._view.size
 
-    def see(self, head: Cell, food: Cell) -> tf.Tensor:
+    def see(self, head: Cell, food: Cell) -> ML.Tensor:
         signals = []
         recip = self._view._reciprocate_distances
 
@@ -62,4 +62,4 @@ class Eye:
                 ]
             )
 
-        return tf.convert_to_tensor(signals)
+        return ML.convert_to_tensor(signals)

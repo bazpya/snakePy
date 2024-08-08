@@ -4,7 +4,7 @@
         //  ====================  Launch  ====================
         {
             "name": "App-and-UI",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
@@ -12,6 +12,9 @@
             "args": [
                 "ui"
             ],
+            "env": {
+                "TF_CPP_MIN_LOG_LEVEL": "2",
+            },
             "presentation": {
                 "hidden": false,
                 "group": "0",
@@ -20,11 +23,14 @@
         },
         {
             "name": "App-Headless",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
+            "env": {
+                "TF_CPP_MIN_LOG_LEVEL": "2",
+            },
             "presentation": {
                 "hidden": false,
                 "group": "0",
@@ -34,7 +40,7 @@
         //  ====================  Test  ====================
         {
             "name": "Test-All",
-            "type": "python",
+            "type": "debugpy",
             "request": "launch",
             "module": "unittest",
             "justMyCode": true,
@@ -46,7 +52,8 @@
                 "*_.py"
             ],
             "env": {
-                "TF_ENABLE_ONEDNN_OPTS": "0"
+                "TF_CPP_MIN_LOG_LEVEL": "2",
+                "TF_ENABLE_ONEDNN_OPTS": "0",
             },
             "presentation": {
                 "hidden": false,
@@ -68,6 +75,7 @@
                 "*_.py"
             ],
             "env": {
+                "TF_CPP_MIN_LOG_LEVEL": "2",
                 "TF_ENABLE_ONEDNN_OPTS": "0"
             },
             "presentation": {
@@ -90,6 +98,7 @@
                 "*_.py"
             ],
             "env": {
+                "TF_CPP_MIN_LOG_LEVEL": "2",
                 "TF_ENABLE_ONEDNN_OPTS": "0"
             },
             "presentation": {

@@ -1,14 +1,12 @@
-import keras
-import tensorflow as tf
-from src.ml.brain_factory import BrainFactory
-from tests.ml import test_ml_
+from src.ml.ml import ML
 from tests.test_ import Test_
+from src.ml.brain_factory import BrainFactory
 
 
 class Brain_factory_(Test_):
     def test_makes_correct_type_of_model(self):
         res = BrainFactory.make(self.some, self.few)
-        self.assertIsInstance(res, tf.keras.Sequential)
+        self.assertIsInstance(res, ML.keras.Sequential)
 
     def test_makes_correct_number_of_layers(self):
         res = BrainFactory.make(self.some, self.few)
@@ -34,7 +32,7 @@ class Brain_factory_(Test_):
     def test_clone_makes_correct_type_of_model(self):
         original = BrainFactory.make(self.some, self.few)
         clone = BrainFactory.clone(original)
-        self.assertIsInstance(clone, tf.keras.Sequential)
+        self.assertIsInstance(clone, ML.keras.Sequential)
 
     def test_clone_makes_correct_number_of_layers(self):
         original = BrainFactory.make(self.some, self.few)

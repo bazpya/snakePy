@@ -1,9 +1,9 @@
+from tests.test_ import Test_
 from src.ml.evolution import Evolution
-from tests.ml.test_ml_ import Test_ml_
 from src.config import config
 
 
-class Evolution_(Test_ml_):
+class Evolution_(Test_):
     def test_specified_gen_count_uses_it(self):
         expected = self.few
         sut = Evolution(expected)

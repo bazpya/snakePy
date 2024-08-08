@@ -1,17 +1,17 @@
+from tests.test_ import Test_
 from src.ml.brain_factory import BrainFactory
-from tests.ml.test_ml_ import Test_ml_
-import shutil
+import os
 
 
-class Brain_(Test_ml_):
+class Brain_(Test_):
     def setUp(self) -> None:
         self.sut = BrainFactory.make(self.some, self.few)
         return super().setUp()
 
     def test_save_saves(self):
-        path = "./models/bazdir"
-        self.assertIsNotDir(path)
+        path = "./models/scratch_test.keras"
+        self.assertIsNotFile(path)
         self.sut.save(path)
-        self.assertIsDir(path)
-        shutil.rmtree(path)
-        self.assertIsNotDir(path)
+        self.assertIsFile(path)
+        os.unlink(path)
+        self.assertIsNotFile(path)

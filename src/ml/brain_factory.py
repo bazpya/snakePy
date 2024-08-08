@@ -1,6 +1,4 @@
-import keras
-from keras import layers
-import tensorflow as tf
+from src.ml.ml import ML
 from src.config import Config, config
 from src.tree import Tree
 
@@ -8,13 +6,13 @@ from src.tree import Tree
 class BrainFactory:
     spec = Tree()
     spec.layer_sizes = Config.parse_ints(config.ml.brain.layer_sizes)
-    spec.activation = tf.keras.activations.linear
-    spec.kernel_initialiser = tf.keras.initializers.LecunNormal
+    spec.activation = ML.keras.activations.linear
+    spec.kernel_initialiser = ML.keras.initializers.LecunNormal
     spec.use_bias = False
-    spec.bias_initialiser = tf.keras.initializers.RandomNormal
+    spec.bias_initialiser = ML.keras.initializers.RandomNormal
 
     @staticmethod
-    def make(input_size: int, output_size: int) -> keras.Sequential:
+    def make(input_size: int, output_size: int) -> ML.keras.Sequential:
         s = BrainFactory.spec
         model_layers = []
 
@@ -31,12 +29,14 @@ class BrainFactory:
         # Add output layer
         output_layer = BrainFactory.make_layer(s, output_size)
         model_layers.append(output_layer)
-        return keras.Sequential(model_layers)
+        return ML.keras.Sequential(model_layers)
 
     @staticmethod
-    def make_layer(spec: Tree, size: int, input_size: int = None) -> keras.layers.Dense:
+    def make_layer(
+        spec: Tree, size: int, input_size: int = None
+    ) -> ML.keras.layers.Dense:
         if input_size:
-            return layers.Dense(
+            return ML.keras.layers.Dense(
                 units=size,
                 activation=spec.activation,
                 use_bias=spec.use_bias,
@@ -45,7 +45,7 @@ class BrainFactory:
                 input_shape=(input_size,),
             )
         else:
-            return layers.Dense(
+            return ML.keras.layers.Dense(
                 units=size,
                 activation=spec.activation,
                 use_bias=spec.use_bias,
@@ -54,7 +54,7 @@ class BrainFactory:
             )
 
     @staticmethod
-    def clone(original: keras.Sequential) -> keras.Sequential:
-        clone = keras.models.clone_model(original)
+    def clone(original: ML.keras.Sequential) -> ML.keras.Sequential:
+        clone = ML.keras.models.clone_model(original)
         clone.set_weights(original.get_weights())
         return clone
