@@ -9,13 +9,14 @@ ml:
   evolution:
     selection_ratio: 0.5
     generations: 2
+    has_ancestor_file: False
   generation:
     population: 2
   player:
     tbc: "tbc"
   brain:
-    layer_sizes: "4, 4" # CSV string
     save_dir: "./models/"
+    layer_sizes: "4, 4" # CSV string
   grid_view:
     reciprocate_distances: False
     food_squarewise: True

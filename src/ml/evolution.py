@@ -1,22 +1,24 @@
 from src.ml.player import Player
 from src.game.result import Result
-from src.ml.generation import Generation
+from src.ml.generation import Generation, GenerationResult
 from src.config import config
 import time
 
 
 class Evolution:
 
-    def __init__(self, generation_count: int = None) -> None:
-        self._gen_count = generation_count or config.ml.evolution.generations
+    def __init__(self) -> None:
+        self._has_ancestor_file = config.ml.evolution.has_ancestor_file
+        self._gen_count = config.ml.evolution.generations
         self._fitness_trend = dict()
         self._last_gen_res = None
 
     async def run(self) -> "EvolutionResult":
-        res = None
+        res: GenerationResult = None
         time_start = time.time()
         for i in range(self._gen_count):
-            gen = Generation(i, res)
+            has_ancestor_file = self._has_ancestor_file if i == 0 else False
+            gen = Generation(i, res, has_ancestor_file)
             res = await gen.run()
             self._last_gen_res = res
             self._fitness_trend[i] = res.max_fitness

@@ -12,6 +12,7 @@ class Generation:
         self,
         id: int,
         previous_res: "GenerationResult" = None,
+        has_ancestor_file: bool = False,
     ) -> None:
         self.use_ui = Args.use_ui
         self.population = config.ml.generation.population
@@ -45,7 +46,7 @@ class Generation:
 
     def _bind(self):
         for player in self._players:
-            player.events.died.subscribe(self.add_res)
+            player.events.died.subscribe(self._add_res)
 
     def _make_coroutines(self):
         for player in self._players:
@@ -61,7 +62,7 @@ class Generation:
             else:
                 self._coroutines.append(player.play_awaitable_sync())
 
-    def add_res(self, res: PlayerResult):
+    def _add_res(self, res: PlayerResult):
         self._player_results.append(res)
 
     async def run(self):
