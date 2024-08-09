@@ -20,9 +20,13 @@ class Generation:
         self.selection_count = math.floor(self.population * selection_ratio)
         if self.selection_count < 1:
             raise ValueError("No player survives the harsh selection ratio")
-
         self._id = id
+        if previous_res is not None and has_ancestor_file:
+            raise ValueError(
+                "A generation with ancestor from file may not inherit result from previous generation"
+            )
         self._previous_res = previous_res
+        self._has_ancestor_file = has_ancestor_file
 
         self._players: list[Player] = []
         self._drawers: list[Drawer] = []
