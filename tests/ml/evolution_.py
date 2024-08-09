@@ -22,9 +22,9 @@ class Evolution_(Test_):
         self.assertEqual(MockGeneration.call_count, gen_count)
         self.assertEqual(
             MockGeneration.call_args_list[0],
-            Call(0, None, True),
+            Call(id=0, previous_res=None, has_ancestor_file=True, verbose=False),
         )
         self.assertEqual(
             MockGeneration.call_args_list[1],
-            Call(1, run_result, False),
+            Call(id=1, previous_res=run_result, has_ancestor_file=False, verbose=False),
         )

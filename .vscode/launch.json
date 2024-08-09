@@ -3,15 +3,12 @@
     "configurations": [
         //  ====================  Launch  ====================
         {
-            "name": "App-and-UI",
+            "name": "Run-Headless",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": [
-                "ui"
-            ],
             "env": {
                 "TF_CPP_MIN_LOG_LEVEL": "2",
             },
@@ -22,12 +19,15 @@
             },
         },
         {
-            "name": "App-Headless",
+            "name": "Run-UI",
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
             "console": "integratedTerminal",
             "justMyCode": true,
+            "args": [
+                "ui"
+            ],
             "env": {
                 "TF_CPP_MIN_LOG_LEVEL": "2",
             },

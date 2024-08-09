@@ -1,8 +1,7 @@
 import asyncio
-import datetime
 from src.ml.ml import ML
 from src.config import config
-from src.ml.brain_factory import BrainFactory
+from src.ml.brain_factory import BrainFactory as BF
 from src.ml.eye import Eye
 from src.game.result import GameResult
 from src.game.event_hub import EventHub
@@ -17,9 +16,15 @@ class Player:
     _output_layer_size: int
     _brain: ML.keras.Sequential
     _eye: Eye = None
+    _dir = config.ml.brain.save_dir
 
     def __init__(
-        self, id: int, game: Game = None, eye: Eye = None, brain: ML.keras.Sequential = None
+        self,
+        id: int,
+        game: Game = None,
+        eye: Eye = None,
+        brain: ML.keras.Sequential = None,
+        verbose: bool = False,
     ) -> None:
         self._game = game if game else Game()
         self._id = id
@@ -28,8 +33,8 @@ class Player:
         self.bind(self._game)
         input_size = self._eye.view_size
         self._output_layer_size = len(Turn)
-        self._brain = brain or BrainFactory.make(input_size, self._output_layer_size)
-        self._dir = config.ml.brain.save_dir
+        self._brain = brain or BF.make(input_size, self._output_layer_size)
+        self._verbose = verbose
 
     def bind(self, game: Game) -> None:
         game.events.stepped.subscribe(self._on_stepped)
@@ -40,6 +45,7 @@ class Player:
 
     def _on_died(self, game_res: GameResult) -> None:
         res = PlayerResult(self, self.get_fitness(game_res), game_res)
+        self._verbose and print(f"Player {self._id} died")
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:
@@ -68,7 +74,7 @@ class Player:
         await self._game.run_async(inter)
 
     def clone(self, id: int, game: Game = None, eye: Eye = None) -> "Player":
-        brain = BrainFactory.clone(self._brain)
+        brain = BF.clone(self._brain)
         player = Player(id, game=game, eye=eye, brain=brain)
         return player
 
@@ -84,10 +90,7 @@ class Player:
         return f"Player-{self._id}"
 
     def save(self):
-        # baztodo: Use UTC from bazpy
-        timestamp = datetime.datetime.now().strftime("%y%m%d-%H%M")
-        filename = f"{self._dir}{timestamp}-brain-{self._id}.keras"
-        self._brain.save(filename)
+        BF.save(self._brain)
 
 
 class PlayerResult(GameResult):

@@ -16,6 +16,7 @@ ml:
     tbc: "tbc"
   brain:
     save_dir: "./models/"
+    ancestor_example_name: "ancestor_example.keras"
     layer_sizes: "4, 4" # CSV string
   grid_view:
     reciprocate_distances: False

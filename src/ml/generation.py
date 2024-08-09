@@ -13,6 +13,7 @@ class Generation:
         id: int,
         previous_res: "GenerationResult" = None,
         has_ancestor_file: bool = False,
+        verbose: bool = False,
     ) -> None:
         self.use_ui = Args.use_ui
         self.population = config.ml.generation.population
@@ -33,6 +34,8 @@ class Generation:
         self._coroutines = []
         self._player_results: list[PlayerResult] = []
 
+        self._verbose = verbose
+
         self._populate()
         self._bind()
         self._make_coroutines()
@@ -45,7 +48,7 @@ class Generation:
             clone = parent.clone(i)
             self._players.append(clone)
         for i in range(len(parents), self.population):
-            player = Player(i)
+            player = Player(id=i, verbose=self._verbose)
             self._players.append(player)
 
     def _bind(self):
@@ -70,6 +73,7 @@ class Generation:
         self._player_results.append(res)
 
     async def run(self):
+        self._verbose and print(f"Generation {self._id} running")
         await asyncio.gather(*self._coroutines)
         return GenerationResult(
             self._id,

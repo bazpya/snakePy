@@ -1,6 +1,8 @@
+import os
 from src.ml.ml import ML
 from src.config import Config, config
 from src.tree import Tree
+from bazpy.utc import Utc
 
 
 class BrainFactory:
@@ -10,6 +12,7 @@ class BrainFactory:
     spec.kernel_initialiser = ML.keras.initializers.LecunNormal
     spec.use_bias = False
     spec.bias_initialiser = ML.keras.initializers.RandomNormal
+    _dir = config.ml.brain.save_dir
 
     @staticmethod
     def make(input_size: int, output_size: int) -> ML.keras.Sequential:
@@ -58,3 +61,26 @@ class BrainFactory:
         clone = ML.keras.models.clone_model(original)
         clone.set_weights(original.get_weights())
         return clone
+
+    @staticmethod
+    def save(brain: ML.keras.Sequential) -> None:
+        now = Utc.get_now()
+        timestamp = now.strftime("%y%m%d-%H%M%S")
+        filename = f"{BrainFactory._dir}brain-{timestamp}.keras"
+        brain.save(filename)
+
+    @staticmethod
+    def load(filename: str = None, verbose: bool = False) -> ML.keras.Sequential:
+        if filename:
+            filepath = f"{BrainFactory._dir}{filename}"
+        else:
+            filepath = BrainFactory.get_latest_filepath()
+        verbose and print(f"Read brain from: {filepath}")
+        brain = ML.keras.models.load_model(filepath)
+        return brain
+
+    def get_latest_filepath() -> str:
+        filenames = os.listdir(BrainFactory._dir)
+        paths = [os.path.join(BrainFactory._dir, x) for x in filenames]
+        latest = max(paths, key=os.path.getctime)
+        return latest

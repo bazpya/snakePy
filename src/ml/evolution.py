@@ -7,18 +7,25 @@ import time
 
 class Evolution:
 
-    def __init__(self) -> None:
+    def __init__(self, verbose: bool = False) -> None:
         self._has_ancestor_file = config.ml.evolution.has_ancestor_file
         self._gen_count = config.ml.evolution.generations
         self._fitness_trend = dict()
         self._last_gen_res = None
+        self._verbose = verbose
 
     async def run(self) -> "EvolutionResult":
+        self._verbose and print("Evolution began ...")
         res: GenerationResult = None
         time_start = time.time()
         for i in range(self._gen_count):
             has_ancestor_file = self._has_ancestor_file if i == 0 else False
-            gen = Generation(i, res, has_ancestor_file)
+            gen = Generation(
+                id=i,
+                previous_res=res,
+                has_ancestor_file=has_ancestor_file,
+                verbose=self._verbose,
+            )
             res = await gen.run()
             self._last_gen_res = res
             self._fitness_trend[i] = res.max_fitness
