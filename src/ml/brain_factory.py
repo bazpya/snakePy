@@ -3,6 +3,7 @@ from src.ml.ml import ML
 from src.config import Config, config
 from src.tree import Tree
 from bazpy.utc import Utc
+from numpy.random import normal
 
 
 class BrainFactory:
@@ -61,6 +62,35 @@ class BrainFactory:
         clone = ML.keras.models.clone_model(original)
         clone.set_weights(original.get_weights())
         return clone
+
+    # https://medium.com/adding-noise-to-network-weights-in-tensorflow/adding-noise-to-network-weights-in-tensorflow-fddc82e851cb#:~:text=Adding%20noise%3A%20method%201&text=In%20the%20same%20manor%20set_weight,value%20plus%20some%20noise%20vector.
+    @staticmethod
+    def mutate(original: ML.keras.Sequential) -> ML.keras.Sequential:
+        clone = ML.keras.models.clone_model(original)
+        clone.set_weights(original.get_weights())
+        BrainFactory.add_noise(clone)
+        return clone
+
+    # def weight_perturbation(model):
+    #     for layer in model.layers:
+    #         trainable_weights = layer.trainable_variables
+
+    #         for weight in trainable_weights:
+    #             random_weights = tf.random.uniform(
+    #                 tf.shape(weight), 1e-4, 1e-5, dtype=tf.float32
+    #             )
+    #             weight.assign_add(random_weights)
+
+    @staticmethod
+    def add_noise(model: ML.keras.Sequential) -> None:
+        centre, std_deviation = 0.0, 1
+        for layer_weights in model.trainable_weights:
+            noise = normal(
+                loc=centre,
+                scale=std_deviation,
+                size=layer_weights.shape,
+            )
+            layer_weights.assign_add(noise)
 
     @staticmethod
     def save(brain: ML.keras.Sequential) -> None:

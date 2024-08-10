@@ -60,13 +60,23 @@ class Brain_factory_(Test_):
         expected = self.few
         self.assertEqual(actual, expected)
 
-    def test_clone_makes_correct_weights(self):
+    def test_clone_keeps_weights(self):
         original = BF.make(self.some, self.few)
         clone = BF.clone(original)
         for ind, size in enumerate(BF.spec.layer_sizes):
             original_weights = original.layers[ind].get_weights()
             clone_weights = clone.layers[ind].get_weights()
             self.assertTensorEqual(original_weights, clone_weights)
+
+    # ======================  Mutating  ======================
+
+    def test_mutate_changes_weights(self):
+        original = BF.make(self.some, self.few)
+        mutant = BF.mutate(original)
+        for ind, size in enumerate(BF.spec.layer_sizes):
+            original_weights = original.layers[ind].get_weights()
+            clone_weights = mutant.layers[ind].get_weights()
+            self.assertTensorDifferent(original_weights, clone_weights)
 
     # ======================  Saving/Loading  ======================
 

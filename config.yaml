@@ -2,7 +2,7 @@ game:
   row_count: 6
   col_count: 6
   cell_size: 20
-  interval: 0.03
+  interval: 0.03 # sec
   snake:
     max_steps: 50
 ml:

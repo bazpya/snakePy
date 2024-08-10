@@ -77,6 +77,11 @@ class Player:
         player = Player(id, game=game, eye=eye, brain=brain)
         return player
 
+    def mutate(self, id: int, game: Game = None, eye: Eye = None) -> "Player":
+        brain = BF.mutate(self._brain)
+        player = Player(id, game=game, eye=eye, brain=brain)
+        return player
+
     def get_fitness(self, game_res: GameResult) -> float:
         # fitness() { return this.#age + (this.length - 1) * The.grid.playableCellCount }
         return (

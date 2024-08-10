@@ -33,6 +33,3 @@ class Generation_(Test_):
                     etc = Generation(id=0)
                 else:
                     self.assertRaises(ValueError, lambda: Generation(id=0))
-
-    # baztodo
-    def test_populate_spawns_correct_number_of_players(self): ...
