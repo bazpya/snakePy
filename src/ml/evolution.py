@@ -31,6 +31,7 @@ class Evolution:
             self._fitness_trend[i] = res.max_fitness
         time_end = time.time()
         time_diff = time_end - time_start
+        self._verbose and print("Evolution ended")
 
         return EvolutionResult(
             self._gen_count,

@@ -5,8 +5,8 @@ warnings.warn = lambda *args, **kwargs: ...
 
 print(".", end="\r", flush=True)
 print("")
-for _ in range(3):
-    print(".")
+print(".")
+print(".")
 line = "==============================="
 print(f"{line}  TensorFlow Output  {line} \n")
 

@@ -45,7 +45,6 @@ class Player:
 
     def _on_died(self, game_res: GameResult) -> None:
         res = PlayerResult(self, self.get_fitness(game_res), game_res)
-        self._verbose and print(f"Player {self._id} died")
         self.events.died.emit(res)
 
     def send_game_input(self) -> None:

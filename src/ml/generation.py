@@ -50,6 +50,9 @@ class Generation:
         for i in range(len(parents), self.population):
             player = Player(id=i, verbose=self._verbose)
             self._players.append(player)
+        self._verbose and print(
+            f"  Running Gen {self._id} population: {len(self._players)}, parents: {len(parents)}"
+        )
 
     def _bind(self):
         for player in self._players:
@@ -73,8 +76,11 @@ class Generation:
         self._player_results.append(res)
 
     async def run(self):
-        self._verbose and print(f"Generation {self._id} running")
         await asyncio.gather(*self._coroutines)
+        if self._verbose:
+            death_seq = [str(x.player._id) for x in self._player_results]
+            death_seq_str = ", ".join(death_seq)
+            self._verbose and print(f"    Death seq: {death_seq_str}")
         return GenerationResult(
             self._id,
             self.selection_count,

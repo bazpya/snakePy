@@ -5,13 +5,13 @@ from tests.testbase import Test_
 
 class Generation_(Test_):
 
-    def test_allows_previous_res_alone(self):
+    def test_init_allows_previous_res_alone(self):
         etc = Generation(id=0, previous_res={})
 
-    def test_allows_ancestor_file_alone(self):
+    def test_init_allows_ancestor_file_alone(self):
         etc = Generation(id=0, has_ancestor_file=True)
 
-    def test_rejects_simultaneous_previous_res_and_ancestor_file(self):
+    def test_init_rejects_previous_res_and_ancestor_file_together(self):
         self.assertRaises(
             ValueError,
             lambda: Generation(id=0, previous_res={}, has_ancestor_file=True),
@@ -33,3 +33,6 @@ class Generation_(Test_):
                     etc = Generation(id=0)
                 else:
                     self.assertRaises(ValueError, lambda: Generation(id=0))
+
+    # baztodo
+    def test_populate_spawns_correct_number_of_players(self): ...
