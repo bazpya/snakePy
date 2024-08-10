@@ -17,8 +17,8 @@ class Generation:
     ) -> None:
         self.use_ui = Args.use_ui
         self.population = config.ml.generation.population
-        selection_ratio = config.ml.evolution.selection_ratio
-        self.selection_count = math.floor(self.population * selection_ratio)
+        selection_divisor = config.ml.generation.selection_divisor
+        self.selection_count = math.floor(self.population / selection_divisor)
         if self.selection_count < 1:
             raise ValueError("No player survives the harsh selection ratio")
         self._id = id
@@ -51,7 +51,7 @@ class Generation:
             player = Player(id=i, verbose=self._verbose)
             self._players.append(player)
         self._verbose and print(
-            f"  Running Gen {self._id} population: {len(self._players)}, parents: {len(parents)}"
+            f"  Generation {self._id} population: {len(self._players)}, parents: {len(parents)}"
         )
 
     def _bind(self):

@@ -7,11 +7,11 @@ game:
     max_steps: 50
 ml:
   evolution:
-    selection_ratio: 0.5
     generations: 2
     has_ancestor_file: False
   generation:
     population: 2
+    selection_divisor: 2 # survivor_count = selection_divisor x population
   player:
     tbc: "tbc"
   brain:
