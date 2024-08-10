@@ -1,7 +1,7 @@
 import os
 from src.ml.ml import ML
 from src.config import config
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.ml.brain_factory import BrainFactory as BF
 
 

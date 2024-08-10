@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 from src.game.event import Event
 from src.game.event_hub import EventHub
-from tests.test_ import Test_
+from tests.testbase import Test_
 
 
 class Snake_sync_(Test_):

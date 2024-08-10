@@ -1,4 +1,4 @@
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.ml.player import Player
 
 

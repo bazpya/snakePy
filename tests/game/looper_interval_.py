@@ -1,7 +1,7 @@
 from unittest.mock import MagicMock
 from src.game.looper_interval import LooperInterval
 from tests.game.helper.counter import Counter
-from tests.test_ import Test_
+from tests.testbase import Test_
 
 
 class LooperInterval_(Test_):

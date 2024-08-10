@@ -1,5 +1,5 @@
 import random
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.game.cell import CellType
 from src.game.direction import Direction
 from tests.game.helper.cell_factory import CellFactory

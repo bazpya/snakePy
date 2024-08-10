@@ -1,5 +1,5 @@
 from src.ml.ml import ML
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.game.game import Game
 from src.ml.eye import Eye
 from src.ml.view import View

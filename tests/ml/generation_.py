@@ -1,6 +1,6 @@
 from src.ml.generation import Generation
 from src.config import config
-from tests.test_ import Test_
+from tests.testbase import Test_
 
 
 class Generation_(Test_):

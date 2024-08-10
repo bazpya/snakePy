@@ -1,6 +1,6 @@
 import math
 from tests.game.helper.cell_factory import CellFactory
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.game.cell import CellType, Cell
 from src.game.direction import Direction
 

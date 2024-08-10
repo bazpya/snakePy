@@ -1,6 +1,6 @@
 from src.game.direction import Direction
 from src.game.grid import Grid
-from tests.test_ import Test_
+from tests.testbase import Test_
 from src.game.cell import Cell
 from src.game.global_refs import CellType
 from src.game.game import Game
