@@ -1,9 +1,8 @@
 {
-    "[python]": {
-        "editor.defaultFormatter": "ms-python.black-formatter"
-    },
-    "python.formatting.provider": "black",
-    "python.analysis.extraPaths": [
-        // "./source"
-    ]
+    "files.exclude": {
+        ".gitignore": true,
+        "**/__pycache__": true,
+        "venv": true,
+        "models": true,
+    }
 }

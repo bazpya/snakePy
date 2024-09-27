@@ -1,14 +1,12 @@
 from typing import Any
 
-# baztodo: move to bazpy
-
+# baztodo: Reuse these from bazpy
 
 def print_line(
     break_before: bool,
     value: Any,
     break_after: bool = False,
 ) -> None:
-    # baztodo: parameterise line length
     text = f"  {value}  "
     text = f"{text:_^68}"
     text = ("\n" if break_before else "") + text
