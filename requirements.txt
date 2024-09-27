@@ -1,4 +1,4 @@
 tensorflow==2.17.0
 pyyaml==6.0.1
-bazpy==0.0.7
+bazpy==0.0.12
 pytz

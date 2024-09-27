@@ -1,7 +1,6 @@
 import logging
 import warnings
-
-from src.print import print_line, print_vertical_space
+from bazpy.print import print_line, print_vertical_space
 
 warnings.warn = lambda *args, **kwargs: ...
 
