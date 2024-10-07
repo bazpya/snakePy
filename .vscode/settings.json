@@ -2,7 +2,7 @@
     "files.exclude": {
         ".gitignore": true,
         "**/__pycache__": true,
-        "venv": true,
+        ".venv": true,
         "models": true,
     }
 }
