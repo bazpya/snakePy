@@ -7,13 +7,11 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "console": "internalConsole",
             "justMyCode": true,
             "env": {
                 "TF_CPP_MIN_LOG_LEVEL": "2",
             },
             "presentation": {
-                "hidden": false,
                 "group": "0",
                 "order": 0,
             },
@@ -23,7 +21,6 @@
             "type": "debugpy",
             "request": "launch",
             "program": "${workspaceFolder}/main.py",
-            "console": "internalConsole",
             "justMyCode": true,
             "args": [
                 "ui"
@@ -32,7 +29,6 @@
                 "TF_CPP_MIN_LOG_LEVEL": "2",
             },
             "presentation": {
-                "hidden": false,
                 "group": "0",
                 "order": 1,
             },
@@ -56,7 +52,6 @@
                 "TF_ENABLE_ONEDNN_OPTS": "0",
             },
             "presentation": {
-                "hidden": false,
                 "group": "1",
                 "order": 0,
             },
@@ -79,7 +74,6 @@
                 "TF_ENABLE_ONEDNN_OPTS": "0"
             },
             "presentation": {
-                "hidden": false,
                 "group": "1",
                 "order": 1,
             },
@@ -102,7 +96,6 @@
                 "TF_ENABLE_ONEDNN_OPTS": "0"
             },
             "presentation": {
-                "hidden": false,
                 "group": "1",
                 "order": 2,
             },

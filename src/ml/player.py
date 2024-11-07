@@ -26,10 +26,10 @@ class Player:
         brain: ML.keras.Sequential = None,
         verbose: bool = False,
     ) -> None:
-        self._game = game if game else Game()
+        self._game = game or Game()
         self._id = id
         self.events = EventHub()
-        self._eye = eye if eye else Eye()
+        self._eye = eye or Eye()
         self.bind(self._game)
         input_size = self._eye.view_size
         self._output_layer_size = len(Turn)
@@ -69,7 +69,7 @@ class Player:
         await loop.run_in_executor(None, self.play_sync)
 
     async def play_async(self, interval: float = 0) -> None:
-        inter = interval if interval else config.game.interval
+        inter = interval or config.game.interval
         await self._game.run_async(inter)
 
     def clone(self, id: int, game: Game = None, eye: Eye = None) -> "Player":

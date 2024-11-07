@@ -12,7 +12,7 @@ class Grid:
     def __init__(self, row_count: int = 0, col_count: int = 0) -> None:
         if row_count:
             self.row_count = row_count
-            self.col_count = col_count if col_count else row_count
+            self.col_count = col_count or row_count
         else:
             self.row_count = config.game.row_count
             self.col_count = config.game.col_count

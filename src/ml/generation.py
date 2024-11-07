@@ -68,15 +68,15 @@ class Generation:
                 # drawer.getMouse()
 
             if self.use_ui:
-                self._coroutines.append(async_func())
+                self._coroutines.append(async_func)
             else:
-                self._coroutines.append(player.play_awaitable_sync())
+                self._coroutines.append(player.play_awaitable_sync)
 
     def _add_res(self, res: PlayerResult):
         self._player_results.append(res)
 
     async def run(self):
-        await asyncio.gather(*self._coroutines)
+        await asyncio.gather(*[x() for x in self._coroutines])
         if self._verbose:
             death_seq = [str(x.player._id) for x in self._player_results]
             death_seq_str = ", ".join(death_seq)

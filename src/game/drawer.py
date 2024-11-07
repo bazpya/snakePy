@@ -18,7 +18,7 @@ class Drawer:
     }
 
     def __init__(self, game: Game, cell_size: int = 0) -> None:
-        self._cell_size = cell_size if cell_size else config.game.cell_size
+        self._cell_size = cell_size or config.game.cell_size
         self._shapes = dict()
         if game:
             self._bind(game)

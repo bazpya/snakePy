@@ -11,7 +11,7 @@ ml:
     has_ancestor_file: False
   generation:
     population: 2
-    selection_divisor: 2 # survivor_count = selection_divisor x population
+    selection_divisor: 2 # survivor_count = population / selection_divisor
   player:
     tbc: "tbc"
   brain:

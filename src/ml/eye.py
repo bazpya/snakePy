@@ -6,7 +6,7 @@ from src.game.cell import Cell
 
 class Eye:
     def __init__(self, view: View = None) -> None:
-        self._view = view if view else the_view
+        self._view = view or the_view
         self.view_size: int = self._view.size
 
     def see(self, head: Cell, food: Cell) -> ML.Tensor:

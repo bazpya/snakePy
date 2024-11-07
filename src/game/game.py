@@ -15,9 +15,7 @@ class Game:
     _last_food: Cell = None
 
     def __init__(self, grid: Grid = None, snake: Snake = None) -> None:
-        # todo: Use this notation:
-        # self.ppm = self.ppm or DEFAULT_PPM
-        self._grid = grid if grid else Grid()
+        self._grid = grid or Grid()
         self.events = EventHub()
         self._diff = GameDiff()
         if snake:
@@ -40,7 +38,7 @@ class Game:
             self._diff.set_food(cell)
 
     def _bind(self, snake: Snake = None) -> None:
-        s = snake if snake else self._snake
+        s = snake or self._snake
         self._snake = s
         s._events.stepped.subscribe(self._on_stepped)
         s._events.ate.subscribe(self._on_ate)
