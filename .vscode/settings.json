@@ -2,7 +2,13 @@
     "files.exclude": {
         ".gitignore": true,
         "**/__pycache__": true,
+        ".pytest_cache": true,
         ".venv": true,
         "models": true,
-    }
+    },
+    // Fold each test file (x_test.py) under its source file (x.py)
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        "*.py": "${capture}_test.py",
+    },
 }
