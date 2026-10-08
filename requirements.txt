@@ -1,1 +1,5 @@
+# CPU-only PyTorch: much smaller than the default CUDA build
+--extra-index-url https://download.pytorch.org/whl/cpu
+# numpy  # torch warns at import without it
 pytest
+torch
