@@ -1,3 +1,4 @@
+from pathlib import Path
 import torch
 from torch import nn
 from snake.core import Turn
@@ -39,6 +40,16 @@ class Brain(BrainConcept, LearnerConcept):
         loss.backward()
         self._optimizer.step()
         return loss.item()
+
+    def save(self, path: str | Path) -> None:
+        # Weights only; the learning progress of the optimizer is not kept
+        torch.save(self._model.state_dict(), path)
+
+    def load(self, path: str | Path) -> None:
+        try:
+            self._model.load_state_dict(torch.load(path, weights_only=True))
+        except RuntimeError as error:  # torch's way of saying the sizes don't match
+            raise ValueError(f"{path} does not fit a brain with {self._input_count} inputs") from error
 
     def copy(self) -> "Brain":
         # Same weights, trained separately from now on

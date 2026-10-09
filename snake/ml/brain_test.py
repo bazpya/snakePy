@@ -78,3 +78,32 @@ def test_copy_is_unaffected_by_later_learning():
     learn_repeatedly(sut, Turn.left, target=5.0, count=10)
     assert copy.estimate(STATE) == before
     assert sut.estimate(STATE) != before
+
+
+# ====================  Save  ====================
+
+
+def test_loaded_brain_gives_the_same_estimates(tmp_path):
+    path = tmp_path / "brain.pt"
+    saved = Brain(input_count=3)
+    saved.save(path)
+    sut = Brain(input_count=3)
+    sut.load(path)
+    assert sut.estimate(STATE) == saved.estimate(STATE)
+
+
+def test_loaded_brain_still_learns(tmp_path):
+    path = tmp_path / "brain.pt"
+    Brain(input_count=3).save(path)
+    sut = Brain(input_count=3, learning_rate=0.01)
+    sut.load(path)
+    losses = learn_repeatedly(sut, Turn.ahead, target=5.0)
+    assert losses[-1] < losses[0]
+
+
+def test_loading_a_different_sized_brain_is_rejected(tmp_path):
+    path = tmp_path / "brain.pt"
+    Brain(input_count=4).save(path)
+    sut = Brain(input_count=3)
+    with pytest.raises(ValueError):
+        sut.load(path)
