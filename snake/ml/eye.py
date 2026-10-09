@@ -11,11 +11,11 @@ class Eye(EyeConcept):
         return 7
 
     def see(self, result: StepResult) -> list[float]:
-        heading = result.direction
+        heading = result.heading
         left = heading.turn(Turn.left)
         right = heading.turn(Turn.right)
         rays = ((heading,), (left,), (right,), (heading, left), (heading, right))
-        safe_cells = {cell for row in result.cell_rows for cell in row} - result.snake_cells
+        safe_cells = {cell for row in result.grid_cells for cell in row} - result.snake_cells
         dangers = [self._get_danger(result.head, ray, safe_cells) for ray in rays]
         return dangers + self._get_food(result, heading, right)
 
@@ -31,11 +31,11 @@ class Eye(EyeConcept):
         return 1 / distance
 
     def _get_food(self, result: StepResult, heading: Direction, right: Direction) -> list[float]:
-        # Food offset along and across the heading, scaled by the board's larger side
+        # Food offset along and across the heading, scaled by the grid's larger side
         if result.food is None:
             return [0.0, 0.0]
         offset = (result.food.row - result.head.row, result.food.col - result.head.col)
-        scale = max(len(result.cell_rows), len(result.cell_rows[0]))
+        scale = max(len(result.grid_cells), len(result.grid_cells[0]))
         return [
             self._project(offset, heading) / scale,
             self._project(offset, right) / scale,

@@ -13,15 +13,15 @@ def test_creates_a_world():
 
 def test_world_has_the_given_size():
     result = Factory(row_count=4, col_count=6).create().initial_result
-    assert len(result.cell_rows) == 4
-    assert all(len(row) == 6 for row in result.cell_rows)
+    assert len(result.grid_cells) == 4
+    assert all(len(row) == 6 for row in result.grid_cells)
 
 
 def test_snake_starts_at_the_centre_heading_right():
     result = Factory(row_count=4, col_count=6).create().initial_result
     assert result.head == Cell(2, 3)
     assert result.snake_cells == frozenset({Cell(2, 3)})
-    assert result.direction == Direction.right
+    assert result.heading == Direction.right
 
 
 def test_uses_the_given_food_placer():

@@ -1,8 +1,8 @@
-from snake.core import Cell, Direction, StepResult
+from snake.core import Cell, Direction, StepResult, Turn
 from snake.ui.colour import Colour
 from snake.ui.drawer import Drawer
 
-# 3x3 board
+# 3x3 grid
 CELL_ROWS = tuple(tuple(Cell(r, c) for c in range(3)) for r in range(3))
 
 
@@ -24,10 +24,12 @@ class FakeCanvas:
 def make_result(snake_cells, head, food=Cell(0, 0), is_over=False) -> StepResult:
     return StepResult(
         is_over=is_over,
-        cell_rows=CELL_ROWS,
+        grid_cells=CELL_ROWS,
         snake_cells=frozenset(snake_cells),
         head=head,
-        direction=Direction.right,
+        heading=Direction.right,
+        last_turn=Turn.ahead,
+        just_ate=False,
         food=food,
     )
 
@@ -99,7 +101,7 @@ def test_step_without_change_recolours_nothing():
 
 
 def test_step_handles_missing_food():
-    # e.g. the board is filled
+    # e.g. the grid is filled
     sut, canvas = make_started_drawer()
     sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), food=None))
     assert canvas.colours[Cell(0, 0)] == Colour.empty

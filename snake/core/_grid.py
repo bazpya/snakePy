@@ -3,14 +3,14 @@ from snake.core.cell import Cell
 
 
 @dataclass(frozen=True)
-class Board:
+class Grid:
     # Playable area only; anything outside it counts as wall
     row_count: int
     col_count: int
 
     def __post_init__(self) -> None:
         if self.row_count < 1 or self.col_count < 1:
-            raise ValueError(f"Board must be at least 1x1, got {self.row_count}x{self.col_count}")
+            raise ValueError(f"Grid must be at least 1x1, got {self.row_count}x{self.col_count}")
         # Built once; frozen dataclass, so bypass its __setattr__
         cell_rows = tuple(
             tuple(Cell(r, c) for c in range(self.col_count))

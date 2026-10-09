@@ -1,5 +1,5 @@
 import pytest
-from snake.core._board import Board
+from snake.core._grid import Grid
 from snake.core.direction import Direction
 from snake.core.world import World
 from snake.core.cell import Cell
@@ -24,10 +24,10 @@ class ScriptedFoodPlacer:
 def make_world(
     snake: Snake | None = None,
     food_placer: ScriptedFoodPlacer | None = None,
-    board: Board | None = None,
+    grid: Grid | None = None,
 ) -> World:
     return World(
-        board or Board(5, 5),
+        grid or Grid(5, 5),
         snake or Snake(START, Direction.right),
         food_placer or ScriptedFoodPlacer(FAR_FOOD),
     )
@@ -74,11 +74,13 @@ def test_first_food_is_chosen_from_free_cells_only():
 
 def test_initial_result_shows_starting_state():
     sut = make_world().initial_result
-    assert sut.cell_rows == Board(5, 5).get_cell_rows()
+    assert sut.grid_cells == Grid(5, 5).get_cell_rows()
     assert sut.snake_cells == frozenset({START})
     assert sut.food == FAR_FOOD
     assert sut.head == START
-    assert sut.direction == Direction.right
+    assert sut.heading == Direction.right
+    assert sut.last_turn == Turn.ahead
+    assert not sut.just_ate
     assert not sut.is_over
 
 
@@ -102,7 +104,8 @@ def test_turn_changes_where_the_snake_goes():
     sut = make_world()
     result = sut.step(Turn.left)
     assert result.head == START + Direction.up
-    assert result.direction == Direction.up
+    assert result.heading == Direction.up
+    assert result.last_turn == Turn.left
 
 
 def test_head_may_move_into_cell_the_tail_leaves():
@@ -122,6 +125,12 @@ def test_step_onto_food_grows_and_places_new_food():
     assert result.head == food
     assert len(result.snake_cells) == 2
     assert result.food == FAR_FOOD
+    assert result.just_ate
+
+
+def test_plain_step_does_not_eat():
+    sut = make_world()
+    assert not sut.step(Turn.ahead).just_ate
 
 
 def test_new_food_is_chosen_from_free_cells_only():
@@ -151,12 +160,20 @@ def test_hitting_the_body_ends_the_game():
     assert result.is_over
 
 
-def test_filling_the_board_ends_the_game():
+def test_crash_reports_the_turn_taken():
+    sut = make_world(snake=make_long_snake())
+    result = sut.step(Turn.right)  # up, into (2,2)
+    assert result.last_turn == Turn.right
+    assert result.heading == Direction.up
+    assert not result.just_ate
+
+
+def test_filling_the_grid_ends_the_game():
     food_placer = ScriptedFoodPlacer(Cell(0, 1), Cell(0, 2))
     sut = make_world(
         snake=Snake(Cell(0, 0), Direction.right),
         food_placer=food_placer,
-        board=Board(1, 3),
+        grid=Grid(1, 3),
     )
     assert not sut.step(Turn.ahead).is_over
     result = sut.step(Turn.ahead)
@@ -186,7 +203,7 @@ def test_length_includes_the_final_step():
     sut = make_world(
         snake=Snake(Cell(0, 0), Direction.right),
         food_placer=food_placer,
-        board=Board(1, 3),
+        grid=Grid(1, 3),
     )
     sut.step(Turn.ahead)
     result = sut.step(Turn.ahead)  # eats the last free cell

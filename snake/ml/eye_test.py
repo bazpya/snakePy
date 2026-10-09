@@ -1,5 +1,5 @@
 import pytest
-from snake.core import Cell, Direction, StepResult
+from snake.core import Cell, Direction, StepResult, Turn
 from snake.ml.eye import Eye
 
 # Positions in the list that Eye.see returns
@@ -8,7 +8,7 @@ AHEAD, LEFT, RIGHT, AHEAD_LEFT, AHEAD_RIGHT, FOOD_AHEAD, FOOD_RIGHT = range(7)
 
 def make_result(
     head: Cell,
-    direction: Direction,
+    heading: Direction,
     body: tuple[Cell, ...] = (),
     food: Cell | None = None,
     row_count: int = 5,
@@ -16,10 +16,12 @@ def make_result(
 ) -> StepResult:
     return StepResult(
         is_over=False,
-        cell_rows=tuple(tuple(Cell(r, c) for c in range(col_count)) for r in range(row_count)),
+        grid_cells=tuple(tuple(Cell(r, c) for c in range(col_count)) for r in range(row_count)),
         snake_cells=frozenset({head, *body}),
         head=head,
-        direction=direction,
+        heading=heading,
+        last_turn=Turn.ahead,
+        just_ate=False,
         food=food,
     )
 
@@ -52,7 +54,7 @@ def test_body_closer_than_the_wall_counts():
 
 
 def test_left_and_right_follow_the_heading():
-    # The same wall on the west side of the board
+    # The same wall on the west side of the grid
     heading_up = Eye().see(make_result(Cell(2, 0), Direction.up))
     heading_down = Eye().see(make_result(Cell(2, 0), Direction.down))
     assert heading_up[LEFT] == 1.0
@@ -96,7 +98,7 @@ def test_no_food_is_zero():
 
 
 def test_values_stay_in_range():
-    # Corner to corner, on a board that is not square
+    # Corner to corner, on a grid that is not square
     seen = Eye().see(
         make_result(Cell(2, 6), Direction.left, food=Cell(0, 0), row_count=3, col_count=7)
     )

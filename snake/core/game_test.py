@@ -103,7 +103,7 @@ def test_is_not_over_before_or_after_start():
 
 
 def test_is_over_when_the_world_is_over():
-    # 1x3 board: snake starts at (0,1) heading right; second step hits the wall
+    # 1x3 grid: snake starts at (0,1) heading right; second step hits the wall
     sut = make_game(world=make_world(1, 3))
     sut.start()
     sut.tick()

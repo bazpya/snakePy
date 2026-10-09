@@ -2,14 +2,16 @@ from snake.core import Cell, Direction, StepResult, Turn
 from snake.human.human_player import HumanPlayer
 
 
-def make_result(direction: Direction) -> StepResult:
-    # Only the direction matters to the player
+def make_result(heading: Direction) -> StepResult:
+    # Only the heading matters to the player
     return StepResult(
         is_over=False,
-        cell_rows=((Cell(0, 0),),),
+        grid_cells=((Cell(0, 0),),),
         snake_cells=frozenset({Cell(0, 0)}),
         head=Cell(0, 0),
-        direction=direction,
+        heading=heading,
+        last_turn=Turn.ahead,
+        just_ate=False,
         food=None,
     )
 

@@ -3,7 +3,7 @@ from snake.core import Turn
 
 
 @dataclass(frozen=True)
-class TurnScores:
+class TurnEstimates:
     # How good each turn looks to the brain; higher is better
     left: float
     ahead: float
@@ -12,6 +12,6 @@ class TurnScores:
     @property
     def best_turn(self) -> Turn:
         # On a tie, the first highest in left, ahead, right order
-        scored_turns = ((Turn.left, self.left), (Turn.ahead, self.ahead), (Turn.right, self.right))
-        turn, _ = max(scored_turns, key=lambda scored_turn: scored_turn[1])
+        estimated_turns = ((Turn.left, self.left), (Turn.ahead, self.ahead), (Turn.right, self.right))
+        turn, _ = max(estimated_turns, key=lambda estimated_turn: estimated_turn[1])
         return turn

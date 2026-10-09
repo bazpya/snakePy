@@ -13,7 +13,7 @@ class Drawer:
     # ====================  Commands  ====================
 
     def on_started(self, result: StepResult) -> None:
-        for row in result.cell_rows:
+        for row in result.grid_cells:
             for cell in row:
                 self._canvas.fill(cell, self._get_colour(result, cell))
         self._previous = result

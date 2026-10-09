@@ -1,15 +1,17 @@
 from snake.core import Cell, Direction, StepResult, Turn
 from snake.ml.ml_player import MLPlayer
-from snake.ml.turn_scores import TurnScores
+from snake.ml.turn_estimates import TurnEstimates
 
 
 def make_result(head: Cell = Cell(0, 0)) -> StepResult:
     return StepResult(
         is_over=False,
-        cell_rows=((Cell(0, 0), Cell(0, 1)),),
+        grid_cells=((Cell(0, 0), Cell(0, 1)),),
         snake_cells=frozenset({head}),
         head=head,
-        direction=Direction.right,
+        heading=Direction.right,
+        last_turn=Turn.ahead,
+        just_ate=False,
         food=None,
     )
 
@@ -26,14 +28,14 @@ class RecordingEye:
 
 
 class ScriptedBrain:
-    # Gives fixed scores; records the states it was given
-    def __init__(self, scores: TurnScores = TurnScores(left=0.0, ahead=1.0, right=0.0)) -> None:
-        self._scores = scores
+    # Gives fixed estimates; records the states it was given
+    def __init__(self, estimates: TurnEstimates = TurnEstimates(left=0.0, ahead=1.0, right=0.0)) -> None:
+        self._estimates = estimates
         self.states_seen: list[list[float]] = []
 
-    def score(self, state: list[float]) -> TurnScores:
+    def estimate(self, state: list[float]) -> TurnEstimates:
         self.states_seen.append(state)
-        return self._scores
+        return self._estimates
 
 
 # ====================  Flow  ====================
@@ -64,7 +66,7 @@ def test_each_call_uses_the_latest_result():
 # ====================  Pick  ====================
 
 
-def test_picks_the_best_turn_of_the_brains_scores():
-    scores = TurnScores(left=0.1, ahead=0.2, right=0.9)
-    sut = MLPlayer(RecordingEye(), ScriptedBrain(scores))
+def test_picks_the_best_turn_of_the_brains_estimates():
+    estimates = TurnEstimates(left=0.1, ahead=0.2, right=0.9)
+    sut = MLPlayer(RecordingEye(), ScriptedBrain(estimates))
     assert sut.pick_turn(make_result()) == Turn.right

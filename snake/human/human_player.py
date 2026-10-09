@@ -14,7 +14,7 @@ class HumanPlayer(PlayerConcept):
     def pick_turn(self, result: StepResult) -> Turn:
         if not self._queue:
             return Turn.ahead
-        turn = result.direction.get_turn_to(self._queue.popleft())
+        turn = result.heading.get_turn_to(self._queue.popleft())
         if turn is None:
             return Turn.ahead  # a reverse is ignored
         return turn

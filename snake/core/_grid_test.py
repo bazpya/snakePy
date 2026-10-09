@@ -1,5 +1,5 @@
 import pytest
-from snake.core._board import Board
+from snake.core._grid import Grid
 from snake.core.cell import Cell
 
 
@@ -12,7 +12,7 @@ from snake.core.cell import Cell
     ])
 def test_rejects_invalid_size(rows, cols):
     with pytest.raises(ValueError):
-        Board(rows, cols)
+        Grid(rows, cols)
 
 
 @pytest.mark.parametrize(
@@ -26,7 +26,7 @@ def test_rejects_invalid_size(rows, cols):
     ]
 )
 def test_does_not_exclude_inside_and_edges(cell):
-    assert not Board(3, 4).excludes(cell)
+    assert not Grid(3, 4).excludes(cell)
 
 
 @pytest.mark.parametrize(
@@ -39,19 +39,19 @@ def test_does_not_exclude_inside_and_edges(cell):
     ]
 )
 def test_excludes_outside(cell):
-    assert Board(3, 4).excludes(cell)
+    assert Grid(3, 4).excludes(cell)
 
 
-def test_cells_cover_whole_board_once():
-    sut = Board(3, 4)
+def test_cells_cover_whole_grid_once():
+    sut = Grid(3, 4)
     cells = sut.get_cells_flat()
     assert len(cells) == 12
     assert len(set(cells)) == 12
     assert not any(sut.excludes(cell) for cell in cells)
 
 
-def test_cell_rows_follow_board_layout():
-    sut = Board(3, 4)
+def test_cell_rows_follow_grid_layout():
+    sut = Grid(3, 4)
     rows = sut.get_cell_rows()
     assert len(rows) == 3
     for r, row in enumerate(rows):
@@ -59,5 +59,5 @@ def test_cell_rows_follow_board_layout():
 
 
 def test_cell_rows_are_built_once():
-    sut = Board(3, 4)
+    sut = Grid(3, 4)
     assert sut.get_cell_rows() is sut.get_cell_rows()
