@@ -1,4 +1,4 @@
-from snake.core import Cell, Direction, StepResult, Turn
+from snake.core import Cell, Direction, EndCause, StepResult, Turn
 from snake.ui.colour import Colour
 from snake.ui.drawer import Drawer
 
@@ -21,9 +21,9 @@ class FakeCanvas:
         self.messages.append(text)
 
 
-def make_result(snake_cells, head, food=Cell(0, 0), is_over=False) -> StepResult:
+def make_result(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None = None) -> StepResult:
     return StepResult(
-        is_over=is_over,
+        end_cause=end_cause,
         grid_cells=CELL_ROWS,
         snake_cells=frozenset(snake_cells),
         head=head,
@@ -96,7 +96,7 @@ def test_step_recolours_food_that_moved():
 
 def test_step_without_change_recolours_nothing():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), is_over=True))
+    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
     assert canvas.filled == []
 
 
@@ -112,7 +112,7 @@ def test_step_handles_missing_food():
 
 def test_shows_a_message_when_the_game_is_over():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), is_over=True))
+    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
     assert len(canvas.messages) == 1
 
 

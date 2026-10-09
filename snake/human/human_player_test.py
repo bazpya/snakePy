@@ -5,7 +5,7 @@ from snake.human.human_player import HumanPlayer
 def make_result(heading: Direction) -> StepResult:
     # Only the heading matters to the player
     return StepResult(
-        is_over=False,
+        end_cause=None,
         grid_cells=((Cell(0, 0),),),
         snake_cells=frozenset({Cell(0, 0)}),
         head=Cell(0, 0),

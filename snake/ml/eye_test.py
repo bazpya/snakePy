@@ -15,7 +15,7 @@ def make_result(
     col_count: int = 5,
 ) -> StepResult:
     return StepResult(
-        is_over=False,
+        end_cause=None,
         grid_cells=tuple(tuple(Cell(r, c) for c in range(col_count)) for r in range(row_count)),
         snake_cells=frozenset({head, *body}),
         head=head,

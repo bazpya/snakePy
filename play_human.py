@@ -4,8 +4,8 @@ from snake.core import Factory, Game
 from snake.human import HumanPlayer, KeySourceTk
 from snake.ui import CanvasTk, Drawer, PacerTk
 
-ROW_COUNT = 20
-COL_COUNT = 20
+ROW_COUNT = 10
+COL_COUNT = 10
 CELL_SIZE = 24  # pixels
 TICK_INTERVAL_MS = 120
 

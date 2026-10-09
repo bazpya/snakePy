@@ -1,4 +1,4 @@
-from snake.core import StepResult
+from snake.core import EndCause, StepResult
 
 
 class Rewarder:
@@ -7,13 +7,12 @@ class Rewarder:
     _crash_penalty = -1.0
     _starvation_penalty = -1.0
 
-    def get_reward(self, result: StepResult, is_starved: bool) -> float:
-        # is_starved: the training loop cut the game short, too long without food
+    def get_reward(self, result: StepResult) -> float:
         reward = 0.0
         if result.just_ate:
             reward += self._food_reward  # also covers filling the grid: a win
-        elif result.is_over:
+        if result.end_cause == EndCause.crashed:
             reward += self._crash_penalty
-        if is_starved:
+        if result.end_cause == EndCause.starved:
             reward += self._starvation_penalty
         return reward

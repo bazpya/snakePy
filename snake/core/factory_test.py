@@ -1,5 +1,6 @@
 from snake.core.cell import Cell
 from snake.core.direction import Direction
+from snake.core.end_cause import EndCause
 from snake.core.factory import Factory
 from snake.core.world import World
 from snake.core.turn import Turn
@@ -41,3 +42,17 @@ def test_creates_independent_worlds():
     second = sut.create()
     first.step(Turn.left)
     assert second.step(Turn.ahead).head == Cell(2, 4)
+
+
+def test_starvation_limit_is_the_factor_times_the_grid_cell_count():
+    # 4x6 = 24 cells, factor 0.5: starves on the 12th unfed step
+    world = Factory(row_count=4, col_count=6, food_placer=FixedFoodPlacer(Cell(0, 0)), starvation_factor=0.5).create()
+    for _ in range(11):
+        assert not world.step(Turn.left).is_over  # circles away from the food
+    assert world.step(Turn.left).end_cause == EndCause.starved
+
+
+def test_never_starves_by_default():
+    world = Factory(row_count=4, col_count=6, food_placer=FixedFoodPlacer(Cell(0, 0))).create()
+    for _ in range(100):
+        assert not world.step(Turn.left).is_over

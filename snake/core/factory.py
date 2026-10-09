@@ -15,13 +15,18 @@ class Factory:
         row_count: int,
         col_count: int,
         food_placer: FoodPlacerConcept | None = None,
+        starvation_factor: float | None = None,  # None: the snake never starves
     ) -> None:
         self._grid = Grid(row_count, col_count)  # immutable, so shared
         self._food_placer = food_placer or FoodPlacer()
+        self._unfed_step_limit = (
+            None if starvation_factor is None
+            else int(starvation_factor * row_count * col_count)  # grows with the grid
+        )
 
     def create(self) -> World:
         snake = Snake(self._get_start(), Direction.right)
-        return World(self._grid, snake, self._food_placer)
+        return World(self._grid, snake, self._food_placer, self._unfed_step_limit)
 
     # ====================  Helpers  ====================
 

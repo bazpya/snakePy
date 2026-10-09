@@ -5,7 +5,7 @@ from snake.ml.turn_estimates import TurnEstimates
 
 def make_result(head: Cell = Cell(0, 0)) -> StepResult:
     return StepResult(
-        is_over=False,
+        end_cause=None,
         grid_cells=((Cell(0, 0), Cell(0, 1)),),
         snake_cells=frozenset({head}),
         head=head,

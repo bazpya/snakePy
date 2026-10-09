@@ -1,6 +1,7 @@
 import pytest
 from snake.core._grid import Grid
 from snake.core.direction import Direction
+from snake.core.end_cause import EndCause
 from snake.core.world import World
 from snake.core.cell import Cell
 from snake.core._snake import Snake
@@ -25,11 +26,13 @@ def make_world(
     snake: Snake | None = None,
     food_placer: ScriptedFoodPlacer | None = None,
     grid: Grid | None = None,
+    unfed_step_limit: int | None = None,
 ) -> World:
     return World(
         grid or Grid(5, 5),
         snake or Snake(START, Direction.right),
         food_placer or ScriptedFoodPlacer(FAR_FOOD),
+        unfed_step_limit,
     )
 
 
@@ -150,14 +153,14 @@ def test_new_food_is_chosen_from_free_cells_only():
 def test_hitting_the_wall_ends_the_game():
     sut = make_world(snake=Snake(Cell(2, 4), Direction.right))
     result = sut.step(Turn.ahead)
-    assert result.is_over
+    assert result.end_cause == EndCause.crashed
     assert result.head == Cell(2, 4)
 
 
 def test_hitting_the_body_ends_the_game():
     sut = make_world(snake=make_long_snake())
     result = sut.step(Turn.right)  # up, into (2,2)
-    assert result.is_over
+    assert result.end_cause == EndCause.crashed
 
 
 def test_crash_reports_the_turn_taken():
@@ -177,9 +180,13 @@ def test_filling_the_grid_ends_the_game():
     )
     assert not sut.step(Turn.ahead).is_over
     result = sut.step(Turn.ahead)
-    assert result.is_over
+    assert result.end_cause == EndCause.won
     assert result.head == Cell(0, 2)
     assert result.food is None
+
+
+def test_a_plain_step_has_no_end_cause():
+    assert make_world().step(Turn.ahead).end_cause is None
 
 
 def test_step_after_game_over_is_rejected():
@@ -208,3 +215,31 @@ def test_length_includes_the_final_step():
     sut.step(Turn.ahead)
     result = sut.step(Turn.ahead)  # eats the last free cell
     assert result.snake_length == 3
+
+
+# ====================  Starve  ====================
+
+
+def test_starves_on_reaching_the_unfed_step_limit():
+    sut = make_world(unfed_step_limit=2)
+    assert not sut.step(Turn.ahead).is_over
+    assert sut.step(Turn.ahead).end_cause == EndCause.starved
+
+
+def test_eating_resets_the_unfed_steps():
+    food_placer = ScriptedFoodPlacer(Cell(2, 4), FAR_FOOD)
+    sut = make_world(food_placer=food_placer, unfed_step_limit=2)
+    sut.step(Turn.ahead)
+    sut.step(Turn.ahead)  # eats at (2,4)
+    assert not sut.step(Turn.left).is_over
+
+
+def test_never_starves_without_a_limit():
+    sut = make_world()
+    for _ in range(8):  # circles in place
+        assert not sut.step(Turn.left).is_over
+
+
+def test_a_crash_wins_over_starving():
+    sut = make_world(snake=Snake(Cell(2, 4), Direction.right), unfed_step_limit=1)
+    assert sut.step(Turn.ahead).end_cause == EndCause.crashed

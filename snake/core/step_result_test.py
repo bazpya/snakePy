@@ -2,6 +2,7 @@ import dataclasses
 import pytest
 from snake.core.cell import Cell
 from snake.core.direction import Direction
+from snake.core.end_cause import EndCause
 from snake.core.step_result import StepResult
 from snake.core.turn import Turn
 
@@ -11,9 +12,9 @@ FOOD = Cell(0, 0)
 CELL_ROWS = tuple(tuple(Cell(r, c) for c in range(5)) for r in range(4))
 
 
-def make_result(snake_cells=frozenset({TAIL, HEAD}), food=FOOD) -> StepResult:
+def make_result(snake_cells=frozenset({TAIL, HEAD}), food=FOOD, end_cause=EndCause.crashed) -> StepResult:
     return StepResult(
-        is_over=True,
+        end_cause=end_cause,
         grid_cells=CELL_ROWS,
         snake_cells=snake_cells,
         head=HEAD,
@@ -33,7 +34,7 @@ def test_keeps_values():
     assert sut.heading == Direction.right
     assert sut.last_turn == Turn.ahead
     assert sut.just_ate is False
-    assert sut.is_over
+    assert sut.end_cause == EndCause.crashed
 
 
 def test_food_may_be_missing():
@@ -53,3 +54,11 @@ def test_immutable():
     sut = make_result()
     with pytest.raises(dataclasses.FrozenInstanceError):
         sut.head = TAIL
+
+
+def test_is_over_when_there_is_an_end_cause():
+    assert make_result(end_cause=EndCause.starved).is_over
+
+
+def test_is_not_over_without_an_end_cause():
+    assert not make_result(end_cause=None).is_over

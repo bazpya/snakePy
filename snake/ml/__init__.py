@@ -7,7 +7,6 @@ from snake.ml.experience import Experience
 from snake.ml.ml_player import MLPlayer
 from snake.ml.replay_memory import ReplayMemory
 from snake.ml.rewarder import Rewarder
-from snake.ml.starvation_rule import StarvationRule
 from snake.ml.stats import Stats
 from snake.ml.turn_estimates import TurnEstimates
 
@@ -20,7 +19,6 @@ __all__ = [
     "MLPlayer",
     "ReplayMemory",
     "Rewarder",
-    "StarvationRule",
     "Stats",
     "TurnEstimates",
 ]

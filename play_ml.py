@@ -4,14 +4,15 @@ from snake.core import Factory, Game
 from snake.ml import Brain, Eye, MLPlayer
 from snake.ui import CanvasTk, Drawer, PacerTk
 
-ROW_COUNT = 20
-COL_COUNT = 20
+ROW_COUNT = 10
+COL_COUNT = 10
 CELL_SIZE = 24  # pixels
 TICK_INTERVAL_MS = 120
+STARVATION_FACTOR = 0.5  # starves after half the grid's cell count of steps without food
 
 
 def main() -> None:
-    world = Factory(ROW_COUNT, COL_COUNT).create()
+    world = Factory(ROW_COUNT, COL_COUNT, starvation_factor=STARVATION_FACTOR).create()
     window = tk.Tk()
     window.title("Snake (ML)")
     window.resizable(False, False)
