@@ -30,7 +30,7 @@ def make_result(
 def test_sees_seven_numbers():
     sut = Eye()
     assert len(sut.see(make_result(Cell(2, 2), Direction.up))) == 7
-    assert sut.input_count == 7
+    assert sut.output_count == 7
 
 
 # ====================  Danger  ====================

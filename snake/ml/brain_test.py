@@ -26,5 +26,5 @@ def test_wrong_sized_state_is_rejected():
 def test_scores_what_the_eye_sees():
     eye = Eye()
     result = Factory(row_count=5, col_count=5).create().initial_result
-    sut = Brain(input_count=eye.input_count)
+    sut = Brain(input_count=eye.output_count)
     assert isinstance(sut.score(eye.see(result)), TurnScores)

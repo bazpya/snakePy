@@ -7,7 +7,7 @@ class Eye(EyeConcept):
     # danger on 5 rays (ahead, left, right, ahead-left, ahead-right), then food ahead and right
 
     @property
-    def input_count(self) -> int:
+    def output_count(self) -> int:
         return 7
 
     def see(self, result: StepResult) -> list[float]:
