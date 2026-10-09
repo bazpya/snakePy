@@ -1,9 +1,10 @@
 import random
 from collections import deque
 from snake.ml.experience import Experience
+from snake.ml.replay_memory_concept import ReplayMemoryConcept
 
 
-class ReplayMemory:
+class ReplayMemory(ReplayMemoryConcept):
     # Keeps the latest experiences and hands out random batches; the oldest drop out when full
 
     def __init__(self, capacity: int, rng: random.Random | None = None) -> None:

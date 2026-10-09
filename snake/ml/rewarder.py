@@ -1,7 +1,8 @@
 from snake.core import EndCause, StepResult
+from snake.ml.rewarder_concept import RewarderConcept
 
 
-class Rewarder:
+class Rewarder(RewarderConcept):
     # Scores one step for learning; each rule is a separate weight, and they add up
     _food_reward = 1.0
     _crash_penalty = -1.0
