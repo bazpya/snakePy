@@ -4,6 +4,7 @@ from snake.ml.brain_concept import BrainConcept
 from snake.ml.eye import Eye
 from snake.ml.eye_concept import EyeConcept
 from snake.ml.experience import Experience
+from snake.ml.exploring_player import ExploringPlayer
 from snake.ml.ml_player import MLPlayer
 from snake.ml.recorder import Recorder
 from snake.ml.replay_memory import ReplayMemory
@@ -19,6 +20,7 @@ __all__ = [
     "Eye",
     "EyeConcept",
     "Experience",
+    "ExploringPlayer",
     "MLPlayer",
     "Recorder",
     "ReplayMemory",
