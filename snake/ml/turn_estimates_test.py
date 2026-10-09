@@ -18,3 +18,7 @@ def test_best_turn_has_the_highest_estimate(estimates, turn):
 def test_tie_picks_the_first_highest_in_left_ahead_right_order():
     assert TurnEstimates(left=0.5, ahead=0.5, right=0.1).best_turn == Turn.left
     assert TurnEstimates(left=0.1, ahead=0.5, right=0.5).best_turn == Turn.ahead
+
+
+def test_best_estimate_is_the_highest_value():
+    assert TurnEstimates(left=0.1, ahead=0.7, right=0.3).best_estimate == 0.7
