@@ -16,16 +16,21 @@ class Drawer:
         for row in result.grid_cells:
             for cell in row:
                 self._canvas.fill(cell, self._get_colour(result, cell))
+        self._show_length(result)
         self._previous = result
 
     def on_stepped(self, result: StepResult) -> None:
         for cell in self._get_diff_cells(result):
             self._canvas.fill(cell, self._get_colour(result, cell))
+        self._show_length(result)
         if result.is_over:
             self._canvas.show_message("Game over")
         self._previous = result
 
     # ====================  Helpers  ====================
+
+    def _show_length(self, result: StepResult) -> None:
+        self._canvas.show_status(f"Length: {result.snake_length}")
 
     def _get_diff_cells(self, result: StepResult) -> set[Cell]:
         # Cells whose state changed since the previous result

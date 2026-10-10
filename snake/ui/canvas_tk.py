@@ -14,6 +14,9 @@ class CanvasTk(CanvasConcept):
             highlightthickness=0,
         )
         self._widget.pack()
+        # A strip below the grid, so the status never covers any cells
+        self._status = tk.Label(window, anchor="w", padx=4)
+        self._status.pack(fill="x")
         # One square per cell, created once and only recoloured afterwards
         self._squares = {
             Cell(row, col): self._widget.create_rectangle(
@@ -30,7 +33,21 @@ class CanvasTk(CanvasConcept):
     def fill(self, cell: Cell, colour: str) -> None:
         self._widget.itemconfigure(self._squares[cell], fill=colour)
 
+    def show_status(self, text: str) -> None:
+        self._status.configure(text=text)
+
     def show_message(self, text: str) -> None:
         width = int(self._widget["width"])
         height = int(self._widget["height"])
-        self._widget.create_text(width // 2, height // 2, text=text, fill="white")
+        font_size = max(12, width // 10)  # grows with the canvas
+        band_half_height = font_size
+        # A dark band behind the text keeps it readable over the cells
+        self._widget.create_rectangle(
+            0, height // 2 - band_half_height,
+            width, height // 2 + band_half_height,
+            fill="black", width=0,
+        )
+        self._widget.create_text(
+            width // 2, height // 2,
+            text=text, fill="white", font=("TkDefaultFont", -font_size, "bold"),  # negative: size in pixels
+        )

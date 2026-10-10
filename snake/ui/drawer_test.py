@@ -12,6 +12,7 @@ class FakeCanvas:
         self.colours: dict[Cell, str] = {}
         self.filled: list[Cell] = []
         self.messages: list[str] = []
+        self.statuses: list[str] = []
 
     def fill(self, cell: Cell, colour: str) -> None:
         self.colours[cell] = colour
@@ -19,6 +20,9 @@ class FakeCanvas:
 
     def show_message(self, text: str) -> None:
         self.messages.append(text)
+
+    def show_status(self, text: str) -> None:
+        self.statuses.append(text)
 
 
 def make_result(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None = None) -> StepResult:
@@ -120,3 +124,24 @@ def test_shows_no_message_while_the_game_goes_on():
     sut, canvas = make_started_drawer()
     sut.on_stepped(make_result({Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
     assert canvas.messages == []
+
+
+# ====================  Status  ====================
+
+
+def test_start_shows_the_snake_length():
+    canvas = FakeCanvas()
+    Drawer(canvas).on_started(START)
+    assert canvas.statuses[-1] == "Length: 2"
+
+
+def test_step_updates_the_snake_length():
+    sut, canvas = make_started_drawer()
+    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
+    assert canvas.statuses[-1] == "Length: 3"
+
+
+def test_length_is_still_shown_when_the_game_is_over():
+    sut, canvas = make_started_drawer()
+    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
+    assert canvas.statuses[-1] == "Length: 2"
