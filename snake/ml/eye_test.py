@@ -3,7 +3,7 @@ from snake.core import Cell, Direction, StepResult, Turn
 from snake.ml.eye import Eye
 
 # Positions in the list that Eye.see returns
-AHEAD, LEFT, RIGHT, AHEAD_LEFT, AHEAD_RIGHT, FOOD_AHEAD, FOOD_RIGHT = range(7)
+AHEAD, LEFT, RIGHT, AHEAD_LEFT, AHEAD_RIGHT, FOOD_AHEAD, FOOD_RIGHT, ROOM_LEFT, ROOM_AHEAD, ROOM_RIGHT = range(10)
 
 
 def make_result(
@@ -29,10 +29,10 @@ def make_result(
 # ====================  Shape  ====================
 
 
-def test_sees_seven_numbers():
+def test_sees_ten_numbers():
     sut = Eye()
-    assert len(sut.see(make_result(Cell(2, 2), Direction.up))) == 7
-    assert sut.output_count == 7
+    assert len(sut.see(make_result(Cell(2, 2), Direction.up))) == 10
+    assert sut.output_count == 10
 
 
 # ====================  Danger  ====================
@@ -103,4 +103,37 @@ def test_values_stay_in_range():
         make_result(Cell(2, 6), Direction.left, food=Cell(0, 0), row_count=3, col_count=7)
     )
     assert all(0 <= value <= 1 for value in seen[:FOOD_AHEAD])
-    assert all(-1 <= value <= 1 for value in seen[FOOD_AHEAD:])
+    assert all(-1 <= value <= 1 for value in seen[FOOD_AHEAD:ROOM_LEFT])
+    assert all(0 <= value <= 1 for value in seen[ROOM_LEFT:])
+
+
+# ====================  Room  ====================
+
+
+def test_open_space_has_full_room_every_way():
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up))
+    assert seen[ROOM_LEFT] == seen[ROOM_AHEAD] == seen[ROOM_RIGHT] == 1.0
+
+
+def test_turn_into_a_pocket_has_little_room():
+    # The body walls off column 0 and (2,1): 6 of the 20 free cells lie that way
+    body = (Cell(0, 1), Cell(1, 1), Cell(3, 1), Cell(4, 1))
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up, body=body))
+    assert seen[ROOM_LEFT] == pytest.approx(6 / 20)
+    assert seen[ROOM_AHEAD] == pytest.approx(14 / 20)
+    assert seen[ROOM_RIGHT] == pytest.approx(14 / 20)
+
+
+def test_blocked_turn_has_no_room():
+    # Wall ahead, body to the right
+    seen = Eye().see(make_result(Cell(0, 2), Direction.up, body=(Cell(0, 3),)))
+    assert seen[ROOM_AHEAD] == 0.0
+    assert seen[ROOM_RIGHT] == 0.0
+    assert seen[ROOM_LEFT] > 0.0
+
+
+def test_room_follows_the_heading():
+    # The same pocket on the west side, seen heading down: it is now to the right
+    body = (Cell(0, 1), Cell(1, 1), Cell(3, 1), Cell(4, 1))
+    seen = Eye().see(make_result(Cell(2, 2), Direction.down, body=body))
+    assert seen[ROOM_RIGHT] == pytest.approx(6 / 20)
