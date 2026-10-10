@@ -89,6 +89,7 @@ class World:
             grid_cells=self._grid.get_cell_rows(),
             snake_cells=self._snake.cells,
             head=self._snake.head,
+            tail=self._snake.tail,
             heading=self._heading,
             last_turn=self._last_turn,
             just_ate=self._just_ate,

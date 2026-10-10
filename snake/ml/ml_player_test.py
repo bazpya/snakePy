@@ -9,6 +9,7 @@ def make_result(head: Cell = Cell(0, 0)) -> StepResult:
         grid_cells=((Cell(0, 0), Cell(0, 1)),),
         snake_cells=frozenset({head}),
         head=head,
+        tail=head,
         heading=Direction.right,
         last_turn=Turn.ahead,
         just_ate=False,

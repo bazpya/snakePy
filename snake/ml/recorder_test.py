@@ -16,6 +16,7 @@ def make_result(
         grid_cells=(tuple(Cell(0, c) for c in range(5)),),
         snake_cells=frozenset({Cell(0, col)}),
         head=Cell(0, col),
+        tail=Cell(0, col),
         heading=Direction.right,
         last_turn=last_turn,
         just_ate=just_ate,

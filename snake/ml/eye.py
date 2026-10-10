@@ -5,11 +5,12 @@ from snake.ml.eye_concept import EyeConcept
 class Eye(EyeConcept):
     # Turns a step result into numbers for the brain, as seen from the snake's heading:
     # danger on 5 rays (ahead, left, right, ahead-left, ahead-right), food ahead and right,
-    # then room after turning left, going ahead and turning right
+    # room after turning left, going ahead and turning right, tail ahead and right,
+    # then whether the tail can still be reached after turning left, going ahead and turning right
 
     @property
     def output_count(self) -> int:
-        return 10
+        return 15
 
     def see(self, result: StepResult) -> list[float]:
         heading = result.heading
@@ -18,8 +19,12 @@ class Eye(EyeConcept):
         rays = ((heading,), (left,), (right,), (heading, left), (heading, right))
         safe_cells = {cell for row in result.grid_cells for cell in row} - result.snake_cells
         dangers = [self._get_danger(result.head, ray, safe_cells) for ray in rays]
-        rooms = [self._get_room(result.head + direction, safe_cells) for direction in (left, heading, right)]
-        return dangers + self._get_food(result, heading, right) + rooms
+        food = self._get_offset(result, result.food, heading, right)
+        turn_cells = [result.head + direction for direction in (left, heading, right)]
+        rooms = [self._get_room(cell, safe_cells) for cell in turn_cells]
+        tail = self._get_offset(result, result.tail, heading, right)
+        tail_reaches = [self._get_tail_reach(cell, result.tail, safe_cells) for cell in turn_cells]
+        return dangers + food + rooms + tail + tail_reaches
 
     # ====================  Helpers  ====================
 
@@ -32,22 +37,33 @@ class Eye(EyeConcept):
             distance += 1
         return 1 / distance
 
-    def _get_food(self, result: StepResult, heading: Direction, right: Direction) -> list[float]:
-        # Food offset along and across the heading, scaled by the grid's larger side
-        if result.food is None:
+    def _get_offset(self, result: StepResult, target: Cell | None, heading: Direction, right: Direction) -> list[float]:
+        # Target's offset from the head, along and across the heading, scaled by the grid's larger side
+        if target is None:
             return [0.0, 0.0]
-        offset = (result.food.row - result.head.row, result.food.col - result.head.col)
+        offset = (target.row - result.head.row, target.col - result.head.col)
         scale = max(len(result.grid_cells), len(result.grid_cells[0]))
         return [
             self._project(offset, heading) / scale,
             self._project(offset, right) / scale,
         ]
 
-    @staticmethod
-    def _get_room(start: Cell, safe_cells: set[Cell]) -> float:
-        # Share of the safe cells reachable from start (flood fill); 0 when start is unsafe
+    def _get_room(self, start: Cell, safe_cells: set[Cell]) -> float:
+        # Share of the safe cells reachable from start; 0 when start is unsafe
+        return len(self._flood(start, safe_cells)) / len(safe_cells) if start in safe_cells else 0.0
+
+    def _get_tail_reach(self, start: Cell, tail: Cell, safe_cells: set[Cell]) -> float:
+        # 1 when the tail can be reached from start: on it, or next to a reachable cell; else 0
+        if start == tail:
+            return 1.0  # the tail moves away as the head moves in
         if start not in safe_cells:
             return 0.0
+        reached = self._flood(start, safe_cells)
+        return 1.0 if any(tail + direction in reached for direction in Direction) else 0.0
+
+    @staticmethod
+    def _flood(start: Cell, safe_cells: set[Cell]) -> set[Cell]:
+        # Every safe cell reachable from start, start included
         reached = {start}
         frontier = [start]
         while frontier:
@@ -57,7 +73,7 @@ class Eye(EyeConcept):
                 if neighbour in safe_cells and neighbour not in reached:
                     reached.add(neighbour)
                     frontier.append(neighbour)
-        return len(reached) / len(safe_cells)
+        return reached
 
     @staticmethod
     def _project(offset: tuple[int, int], direction: Direction) -> int:

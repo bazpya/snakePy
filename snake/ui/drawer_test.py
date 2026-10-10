@@ -31,6 +31,7 @@ def make_result(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None =
         grid_cells=CELL_ROWS,
         snake_cells=frozenset(snake_cells),
         head=head,
+        tail=head,
         heading=Direction.right,
         last_turn=Turn.ahead,
         just_ate=False,

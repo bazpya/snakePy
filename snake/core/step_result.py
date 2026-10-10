@@ -11,6 +11,7 @@ class StepResult:
     grid_cells: tuple[tuple[Cell, ...], ...]  # rows, top to bottom
     snake_cells: frozenset[Cell]
     head: Cell
+    tail: Cell
     heading: Direction
     last_turn: Turn
     just_ate: bool

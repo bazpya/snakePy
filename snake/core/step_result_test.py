@@ -18,6 +18,7 @@ def make_result(snake_cells=frozenset({TAIL, HEAD}), food=FOOD, end_cause=EndCau
         grid_cells=CELL_ROWS,
         snake_cells=snake_cells,
         head=HEAD,
+        tail=TAIL,
         heading=Direction.right,
         last_turn=Turn.ahead,
         just_ate=False,
@@ -31,6 +32,7 @@ def test_keeps_values():
     assert sut.snake_cells == frozenset({TAIL, HEAD})
     assert sut.food == FOOD
     assert sut.head == HEAD
+    assert sut.tail == TAIL
     assert sut.heading == Direction.right
     assert sut.last_turn == Turn.ahead
     assert sut.just_ate is False

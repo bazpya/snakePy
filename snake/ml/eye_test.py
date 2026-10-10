@@ -3,13 +3,20 @@ from snake.core import Cell, Direction, StepResult, Turn
 from snake.ml.eye import Eye
 
 # Positions in the list that Eye.see returns
-AHEAD, LEFT, RIGHT, AHEAD_LEFT, AHEAD_RIGHT, FOOD_AHEAD, FOOD_RIGHT, ROOM_LEFT, ROOM_AHEAD, ROOM_RIGHT = range(10)
+(
+    AHEAD, LEFT, RIGHT, AHEAD_LEFT, AHEAD_RIGHT,
+    FOOD_AHEAD, FOOD_RIGHT,
+    ROOM_LEFT, ROOM_AHEAD, ROOM_RIGHT,
+    TAIL_AHEAD, TAIL_RIGHT,
+    TAIL_REACH_LEFT, TAIL_REACH_AHEAD, TAIL_REACH_RIGHT,
+) = range(15)
 
 
 def make_result(
     head: Cell,
     heading: Direction,
     body: tuple[Cell, ...] = (),
+    tail: Cell | None = None,  # None: the head is the tail
     food: Cell | None = None,
     row_count: int = 5,
     col_count: int = 5,
@@ -17,8 +24,9 @@ def make_result(
     return StepResult(
         end_cause=None,
         grid_cells=tuple(tuple(Cell(r, c) for c in range(col_count)) for r in range(row_count)),
-        snake_cells=frozenset({head, *body}),
+        snake_cells=frozenset({head, *body, tail or head}),
         head=head,
+        tail=tail or head,
         heading=heading,
         last_turn=Turn.ahead,
         just_ate=False,
@@ -29,10 +37,10 @@ def make_result(
 # ====================  Shape  ====================
 
 
-def test_sees_ten_numbers():
+def test_sees_fifteen_numbers():
     sut = Eye()
-    assert len(sut.see(make_result(Cell(2, 2), Direction.up))) == 10
-    assert sut.output_count == 10
+    assert len(sut.see(make_result(Cell(2, 2), Direction.up))) == 15
+    assert sut.output_count == 15
 
 
 # ====================  Danger  ====================
@@ -104,7 +112,9 @@ def test_values_stay_in_range():
     )
     assert all(0 <= value <= 1 for value in seen[:FOOD_AHEAD])
     assert all(-1 <= value <= 1 for value in seen[FOOD_AHEAD:ROOM_LEFT])
-    assert all(0 <= value <= 1 for value in seen[ROOM_LEFT:])
+    assert all(0 <= value <= 1 for value in seen[ROOM_LEFT:TAIL_AHEAD])
+    assert all(-1 <= value <= 1 for value in seen[TAIL_AHEAD:TAIL_REACH_LEFT])
+    assert all(value in (0.0, 1.0) for value in seen[TAIL_REACH_LEFT:])
 
 
 # ====================  Room  ====================
@@ -137,3 +147,45 @@ def test_room_follows_the_heading():
     body = (Cell(0, 1), Cell(1, 1), Cell(3, 1), Cell(4, 1))
     seen = Eye().see(make_result(Cell(2, 2), Direction.down, body=body))
     assert seen[ROOM_RIGHT] == pytest.approx(6 / 20)
+
+
+# ====================  Tail  ====================
+
+
+def test_tail_behind():
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up, body=(Cell(3, 2),), tail=Cell(4, 2)))
+    assert seen[TAIL_AHEAD] == pytest.approx(-0.4)
+    assert seen[TAIL_RIGHT] == 0
+
+
+def test_tail_right_follows_the_heading():
+    # The same tail cell, east of the head
+    heading_up = Eye().see(make_result(Cell(2, 2), Direction.up, body=(Cell(2, 3),), tail=Cell(2, 4)))
+    heading_down = Eye().see(make_result(Cell(2, 2), Direction.down, body=(Cell(2, 3),), tail=Cell(2, 4)))
+    assert heading_up[TAIL_RIGHT] == pytest.approx(0.4)
+    assert heading_down[TAIL_RIGHT] == pytest.approx(-0.4)
+
+
+def test_open_space_reaches_the_tail_every_way():
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up, tail=Cell(3, 2)))
+    assert seen[TAIL_REACH_LEFT] == seen[TAIL_REACH_AHEAD] == seen[TAIL_REACH_RIGHT] == 1.0
+
+
+def test_turn_cut_off_from_the_tail_cannot_reach_it():
+    # The body walls off column 0 and (2,1); the tail lies on the other side
+    body = (Cell(0, 1), Cell(1, 1), Cell(3, 1), Cell(4, 1), Cell(4, 2))
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up, body=body, tail=Cell(4, 3)))
+    assert seen[TAIL_REACH_LEFT] == 0.0
+    assert seen[TAIL_REACH_AHEAD] == 1.0
+    assert seen[TAIL_REACH_RIGHT] == 1.0
+
+
+def test_blocked_turn_cannot_reach_the_tail():
+    seen = Eye().see(make_result(Cell(0, 2), Direction.up, tail=Cell(1, 2)))
+    assert seen[TAIL_REACH_AHEAD] == 0.0
+
+
+def test_moving_onto_the_tail_reaches_it():
+    # Tail (2,1) -> (3,1) -> (3,2) -> head (2,2), heading up: turning left enters the tail's cell
+    seen = Eye().see(make_result(Cell(2, 2), Direction.up, body=(Cell(3, 1), Cell(3, 2)), tail=Cell(2, 1)))
+    assert seen[TAIL_REACH_LEFT] == 1.0

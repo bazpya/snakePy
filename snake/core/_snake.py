@@ -20,6 +20,10 @@ class Snake:
         return self._body[-1]
 
     @property
+    def tail(self) -> Cell:
+        return self._body[0]
+
+    @property
     def cells(self) -> frozenset[Cell]:
         # Unordered on purpose; use head for the front end
         return frozenset(self._occupied)
@@ -40,7 +44,7 @@ class Snake:
         # The tail's cell is safe: it moves away in the same step.
         # Growing into the tail can't happen, since food is never on the snake.
         next_head = self.next_head
-        return self._occupies(next_head) and next_head != self._tail
+        return self._occupies(next_head) and next_head != self.tail
 
     # ====================  Commands  ====================
 
@@ -59,10 +63,6 @@ class Snake:
         self._direction = self._next_direction
 
     # ====================  Helpers  ====================
-
-    @property
-    def _tail(self) -> Cell:
-        return self._body[0]
 
     def _occupies(self, cell: Cell) -> bool:
         return cell in self._occupied

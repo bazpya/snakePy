@@ -48,6 +48,10 @@ def test_starts_with_given_direction(sut):
     assert sut.direction == Direction.right
 
 
+def test_tail_is_the_head_at_start(sut):
+    assert sut.tail == START
+
+
 # ====================  Step  ====================
 
 
@@ -78,6 +82,21 @@ def test_head_may_move_into_cell_the_tail_leaves():
     assert sut.length == 4
     assert START in sut.cells
 
+
+def test_tail_is_the_oldest_cell():
+    assert make_long_snake().tail == Cell(5, 4)
+
+
+def test_tail_moves_on_a_step_without_growing():
+    sut = make_long_snake()
+    sut.step()
+    assert sut.tail == Cell(5, 5)
+
+
+def test_tail_stays_on_a_step_with_growing():
+    sut = make_long_snake()
+    sut.step(grow=True)
+    assert sut.tail == Cell(5, 4)
 
 # ====================  Turn  ====================
 

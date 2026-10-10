@@ -81,6 +81,7 @@ def test_initial_result_shows_starting_state():
     assert sut.snake_cells == frozenset({START})
     assert sut.food == FAR_FOOD
     assert sut.head == START
+    assert sut.tail == START
     assert sut.heading == Direction.right
     assert sut.last_turn == Turn.ahead
     assert not sut.just_ate
@@ -109,6 +110,12 @@ def test_turn_changes_where_the_snake_goes():
     assert result.head == START + Direction.up
     assert result.heading == Direction.up
     assert result.last_turn == Turn.left
+
+
+def test_result_reports_the_tail():
+    sut = make_world(snake=make_long_snake())
+    result = sut.step(Turn.left)  # down, away from the body
+    assert result.tail == Cell(2, 2)
 
 
 def test_head_may_move_into_cell_the_tail_leaves():

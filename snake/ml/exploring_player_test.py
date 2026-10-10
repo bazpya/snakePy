@@ -8,6 +8,7 @@ RESULT = StepResult(
     grid_cells=((Cell(0, 0),),),
     snake_cells=frozenset({Cell(0, 0)}),
     head=Cell(0, 0),
+    tail=Cell(0, 0),
     heading=Direction.right,
     last_turn=Turn.ahead,
     just_ate=False,
