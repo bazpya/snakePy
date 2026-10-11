@@ -25,9 +25,9 @@ def test_wrong_sized_sight_is_rejected():
 
 def test_estimates_what_the_eye_sees():
     eye = Eye()
-    result = Factory(row_count=5, col_count=5).create().initial_result
+    state = Factory(row_count=5, col_count=5).create().initial_state
     sut = Brain(input_count=eye.output_count)
-    assert isinstance(sut.estimate(eye.see(result)), TurnEstimates)
+    assert isinstance(sut.estimate(eye.see(state)), TurnEstimates)
 
 
 # ====================  Learn  ====================

@@ -1,6 +1,6 @@
 # ML training: many headless games, no window; saves the brain's weights at the end
 from pathlib import Path
-from snake.core import Factory, Game, ObserverConcept, StepResult
+from snake.core import Factory, Game, ObserverConcept, WorldState
 from snake.ml import Brain, ExploringPlayer, Eye, MLPlayer, Recorder, ReplayMemory, Rewarder, Stats, Teacher
 
 ROW_COUNT = 10
@@ -19,16 +19,16 @@ REPORT_INTERVAL_GAMES = 25
 BRAIN_PATH = Path(__file__).parent / "models" / "brain.pt"
 
 
-class LastResult(ObserverConcept):
-    # Keeps the latest result, to report how each game ended
+class LastState(ObserverConcept):
+    # Keeps the latest state, to report how each game ended
     def __init__(self) -> None:
-        self.result: StepResult | None = None
+        self.state: WorldState | None = None
 
-    def on_started(self, result: StepResult) -> None:
-        self.result = result
+    def on_started(self, state: WorldState) -> None:
+        self.state = state
 
-    def on_stepped(self, result: StepResult) -> None:
-        self.result = result
+    def on_stepped(self, state: WorldState) -> None:
+        self.state = state
 
 
 def main() -> None:
@@ -38,14 +38,14 @@ def main() -> None:
     memory = ReplayMemory(MEMORY_CAPACITY)
     recorder = Recorder(eye, Rewarder(), memory)
     stats = Stats()
-    last_result = LastResult()
+    last_state = LastState()
     player = ExploringPlayer(MLPlayer(eye, brain), START_EPSILON, MIN_EPSILON, EPSILON_DECAY_FACTOR)
     teacher = Teacher(brain, memory, BATCH_SIZE, DISCOUNT)
 
     total_step_count = 0
     report_lengths: list[int] = []
     for game_number in range(1, GAME_COUNT + 1):
-        game = Game(factory.create(), player, observers=[recorder, stats, last_result])
+        game = Game(factory.create(), player, observers=[recorder, stats, last_state])
         game.start()
         while not game.is_over():
             game.tick()
@@ -55,7 +55,7 @@ def main() -> None:
                 teacher.sync_target()
         player.decay_epsilon()
 
-        report_lengths.append(last_result.result.snake_length)
+        report_lengths.append(last_state.state.snake_length)
         if game_number % REPORT_INTERVAL_GAMES == 0:
             average_length = sum(report_lengths) / len(report_lengths)
             print(

@@ -1,10 +1,10 @@
-from snake.core import Cell, Direction, StepResult, Turn
+from snake.core import Cell, Direction, Turn, WorldState
 from snake.ml.ml_player import MLPlayer
 from snake.ml.turn_estimates import TurnEstimates
 
 
-def make_result(head: Cell = Cell(0, 0)) -> StepResult:
-    return StepResult(
+def make_state(head: Cell = Cell(0, 0)) -> WorldState:
+    return WorldState(
         end_cause=None,
         grid_cells=((Cell(0, 0), Cell(0, 1)),),
         snake_cells=frozenset({head}),
@@ -18,13 +18,13 @@ def make_result(head: Cell = Cell(0, 0)) -> StepResult:
 
 
 class RecordingEye:
-    # Sees a fixed sight; records the results it was shown
+    # Sees a fixed sight; records the states it was shown
     def __init__(self, sight: list[float] = [0.5]) -> None:
         self._sight = sight
-        self.results_seen: list[StepResult] = []
+        self.states_seen: list[WorldState] = []
 
-    def see(self, result: StepResult) -> list[float]:
-        self.results_seen.append(result)
+    def see(self, state: WorldState) -> list[float]:
+        self.states_seen.append(state)
         return self._sight
 
 
@@ -42,26 +42,26 @@ class ScriptedBrain:
 # ====================  Flow  ====================
 
 
-def test_eye_gets_the_result():
+def test_eye_gets_the_state():
     eye = RecordingEye()
-    result = make_result()
-    MLPlayer(eye, ScriptedBrain()).pick_turn(result)
-    assert eye.results_seen == [result]
+    state = make_state()
+    MLPlayer(eye, ScriptedBrain()).pick_turn(state)
+    assert eye.states_seen == [state]
 
 
 def test_brain_gets_what_the_eye_sees():
     brain = ScriptedBrain()
-    MLPlayer(RecordingEye([0.1, 0.2]), brain).pick_turn(make_result())
+    MLPlayer(RecordingEye([0.1, 0.2]), brain).pick_turn(make_state())
     assert brain.sights_seen == [[0.1, 0.2]]
 
 
-def test_each_call_uses_the_latest_result():
+def test_each_call_uses_the_latest_state():
     eye = RecordingEye()
     sut = MLPlayer(eye, ScriptedBrain())
-    first, second = make_result(Cell(0, 0)), make_result(Cell(0, 1))
+    first, second = make_state(Cell(0, 0)), make_state(Cell(0, 1))
     sut.pick_turn(first)
     sut.pick_turn(second)
-    assert eye.results_seen == [first, second]
+    assert eye.states_seen == [first, second]
 
 
 # ====================  Pick  ====================
@@ -70,4 +70,4 @@ def test_each_call_uses_the_latest_result():
 def test_picks_the_best_turn_of_the_brains_estimates():
     estimates = TurnEstimates(left=0.1, ahead=0.2, right=0.9)
     sut = MLPlayer(RecordingEye(), ScriptedBrain(estimates))
-    assert sut.pick_turn(make_result()) == Turn.right
+    assert sut.pick_turn(make_state()) == Turn.right

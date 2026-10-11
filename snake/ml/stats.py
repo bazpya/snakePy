@@ -1,4 +1,4 @@
-from snake.core import ObserverConcept, StepResult
+from snake.core import ObserverConcept, WorldState
 
 
 class Stats(ObserverConcept):
@@ -7,8 +7,8 @@ class Stats(ObserverConcept):
     def __init__(self) -> None:
         self.taken_step_count = 0
 
-    def on_started(self, result: StepResult) -> None:
+    def on_started(self, state: WorldState) -> None:
         self.taken_step_count = 0
 
-    def on_stepped(self, result: StepResult) -> None:
+    def on_stepped(self, state: WorldState) -> None:
         self.taken_step_count += 1

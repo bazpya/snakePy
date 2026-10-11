@@ -1,4 +1,4 @@
-from snake.core import ObserverConcept, StepResult
+from snake.core import ObserverConcept, WorldState
 from snake.ml.experience import Experience
 from snake.ml.eye_concept import EyeConcept
 from snake.ml.replay_memory_concept import ReplayMemoryConcept
@@ -14,16 +14,16 @@ class Recorder(ObserverConcept):
         self._memory = memory
         self._sight: list[float] = []
 
-    def on_started(self, result: StepResult) -> None:
-        self._sight = self._eye.see(result)
+    def on_started(self, state: WorldState) -> None:
+        self._sight = self._eye.see(state)
 
-    def on_stepped(self, result: StepResult) -> None:
-        next_sight = self._eye.see(result)
+    def on_stepped(self, state: WorldState) -> None:
+        next_sight = self._eye.see(state)
         self._memory.add(Experience(
             sight=self._sight,
-            turn=result.last_turn,
-            reward=self._rewarder.get_reward(result),
+            turn=state.last_turn,
+            reward=self._rewarder.get_reward(state),
             next_sight=next_sight,
-            is_over=result.is_over,
+            is_over=state.is_over,
         ))
         self._sight = next_sight

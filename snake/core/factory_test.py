@@ -13,27 +13,27 @@ def test_creates_a_world():
 
 
 def test_world_has_the_given_size():
-    result = Factory(row_count=4, col_count=6).create().initial_result
-    assert len(result.grid_cells) == 4
-    assert all(len(row) == 6 for row in result.grid_cells)
+    state = Factory(row_count=4, col_count=6).create().initial_state
+    assert len(state.grid_cells) == 4
+    assert all(len(row) == 6 for row in state.grid_cells)
 
 
 def test_snake_starts_at_the_centre_heading_right():
-    result = Factory(row_count=4, col_count=6).create().initial_result
-    assert result.head == Cell(2, 3)
-    assert result.snake_cells == frozenset({Cell(2, 3)})
-    assert result.heading == Direction.right
+    state = Factory(row_count=4, col_count=6).create().initial_state
+    assert state.head == Cell(2, 3)
+    assert state.snake_cells == frozenset({Cell(2, 3)})
+    assert state.heading == Direction.right
 
 
 def test_uses_the_given_food_placer():
     sut = Factory(row_count=4, col_count=6, food_placer=FixedFoodPlacer(Cell(0, 0)))
-    assert sut.create().initial_result.food == Cell(0, 0)
+    assert sut.create().initial_state.food == Cell(0, 0)
 
 
 def test_places_food_off_the_snake_by_default():
-    result = Factory(row_count=4, col_count=6).create().initial_result
-    assert result.food is not None
-    assert result.food not in result.snake_cells
+    state = Factory(row_count=4, col_count=6).create().initial_state
+    assert state.food is not None
+    assert state.food not in state.snake_cells
 
 
 def test_creates_independent_worlds():

@@ -1,5 +1,5 @@
 from collections import deque
-from snake.core import Direction, StepResult, Turn, PlayerConcept
+from snake.core import Direction, PlayerConcept, Turn, WorldState
 from snake.human.key_source_concept import KeySourceConcept
 
 
@@ -11,10 +11,10 @@ class HumanPlayer(PlayerConcept):
         self._queue: deque[Direction] = deque()
         key_source.add_listener(self._on_key_pressed)
 
-    def pick_turn(self, result: StepResult) -> Turn:
+    def pick_turn(self, state: WorldState) -> Turn:
         if not self._queue:
             return Turn.ahead
-        turn = result.heading.get_turn_to(self._queue.popleft())
+        turn = state.heading.get_turn_to(self._queue.popleft())
         if turn is None:
             return Turn.ahead  # a reverse is ignored
         return turn

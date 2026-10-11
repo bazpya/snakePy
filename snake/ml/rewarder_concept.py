@@ -1,7 +1,7 @@
 from typing import Protocol
-from snake.core import StepResult
+from snake.core import WorldState
 
 
 class RewarderConcept(Protocol):
-    # What Recorder needs from a rewarder: a reward for the step that gave this result
-    def get_reward(self, result: StepResult) -> float: ...
+    # What Recorder needs from a rewarder: a reward for the step that led to this state
+    def get_reward(self, state: WorldState) -> float: ...

@@ -3,7 +3,7 @@ import pytest
 from snake.core.cell import Cell
 from snake.core.direction import Direction
 from snake.core.end_cause import EndCause
-from snake.core.step_result import StepResult
+from snake.core.world_state import WorldState
 from snake.core.turn import Turn
 
 HEAD = Cell(2, 2)
@@ -12,8 +12,8 @@ FOOD = Cell(0, 0)
 CELL_ROWS = tuple(tuple(Cell(r, c) for c in range(5)) for r in range(4))
 
 
-def make_result(snake_cells=frozenset({TAIL, HEAD}), food=FOOD, end_cause=EndCause.crashed) -> StepResult:
-    return StepResult(
+def make_state(snake_cells=frozenset({TAIL, HEAD}), food=FOOD, end_cause=EndCause.crashed) -> WorldState:
+    return WorldState(
         end_cause=end_cause,
         grid_cells=CELL_ROWS,
         snake_cells=snake_cells,
@@ -27,7 +27,7 @@ def make_result(snake_cells=frozenset({TAIL, HEAD}), food=FOOD, end_cause=EndCau
 
 
 def test_keeps_values():
-    sut = make_result()
+    sut = make_state()
     assert sut.grid_cells == CELL_ROWS
     assert sut.snake_cells == frozenset({TAIL, HEAD})
     assert sut.food == FOOD
@@ -41,26 +41,26 @@ def test_keeps_values():
 
 def test_food_may_be_missing():
     # e.g. the grid is filled and there is nowhere left to put food
-    assert make_result(food=None).food is None
+    assert make_state(food=None).food is None
 
 
 def test_snake_length_comes_from_snake_cells():
-    assert make_result().snake_length == 2
+    assert make_state().snake_length == 2
 
 
 def test_grid_cell_count_comes_from_grid_cells():
-    assert make_result().grid_cell_count == 20  # 4x5
+    assert make_state().grid_cell_count == 20  # 4x5
 
 
 def test_immutable():
-    sut = make_result()
+    sut = make_state()
     with pytest.raises(dataclasses.FrozenInstanceError):
         sut.head = TAIL
 
 
 def test_is_over_when_there_is_an_end_cause():
-    assert make_result(end_cause=EndCause.starved).is_over
+    assert make_state(end_cause=EndCause.starved).is_over
 
 
 def test_is_not_over_without_an_end_cause():
-    assert not make_result(end_cause=None).is_over
+    assert not make_state(end_cause=None).is_over

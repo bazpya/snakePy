@@ -1,4 +1,4 @@
-from snake.core import Cell, Direction, EndCause, StepResult, Turn
+from snake.core import Cell, Direction, EndCause, Turn, WorldState
 from snake.ui.colour import Colour
 from snake.ui.drawer import Drawer
 
@@ -25,8 +25,8 @@ class FakeCanvas:
         self.statuses.append(text)
 
 
-def make_result(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None = None) -> StepResult:
-    return StepResult(
+def make_state(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None = None) -> WorldState:
+    return WorldState(
         end_cause=end_cause,
         grid_cells=CELL_ROWS,
         snake_cells=frozenset(snake_cells),
@@ -40,7 +40,7 @@ def make_result(snake_cells, head, food=Cell(0, 0), end_cause: EndCause | None =
 
 
 # Snake (1,0) -> head (1,1), food at (0,0)
-START = make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1))
+START = make_state({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1))
 
 
 def make_started_drawer() -> tuple[Drawer, FakeCanvas]:
@@ -80,7 +80,7 @@ def test_start_shows_no_message():
 
 def test_step_recolours_only_cells_that_changed():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
+    sut.on_stepped(make_state({Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
     assert set(canvas.filled) == {Cell(1, 0), Cell(1, 1), Cell(1, 2)}
     assert canvas.colours[Cell(1, 0)] == Colour.empty
     assert canvas.colours[Cell(1, 1)] == Colour.body
@@ -91,9 +91,9 @@ def test_step_recolours_food_that_moved():
     canvas = FakeCanvas()
     sut = Drawer(canvas)
     # Head moves up onto the food at (0,1); new food appears at (2,2)
-    sut.on_started(make_result({Cell(1, 1)}, head=Cell(1, 1), food=Cell(0, 1)))
+    sut.on_started(make_state({Cell(1, 1)}, head=Cell(1, 1), food=Cell(0, 1)))
     canvas.filled.clear()
-    sut.on_stepped(make_result({Cell(1, 1), Cell(0, 1)}, head=Cell(0, 1), food=Cell(2, 2)))
+    sut.on_stepped(make_state({Cell(1, 1), Cell(0, 1)}, head=Cell(0, 1), food=Cell(2, 2)))
     assert canvas.colours[Cell(0, 1)] == Colour.head
     assert canvas.colours[Cell(1, 1)] == Colour.body
     assert canvas.colours[Cell(2, 2)] == Colour.food
@@ -101,14 +101,14 @@ def test_step_recolours_food_that_moved():
 
 def test_step_without_change_recolours_nothing():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
+    sut.on_stepped(make_state({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
     assert canvas.filled == []
 
 
 def test_step_handles_missing_food():
     # e.g. the grid is filled
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), food=None))
+    sut.on_stepped(make_state({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), food=None))
     assert canvas.colours[Cell(0, 0)] == Colour.empty
 
 
@@ -117,13 +117,13 @@ def test_step_handles_missing_food():
 
 def test_shows_a_message_when_the_game_is_over():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
+    sut.on_stepped(make_state({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
     assert len(canvas.messages) == 1
 
 
 def test_shows_no_message_while_the_game_goes_on():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
+    sut.on_stepped(make_state({Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
     assert canvas.messages == []
 
 
@@ -138,11 +138,11 @@ def test_start_shows_the_snake_length():
 
 def test_step_updates_the_snake_length():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
+    sut.on_stepped(make_state({Cell(1, 0), Cell(1, 1), Cell(1, 2)}, head=Cell(1, 2)))
     assert canvas.statuses[-1] == "Length: 3"
 
 
 def test_length_is_still_shown_when_the_game_is_over():
     sut, canvas = make_started_drawer()
-    sut.on_stepped(make_result({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
+    sut.on_stepped(make_state({Cell(1, 0), Cell(1, 1)}, head=Cell(1, 1), end_cause=EndCause.crashed))
     assert canvas.statuses[-1] == "Length: 2"

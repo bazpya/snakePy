@@ -1,10 +1,10 @@
-from snake.core import Cell, Direction, StepResult, Turn
+from snake.core import Cell, Direction, Turn, WorldState
 from snake.human.human_player import HumanPlayer
 
 
-def make_result(heading: Direction) -> StepResult:
+def make_state(heading: Direction) -> WorldState:
     # Only the heading matters to the player
-    return StepResult(
+    return WorldState(
         end_cause=None,
         grid_cells=((Cell(0, 0),),),
         snake_cells=frozenset({Cell(0, 0)}),
@@ -17,9 +17,9 @@ def make_result(heading: Direction) -> StepResult:
     )
 
 
-RIGHT = make_result(Direction.right)
-UP = make_result(Direction.up)
-LEFT = make_result(Direction.left)
+RIGHT = make_state(Direction.right)
+UP = make_state(Direction.up)
+LEFT = make_state(Direction.left)
 
 
 class FakeKeySource:

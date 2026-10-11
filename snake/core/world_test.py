@@ -64,7 +64,7 @@ def make_square_snake() -> Snake:
 
 def test_places_first_food_from_food_placer():
     sut = make_world(food_placer=ScriptedFoodPlacer(Cell(4, 4)))
-    assert sut.initial_result.food == Cell(4, 4)
+    assert sut.initial_state.food == Cell(4, 4)
 
 
 def test_first_food_is_chosen_from_free_cells_only():
@@ -75,8 +75,8 @@ def test_first_food_is_chosen_from_free_cells_only():
     assert START not in free
 
 
-def test_initial_result_shows_starting_state():
-    sut = make_world().initial_result
+def test_initial_state_shows_the_start():
+    sut = make_world().initial_state
     assert sut.grid_cells == Grid(5, 5).get_cell_rows()
     assert sut.snake_cells == frozenset({START})
     assert sut.food == FAR_FOOD
@@ -88,10 +88,10 @@ def test_initial_result_shows_starting_state():
     assert not sut.is_over
 
 
-def test_initial_result_does_not_change_after_a_step():
+def test_initial_state_does_not_change_after_a_step():
     sut = make_world()
     sut.step(Turn.ahead)
-    assert sut.initial_result.head == START
+    assert sut.initial_state.head == START
 
 
 # ====================  Step  ====================
@@ -99,29 +99,29 @@ def test_initial_result_does_not_change_after_a_step():
 
 def test_step_moves_the_snake():
     sut = make_world()
-    result = sut.step(Turn.ahead)
-    assert result.head == START + Direction.right
-    assert result.snake_cells == frozenset({START + Direction.right})
+    state = sut.step(Turn.ahead)
+    assert state.head == START + Direction.right
+    assert state.snake_cells == frozenset({START + Direction.right})
 
 
 def test_turn_changes_where_the_snake_goes():
     sut = make_world()
-    result = sut.step(Turn.left)
-    assert result.head == START + Direction.up
-    assert result.heading == Direction.up
-    assert result.last_turn == Turn.left
+    state = sut.step(Turn.left)
+    assert state.head == START + Direction.up
+    assert state.heading == Direction.up
+    assert state.last_turn == Turn.left
 
 
-def test_result_reports_the_tail():
+def test_state_reports_the_tail():
     sut = make_world(snake=make_long_snake())
-    result = sut.step(Turn.left)  # down, away from the body
-    assert result.tail == Cell(2, 2)
+    state = sut.step(Turn.left)  # down, away from the body
+    assert state.tail == Cell(2, 2)
 
 
 def test_head_may_move_into_cell_the_tail_leaves():
     sut = make_world(snake=make_square_snake())
-    result = sut.step(Turn.right)  # up, into the tail's cell
-    assert result.head == START
+    state = sut.step(Turn.right)  # up, into the tail's cell
+    assert state.head == START
 
 
 # ====================  Eat  ====================
@@ -131,11 +131,11 @@ def test_step_onto_food_grows_and_places_new_food():
     food = START + Direction.right
     food_placer = ScriptedFoodPlacer(food, FAR_FOOD)
     sut = make_world(food_placer=food_placer)
-    result = sut.step(Turn.ahead)
-    assert result.head == food
-    assert len(result.snake_cells) == 2
-    assert result.food == FAR_FOOD
-    assert result.just_ate
+    state = sut.step(Turn.ahead)
+    assert state.head == food
+    assert len(state.snake_cells) == 2
+    assert state.food == FAR_FOOD
+    assert state.just_ate
 
 
 def test_plain_step_does_not_eat():
@@ -159,23 +159,23 @@ def test_new_food_is_chosen_from_free_cells_only():
 
 def test_hitting_the_wall_ends_the_game():
     sut = make_world(snake=Snake(Cell(2, 4), Direction.right))
-    result = sut.step(Turn.ahead)
-    assert result.end_cause == EndCause.crashed
-    assert result.head == Cell(2, 4)
+    state = sut.step(Turn.ahead)
+    assert state.end_cause == EndCause.crashed
+    assert state.head == Cell(2, 4)
 
 
 def test_hitting_the_body_ends_the_game():
     sut = make_world(snake=make_long_snake())
-    result = sut.step(Turn.right)  # up, into (2,2)
-    assert result.end_cause == EndCause.crashed
+    state = sut.step(Turn.right)  # up, into (2,2)
+    assert state.end_cause == EndCause.crashed
 
 
 def test_crash_reports_the_turn_taken():
     sut = make_world(snake=make_long_snake())
-    result = sut.step(Turn.right)  # up, into (2,2)
-    assert result.last_turn == Turn.right
-    assert result.heading == Direction.up
-    assert not result.just_ate
+    state = sut.step(Turn.right)  # up, into (2,2)
+    assert state.last_turn == Turn.right
+    assert state.heading == Direction.up
+    assert not state.just_ate
 
 
 def test_filling_the_grid_ends_the_game():
@@ -186,10 +186,10 @@ def test_filling_the_grid_ends_the_game():
         grid=Grid(1, 3),
     )
     assert not sut.step(Turn.ahead).is_over
-    result = sut.step(Turn.ahead)
-    assert result.end_cause == EndCause.won
-    assert result.head == Cell(0, 2)
-    assert result.food is None
+    state = sut.step(Turn.ahead)
+    assert state.end_cause == EndCause.won
+    assert state.head == Cell(0, 2)
+    assert state.food is None
 
 
 def test_a_plain_step_has_no_end_cause():
@@ -208,8 +208,8 @@ def test_step_after_game_over_is_rejected():
 
 def test_length_stays_the_same_without_food():
     sut = make_world()
-    result = sut.step(Turn.ahead)
-    assert result.snake_length == 1
+    state = sut.step(Turn.ahead)
+    assert state.snake_length == 1
 
 
 def test_length_includes_the_final_step():
@@ -220,8 +220,8 @@ def test_length_includes_the_final_step():
         grid=Grid(1, 3),
     )
     sut.step(Turn.ahead)
-    result = sut.step(Turn.ahead)  # eats the last free cell
-    assert result.snake_length == 3
+    state = sut.step(Turn.ahead)  # eats the last free cell
+    assert state.snake_length == 3
 
 
 # ====================  Starve  ====================

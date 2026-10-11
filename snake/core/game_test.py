@@ -1,5 +1,5 @@
 import pytest
-from snake.core import Cell, Factory, StepResult, Turn
+from snake.core import Cell, Factory, Turn, WorldState
 from snake.core.game import Game
 from snake.fakes import FixedFoodPlacer
 
@@ -8,23 +8,23 @@ class ScriptedPlayer:
     # Gives the given turns in order (ahead when out of turns); records what it was shown
     def __init__(self, *turns: Turn) -> None:
         self._turns = list(turns)
-        self.results_seen: list[StepResult] = []
+        self.states_seen: list[WorldState] = []
 
-    def pick_turn(self, result: StepResult) -> Turn:
-        self.results_seen.append(result)
+    def pick_turn(self, state: WorldState) -> Turn:
+        self.states_seen.append(state)
         return self._turns.pop(0) if self._turns else Turn.ahead
 
 
 class RecordingObserver:
     def __init__(self) -> None:
-        self.started: list[StepResult] = []
-        self.stepped: list[StepResult] = []
+        self.started: list[WorldState] = []
+        self.stepped: list[WorldState] = []
 
-    def on_started(self, result: StepResult) -> None:
-        self.started.append(result)
+    def on_started(self, state: WorldState) -> None:
+        self.started.append(state)
 
-    def on_stepped(self, result: StepResult) -> None:
-        self.stepped.append(result)
+    def on_stepped(self, state: WorldState) -> None:
+        self.stepped.append(state)
 
 
 def make_world(row_count: int = 5, col_count: int = 5):
@@ -44,12 +44,12 @@ def make_game(player=None, observers=(), world=None) -> Game:
 # ====================  Start  ====================
 
 
-def test_start_gives_initial_result_to_every_observer():
+def test_start_gives_initial_state_to_every_observer():
     world = make_world()
     first, second = RecordingObserver(), RecordingObserver()
     make_game(observers=[first, second], world=world).start()
-    assert first.started == [world.initial_result]
-    assert second.started == [world.initial_result]
+    assert first.started == [world.initial_state]
+    assert second.started == [world.initial_state]
     assert first.stepped == []
 
 
@@ -74,22 +74,22 @@ def test_tick_steps_the_world_with_the_picked_turn():
     assert sut.tick().head == Cell(1, 2)  # centre (2,2), turned up
 
 
-def test_player_sees_the_latest_result():
+def test_player_sees_the_latest_state():
     world = make_world()
     player = ScriptedPlayer()
     sut = make_game(player=player, world=world)
     sut.start()
     first = sut.tick()
     sut.tick()
-    assert player.results_seen == [world.initial_result, first]
+    assert player.states_seen == [world.initial_state, first]
 
 
-def test_tick_gives_its_result_to_every_observer():
+def test_tick_gives_its_state_to_every_observer():
     observer = RecordingObserver()
     sut = make_game(observers=[observer])
     sut.start()
-    result = sut.tick()
-    assert observer.stepped == [result]
+    state = sut.tick()
+    assert observer.stepped == [state]
 
 
 # ====================  Over  ====================

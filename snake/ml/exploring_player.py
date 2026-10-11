@@ -1,5 +1,5 @@
 import random
-from snake.core import PlayerConcept, StepResult, Turn
+from snake.core import PlayerConcept, Turn, WorldState
 
 
 class ExploringPlayer(PlayerConcept):
@@ -24,10 +24,10 @@ class ExploringPlayer(PlayerConcept):
     def epsilon(self) -> float:
         return self._epsilon
 
-    def pick_turn(self, result: StepResult) -> Turn:
+    def pick_turn(self, state: WorldState) -> Turn:
         if self._rng.random() < self._epsilon:
             return self._rng.choice(list(Turn))
-        return self._player.pick_turn(result)
+        return self._player.pick_turn(state)
 
     def decay_epsilon(self) -> None:
         self._epsilon = max(self._min_epsilon, self._epsilon * self._decay_factor)

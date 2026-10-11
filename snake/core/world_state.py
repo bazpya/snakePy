@@ -6,7 +6,7 @@ from snake.core.turn import Turn
 
 
 @dataclass(frozen=True)
-class StepResult:
+class WorldState:
     end_cause: EndCause | None
     grid_cells: tuple[tuple[Cell, ...], ...]  # rows, top to bottom
     snake_cells: frozenset[Cell]

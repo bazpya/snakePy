@@ -1,9 +1,9 @@
 import random
 import pytest
-from snake.core import Cell, Direction, StepResult, Turn
+from snake.core import Cell, Direction, Turn, WorldState
 from snake.ml.exploring_player import ExploringPlayer
 
-RESULT = StepResult(
+STATE = WorldState(
     end_cause=None,
     grid_cells=((Cell(0, 0),),),
     snake_cells=frozenset({Cell(0, 0)}),
@@ -21,7 +21,7 @@ class ScriptedPlayer:
     def __init__(self) -> None:
         self.asked_count = 0
 
-    def pick_turn(self, result: StepResult) -> Turn:
+    def pick_turn(self, state: WorldState) -> Turn:
         self.asked_count += 1
         return Turn.ahead
 
@@ -37,7 +37,7 @@ def make_player(epsilon: float, min_epsilon: float = 0.0, decay_factor: float = 
 
 def test_zero_epsilon_always_asks_the_inner_player():
     sut, inner = make_player(epsilon=0.0)
-    turns = [sut.pick_turn(RESULT) for _ in range(50)]
+    turns = [sut.pick_turn(STATE) for _ in range(50)]
     assert turns == [Turn.ahead] * 50
     assert inner.asked_count == 50
 
@@ -45,13 +45,13 @@ def test_zero_epsilon_always_asks_the_inner_player():
 def test_full_epsilon_never_asks_the_inner_player():
     sut, inner = make_player(epsilon=1.0)
     for _ in range(50):
-        sut.pick_turn(RESULT)
+        sut.pick_turn(STATE)
     assert inner.asked_count == 0
 
 
 def test_random_turns_cover_all_three():
     sut, _ = make_player(epsilon=1.0)
-    turns = {sut.pick_turn(RESULT) for _ in range(50)}
+    turns = {sut.pick_turn(STATE) for _ in range(50)}
     assert turns == set(Turn)
 
 

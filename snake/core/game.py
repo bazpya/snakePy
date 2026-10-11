@@ -1,5 +1,5 @@
 from typing import Sequence
-from snake.core.step_result import StepResult
+from snake.core.world_state import WorldState
 from snake.core.world import World
 from snake.core.player_concept import PlayerConcept
 from snake.core.observer_concept import ObserverConcept
@@ -18,29 +18,29 @@ class Game:
         self._world = world
         self._player = player
         self._observers = tuple(observers)
-        self._latest_result: StepResult | None = None
+        self._latest_state: WorldState | None = None
 
     # ====================  Queries  ====================
 
     def is_over(self) -> bool:
-        return self._latest_result is not None and self._latest_result.is_over
+        return self._latest_state is not None and self._latest_state.is_over
 
     # ====================  Commands  ====================
 
     def start(self) -> None:
-        if self._latest_result is not None:
+        if self._latest_state is not None:
             raise RuntimeError("The game has already started")
-        self._latest_result = self._world.initial_result
+        self._latest_state = self._world.initial_state
         for observer in self._observers:
-            observer.on_started(self._latest_result)
+            observer.on_started(self._latest_state)
 
-    def tick(self) -> StepResult:
-        if self._latest_result is None:
+    def tick(self) -> WorldState:
+        if self._latest_state is None:
             raise RuntimeError("The game has not started")
         if self.is_over():
             raise RuntimeError("The game is over")
-        turn = self._player.pick_turn(self._latest_result)
-        self._latest_result = self._world.step(turn)
+        turn = self._player.pick_turn(self._latest_state)
+        self._latest_state = self._world.step(turn)
         for observer in self._observers:
-            observer.on_stepped(self._latest_result)
-        return self._latest_result
+            observer.on_stepped(self._latest_state)
+        return self._latest_state

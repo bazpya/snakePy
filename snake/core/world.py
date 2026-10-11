@@ -3,7 +3,7 @@ from snake.core.cell import Cell
 from snake.core.end_cause import EndCause
 from snake.core.food_placer_concept import FoodPlacerConcept
 from snake.core._snake import Snake
-from snake.core.step_result import StepResult
+from snake.core.world_state import WorldState
 from snake.core.turn import Turn
 
 
@@ -29,18 +29,18 @@ class World:
         self._food: Cell | None = food_placer.place_food(
             self._get_free_cells()
         )
-        self._initial_result = self._make_result()
+        self._initial_state = self._make_state()
 
     # ====================  Queries  ====================
 
     @property
-    def initial_result(self) -> StepResult:
-        # How the game began, as step 0; fixed, unlike the result of each step
-        return self._initial_result
+    def initial_state(self) -> WorldState:
+        # How the game began, as step 0; fixed, unlike the state after each step
+        return self._initial_state
 
     # ====================  Commands  ====================
 
-    def step(self, turn: Turn) -> StepResult:
+    def step(self, turn: Turn) -> WorldState:
         if self._end_cause is not None:
             raise RuntimeError("The game is over")
         self._snake.turn(turn)
@@ -51,7 +51,7 @@ class World:
         next_head = self._snake.next_head
         if self._grid.excludes(next_head) or self._snake.is_hitting_itself():
             self._end_cause = EndCause.crashed
-            return self._make_result()
+            return self._make_state()
 
         self._just_ate = next_head == self._food
         self._snake.step(grow=self._just_ate)
@@ -69,7 +69,7 @@ class World:
             if self._is_starved():
                 self._end_cause = EndCause.starved
 
-        return self._make_result()
+        return self._make_state()
 
     # ====================  Helpers  ====================
 
@@ -83,8 +83,8 @@ class World:
             if cell not in snake_cells
         ]
 
-    def _make_result(self) -> StepResult:
-        return StepResult(
+    def _make_state(self) -> WorldState:
+        return WorldState(
             end_cause=self._end_cause,
             grid_cells=self._grid.get_cell_rows(),
             snake_cells=self._snake.cells,

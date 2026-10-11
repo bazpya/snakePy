@@ -8,9 +8,9 @@ from snake.core.food_placer_concept import FoodPlacerConcept
 from snake.core.game import Game
 from snake.core.observer_concept import ObserverConcept
 from snake.core.player_concept import PlayerConcept
-from snake.core.step_result import StepResult
 from snake.core.turn import Turn
 from snake.core.world import World
+from snake.core.world_state import WorldState
 
 __all__ = [
     "Cell",
@@ -22,7 +22,7 @@ __all__ = [
     "Game",
     "ObserverConcept",
     "PlayerConcept",
-    "StepResult",
     "Turn",
     "World",
+    "WorldState",
 ]
