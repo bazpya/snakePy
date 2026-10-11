@@ -25,7 +25,7 @@ class DisplayConfig:
 
 @dataclass(frozen=True)
 class TrainingConfig:
-    game_count: int = 50
+    game_count: int = 500
     memory_capacity: int = 50_000
     batch_size: int = 64
     discount: float = 0.9  # how much future reward counts

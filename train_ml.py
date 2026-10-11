@@ -1,4 +1,5 @@
 # ML training: many headless games, no window; saves the brain's weights at the end
+import time
 from snake.config import Config
 from snake.core import Factory, Game, ObserverConcept, WorldState
 from snake.ml import Brain, ExploringPlayer, Eye, MLPlayer, Recorder, ReplayMemory, Rewarder, Stats, Teacher
@@ -31,8 +32,10 @@ def main() -> None:
     )
     teacher = Teacher(brain, memory, training.batch_size, training.discount)
 
+    start_time = time.monotonic()
     total_step_count = 0
     report_lengths: list[int] = []
+    report_step_counts: list[int] = []
     for game_number in range(1, training.game_count + 1):
         game = Game(factory.create(), player, observers=[recorder, stats, last_state])
         game.start()
@@ -45,14 +48,18 @@ def main() -> None:
         player.decay_epsilon()
 
         report_lengths.append(last_state.state.snake_length)
+        report_step_counts.append(stats.taken_step_count)
         if game_number % training.report_interval_games == 0:
+            elapsed = time.strftime("%H:%M:%S", time.gmtime(time.monotonic() - start_time))
             average_length = sum(report_lengths) / len(report_lengths)
+            average_steps = sum(report_step_counts) / len(report_step_counts)
             print(
-                f"game {game_number}: average length {average_length:.1f}, "
-                f"best {max(report_lengths)}, last steps {stats.taken_step_count}, "
-                f"epsilon {player.epsilon:.3f}"
+                f"games {game_number} | time_taken {elapsed} | "
+                f"avg of last {len(report_lengths)}: len {average_length:.1f}, steps {average_steps:.1f} | "
+                f"current_epsilon {player.epsilon:.3f}"
             )
             report_lengths.clear()
+            report_step_counts.clear()
 
     brain_path.parent.mkdir(exist_ok=True)
     brain.save(brain_path)
