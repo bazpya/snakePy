@@ -12,18 +12,18 @@ class Recorder(ObserverConcept):
         self._eye = eye
         self._rewarder = rewarder
         self._memory = memory
-        self._state: list[float] = []
+        self._sight: list[float] = []
 
     def on_started(self, result: StepResult) -> None:
-        self._state = self._eye.see(result)
+        self._sight = self._eye.see(result)
 
     def on_stepped(self, result: StepResult) -> None:
-        next_state = self._eye.see(result)
+        next_sight = self._eye.see(result)
         self._memory.add(Experience(
-            state=self._state,
+            sight=self._sight,
             turn=result.last_turn,
             reward=self._rewarder.get_reward(result),
-            next_state=next_state,
+            next_sight=next_sight,
             is_over=result.is_over,
         ))
-        self._state = next_state
+        self._sight = next_sight

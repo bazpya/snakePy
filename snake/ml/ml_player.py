@@ -11,5 +11,5 @@ class MLPlayer(PlayerConcept):
         self._brain = brain
 
     def pick_turn(self, result: StepResult) -> Turn:
-        state = self._eye.see(result)
-        return self._brain.estimate(state).best_turn
+        sight = self._eye.see(result)
+        return self._brain.estimate(sight).best_turn

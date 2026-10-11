@@ -8,7 +8,7 @@ from snake.ml.turn_estimates import TurnEstimates
 
 
 class Brain(BrainConcept, LearnerConcept):
-    # A small neural network: state in, an estimate (Q-value) for each turn out
+    # A small neural network: sight in, an estimate (Q-value) for each turn out
     _hidden_count = 64
 
     def __init__(self, input_count: int, learning_rate: float = 0.001) -> None:
@@ -21,18 +21,18 @@ class Brain(BrainConcept, LearnerConcept):
         )
         self._optimizer = torch.optim.Adam(self._model.parameters(), lr=learning_rate)
 
-    def estimate(self, state: list[float]) -> TurnEstimates:
-        if len(state) != self._input_count:
-            raise ValueError(f"Expected {self._input_count} inputs, got {len(state)}")
+    def estimate(self, sight: list[float]) -> TurnEstimates:
+        if len(sight) != self._input_count:
+            raise ValueError(f"Expected {self._input_count} inputs, got {len(sight)}")
         with torch.no_grad():  # estimating only; no learning here
-            left, ahead, right = self._model(torch.tensor(state, dtype=torch.float32)).tolist()
+            left, ahead, right = self._model(torch.tensor(sight, dtype=torch.float32)).tolist()
         return TurnEstimates(left=left, ahead=ahead, right=right)
 
-    def learn(self, states: list[list[float]], turns: list[Turn], targets: list[float]) -> float:
+    def learn(self, sights: list[list[float]], turns: list[Turn], targets: list[float]) -> float:
         # One learning step: pulls each chosen turn's estimate towards its target; returns the loss
-        if not len(states) == len(turns) == len(targets):
-            raise ValueError("states, turns and targets must have the same length")
-        estimates = self._model(torch.tensor(states, dtype=torch.float32))
+        if not len(sights) == len(turns) == len(targets):
+            raise ValueError("sights, turns and targets must have the same length")
+        estimates = self._model(torch.tensor(sights, dtype=torch.float32))
         columns = torch.tensor([[_turn_columns[turn]] for turn in turns])
         chosen = estimates.gather(1, columns).squeeze(1)
         loss = nn.functional.mse_loss(chosen, torch.tensor(targets, dtype=torch.float32))

@@ -18,24 +18,24 @@ def make_result(head: Cell = Cell(0, 0)) -> StepResult:
 
 
 class RecordingEye:
-    # Sees a fixed state; records the results it was shown
-    def __init__(self, state: list[float] = [0.5]) -> None:
-        self._state = state
+    # Sees a fixed sight; records the results it was shown
+    def __init__(self, sight: list[float] = [0.5]) -> None:
+        self._sight = sight
         self.results_seen: list[StepResult] = []
 
     def see(self, result: StepResult) -> list[float]:
         self.results_seen.append(result)
-        return self._state
+        return self._sight
 
 
 class ScriptedBrain:
-    # Gives fixed estimates; records the states it was given
+    # Gives fixed estimates; records the sights it was given
     def __init__(self, estimates: TurnEstimates = TurnEstimates(left=0.0, ahead=1.0, right=0.0)) -> None:
         self._estimates = estimates
-        self.states_seen: list[list[float]] = []
+        self.sights_seen: list[list[float]] = []
 
-    def estimate(self, state: list[float]) -> TurnEstimates:
-        self.states_seen.append(state)
+    def estimate(self, sight: list[float]) -> TurnEstimates:
+        self.sights_seen.append(sight)
         return self._estimates
 
 
@@ -52,7 +52,7 @@ def test_eye_gets_the_result():
 def test_brain_gets_what_the_eye_sees():
     brain = ScriptedBrain()
     MLPlayer(RecordingEye([0.1, 0.2]), brain).pick_turn(make_result())
-    assert brain.states_seen == [[0.1, 0.2]]
+    assert brain.sights_seen == [[0.1, 0.2]]
 
 
 def test_each_call_uses_the_latest_result():

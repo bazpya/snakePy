@@ -25,7 +25,7 @@ def make_result(
 
 
 class ColumnEye:
-    # Sees only the head's column, so states are easy to tell apart
+    # Sees only the head's column, so sights are easy to tell apart
     def see(self, result: StepResult) -> list[float]:
         return [float(result.head.col)]
 
@@ -67,8 +67,8 @@ def test_each_step_adds_one_experience():
 def test_experience_holds_what_was_seen_before_and_after():
     sut, memory = make_started_recorder()
     sut.on_stepped(make_result(1))
-    assert memory.experiences[0].state == [0.0]
-    assert memory.experiences[0].next_state == [1.0]
+    assert memory.experiences[0].sight == [0.0]
+    assert memory.experiences[0].next_sight == [1.0]
 
 
 def test_experience_holds_the_turn_taken():
@@ -95,17 +95,17 @@ def test_experience_is_over_when_the_game_ends():
     assert memory.experiences[0].is_over is True
 
 
-def test_next_state_becomes_the_following_state():
+def test_next_sight_becomes_the_following_sight():
     sut, memory = make_started_recorder()
     sut.on_stepped(make_result(1))
     sut.on_stepped(make_result(2))
-    assert memory.experiences[1].state == [1.0]
-    assert memory.experiences[1].next_state == [2.0]
+    assert memory.experiences[1].sight == [1.0]
+    assert memory.experiences[1].next_sight == [2.0]
 
 
-def test_new_game_starts_from_a_fresh_state():
+def test_new_game_starts_from_a_fresh_sight():
     sut, memory = make_started_recorder()
     sut.on_stepped(make_result(1, end_cause=EndCause.crashed))
     sut.on_started(make_result(3))
     sut.on_stepped(make_result(4))
-    assert memory.experiences[1].state == [3.0]
+    assert memory.experiences[1].sight == [3.0]

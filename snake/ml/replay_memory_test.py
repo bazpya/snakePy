@@ -8,10 +8,10 @@ from snake.ml.replay_memory import ReplayMemory
 def make_experience(number: int) -> Experience:
     # The reward tells experiences apart
     return Experience(
-        state=[0.0],
+        sight=[0.0],
         turn=Turn.ahead,
         reward=float(number),
-        next_state=[0.0],
+        next_sight=[0.0],
         is_over=False,
     )
 

@@ -26,11 +26,11 @@ class Teacher:
         batch = self._memory.sample(self._batch_size)
         targets = [
             experience.reward if experience.is_over
-            else experience.reward + self._discount * self._target.estimate(experience.next_state).best_estimate
+            else experience.reward + self._discount * self._target.estimate(experience.next_sight).best_estimate
             for experience in batch
         ]
         return self._learner.learn(
-            [experience.state for experience in batch],
+            [experience.sight for experience in batch],
             [experience.turn for experience in batch],
             targets,
         )

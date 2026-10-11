@@ -8,20 +8,20 @@ DISCOUNT = 0.9
 
 
 def make_experience(reward: float = 1.0, is_over: bool = False, turn: Turn = Turn.ahead) -> Experience:
-    return Experience(state=[0.1], turn=turn, reward=reward, next_state=[0.2], is_over=is_over)
+    return Experience(sight=[0.1], turn=turn, reward=reward, next_sight=[0.2], is_over=is_over)
 
 
 class FakeLearner:
-    # Every state looks the same: best_estimate is the highest; records what it was taught
+    # Every sight looks the same: best_estimate is the highest; records what it was taught
     def __init__(self, best_estimate: float = 2.0) -> None:
         self.best_estimate = best_estimate
         self.lessons: list[tuple[list[list[float]], list[Turn], list[float]]] = []
 
-    def estimate(self, state: list[float]) -> TurnEstimates:
+    def estimate(self, sight: list[float]) -> TurnEstimates:
         return TurnEstimates(left=0.0, ahead=self.best_estimate, right=0.0)
 
-    def learn(self, states: list[list[float]], turns: list[Turn], targets: list[float]) -> float:
-        self.lessons.append((states, turns, targets))
+    def learn(self, sights: list[list[float]], turns: list[Turn], targets: list[float]) -> float:
+        self.lessons.append((sights, turns, targets))
         return 0.5
 
     def copy(self) -> "FakeLearner":
@@ -64,15 +64,15 @@ def test_too_few_experiences_teaches_nothing():
 def test_teaches_one_batch_of_the_given_size():
     sut, learner = make_teacher(make_experience(), make_experience(), make_experience(), batch_size=2)
     sut.teach()
-    states, turns, targets = learner.lessons[0]
-    assert len(states) == len(turns) == len(targets) == 2
+    sights, turns, targets = learner.lessons[0]
+    assert len(sights) == len(turns) == len(targets) == 2
 
 
-def test_passes_on_the_states_and_turns():
+def test_passes_on_the_sights_and_turns():
     sut, learner = make_teacher(make_experience(turn=Turn.left))
     sut.teach()
-    states, turns, _ = learner.lessons[0]
-    assert states == [[0.1]]
+    sights, turns, _ = learner.lessons[0]
+    assert sights == [[0.1]]
     assert turns == [Turn.left]
 
 
@@ -84,7 +84,7 @@ def test_returns_the_loss():
 # ====================  Target  ====================
 
 
-def test_target_adds_the_discounted_best_estimate_of_the_next_state():
+def test_target_adds_the_discounted_best_estimate_of_the_next_sight():
     sut, learner = make_teacher(make_experience(reward=1.0))
     sut.teach()
     assert get_targets(learner) == [pytest.approx(1.0 + DISCOUNT * 2.0)]
