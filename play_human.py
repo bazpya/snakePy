@@ -1,26 +1,24 @@
 # Human play: arrow keys steer, a tkinter window shows the game
 import tkinter as tk
+from snake.config import Config
 from snake.core import Factory, Game
 from snake.human import HumanPlayer, KeySourceTk
 from snake.ui import CanvasTk, Drawer, PacerTk
 
-ROW_COUNT = 10
-COL_COUNT = 10
-CELL_SIZE = 24  # pixels
-TICK_INTERVAL_MS = 120
-
 
 def main() -> None:
-    world = Factory(ROW_COUNT, COL_COUNT).create()
+    config = Config()
+    grid, display = config.grid, config.display
+    world = Factory(grid.row_count, grid.col_count).create()
     window = tk.Tk()
     window.title("Snake")
     window.resizable(False, False)
-    canvas = CanvasTk(window, ROW_COUNT, COL_COUNT, CELL_SIZE)
+    canvas = CanvasTk(window, grid.row_count, grid.col_count, display.cell_size)
     drawer = Drawer(canvas)
     key_source = KeySourceTk(window)
     player = HumanPlayer(key_source)
     game = Game(world, player, observers=[drawer])
-    pacer = PacerTk(window, TICK_INTERVAL_MS)
+    pacer = PacerTk(window, display.tick_interval_ms)
     pacer.run(game)
 
 
