@@ -67,3 +67,4 @@ Tests sit next to the code they test (`world.py` → `world_test.py`). VS Code h
   - Calls read as plain English.
   - An implementation's qualifier goes at the end of its name (`CanvasTk`), so its file sorts next to its contract's file.
 - **One-way flow:** `World` → `WorldState` → players and observers → turn → `World`.
+
